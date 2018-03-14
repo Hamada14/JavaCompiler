@@ -40,3 +40,6 @@
 *.xcscheme
 *.plist
 
+# build file
+**/build/*
+**/compiler
