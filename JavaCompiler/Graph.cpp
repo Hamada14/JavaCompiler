@@ -8,15 +8,23 @@
 
 #include "Graph.hpp"
 
-int Graph:: add_node(bool acceptance) {
-    id_to_pos[++number_of_nodes] = (int)adjList.size();
-    adjList.push_back({number_of_nodes, (int)adjList.size(), acceptance});
-    return number_of_nodes;
+int Graph:: numberOfNodes = 0;
+
+int Graph:: add_node(bool acceptance, string type) {
+    int id = ++numberOfNodes;
+    adjList[id] = {id, acceptance, type};
+    return id;
 }
 
 
 void Graph:: add_edge(int from, int to, string input) {
-    if(!id_to_pos.count(from) || !id_to_pos.count(to))
+    if(!adjList.count(from) || !adjList.count(to))
         printf("in add edge function there node isn't in graph added edge from or to");
-    adjList[id_to_pos[from]].transitions.push_back({to,input});
+    adjList[from].transitions.push_back({to,input});
+}
+
+
+
+unordered_map<int, node>* Graph:: get_nodes() {
+    return &adjList;
 }

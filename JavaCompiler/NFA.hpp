@@ -18,7 +18,7 @@ class NFA {
     Graph g;
     
     public:
-        NFA(Graph &g, int start_node, int end_node);
+        NFA(Graph &g, int start_node, int end_node, int priority);
         Graph* get_graph();
         int get_start_node();
         int get_end_node();
@@ -27,6 +27,14 @@ class NFA {
         void set_start_node(int node);
         void set_end_node(int node);
         void set_priority(int priority);
+        virtual NFA clone();
+        NFA operator | (NFA &nfa);
+        NFA cascade (NFA &nfa);
+        NFA operator * ();
+        NFA operator + ();
+
+    
+    
 };
 
 

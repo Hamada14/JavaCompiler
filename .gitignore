@@ -33,3 +33,10 @@
 
 # DS_store
 *.DS_STORE
+*.pbxproj
+*.xcworkspacedata
+*.xcuserstate
+*.xcbkptlist
+*.xcscheme
+*.plist
+

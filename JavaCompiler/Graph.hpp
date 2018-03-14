@@ -14,6 +14,7 @@
 
 using namespace std;
 
+
 struct transition {
     int next; // node id;
     string input; // string because /L == lamda
@@ -22,20 +23,21 @@ struct transition {
 
 // it can be pool design pattern for better performance
 struct node {
-    int id, pos; // we still need valid mapping between id, pos
+    int id; // we still need valid mapping between id, pos
     bool acceptance;
+    string type;
     vector< transition > transitions;
 };
 
 class Graph {
     
-    static int number_of_nodes;
-    vector<node> adjList;
-    unordered_map<int, int> id_to_pos;
+    static int numberOfNodes;
+    unordered_map<int, node> adjList;
     
     public:
-        int add_node(bool acceptance);  // returns node id
+        int add_node(bool acceptance, string type);  // returns node id
         void add_edge(int from, int to, string input); //function parameters(from, to) are node ids
+        unordered_map<int, node>* get_nodes();
     
 };
 
