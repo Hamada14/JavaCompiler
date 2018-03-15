@@ -1,8 +1,5 @@
 #include "DFA_Builder.hpp"
 
-int id = 0;
-int g_start, g_end;
-
 Graph* DFA_Builder::get_DFA() {
     bool visited[number_of_nodes];
     std::memset(visited, 0, sizeof visited);
@@ -18,7 +15,10 @@ Graph* DFA_Builder::get_DFA() {
     }
     Graph *ret;
     g_start = ret->add_node(is_acceptance_state, "");
-    push_state(g_start);
+    g_end = ret->add_node(false, "");
+    State *cur_state;
+    cur_state->set_id(g_start), cur_state->set_nodes(&khra);
+    push_state(cur_state);
     subset_construction(*ret);
 }
 
@@ -49,27 +49,21 @@ void DFA_Builder::solve_epsillon(int v, bool *vis) {
     }
 }
 
-void DFA_Builder::push_state(int state) {
-    if (taken.count(state))
+void DFA_Builder::push_state(State *state) {
+    if (taken.count(state->get_id()))
         return;
-    taken.insert(state);
+    taken.insert(state->get_id());
     stk.push(state);
 }
 
 void DFA_Builder::subset_construction(Graph &ret) {
     while (!stk.empty()) {
-        int n = stk.top();
+        State *cur_state = stk.top();
         stk.pop();
-        for (auto v : (*epsillon)[n]) {
-            unordered_map<int, node> *cur = nfa_graph->get_nodes();
-            node tmp = (*cur)[v];
-            for (transition &x: tmp.transitions) {
-                if (x.input == "/L") {
-                    push_state(x.next);
-                    ret.add_node(x.next, "");
-                    ret.add_edge(n, x.next, "/L");
-                }
-            }
+        for (char c = 0; c < 128; ++c) {
+            string trans;
+            trans += c;
+
         }
     }
 }
