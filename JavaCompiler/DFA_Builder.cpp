@@ -1,4 +1,4 @@
-#include "DFA_Builder.h"
+#include "DFA_Builder.hpp"
 
 Graph* DFA_Builder::get_DFA() {
     bool visited[number_of_nodes];
@@ -6,9 +6,9 @@ Graph* DFA_Builder::get_DFA() {
     solve_epsillon(start_node, visited);
     bool is_acceptance_state = false;
     int type = INT_MAX;
-    unordered_set<int> khra = (*epsillon)[start_node];
+    unordered_set<int> cur = (*epsillon)[start_node];
     // missing type
-    for (auto v : khra) {
+    for (auto v : cur) {
         unordered_map<int, node> *cur = nfa_graph->get_nodes();
         node tmp = (*cur)[v];
         is_acceptance_state |= tmp.acceptance;
@@ -17,7 +17,10 @@ Graph* DFA_Builder::get_DFA() {
     g_start = ret->add_node(is_acceptance_state, "");
     g_end = ret->add_node(false, "");
     State *cur_state;
-    cur_state->set_id(g_start), cur_state->set_nodes(&khra);
+    set<int> *first_set;
+    for (auto x : cur)
+        first_set->insert(x);
+    cur_state->set_id(g_start), cur_state->set_nodes(first_set);
     push_state(cur_state);
     subset_construction(*ret);
 }
@@ -56,8 +59,8 @@ void DFA_Builder::subset_construction(Graph &ret) {
     while (!stk.empty()) {
         State *cur_state = stk.top();
         stk.pop();
-        unordered_set<int> next;
         for (char c = 0; c < 128; ++c) {
+            set<int> next;
             string trans;
             trans += c;
             for (int v : (*(*cur_state).get_nodes())) {
@@ -67,15 +70,20 @@ void DFA_Builder::subset_construction(Graph &ret) {
                     if (transitions.input == trans)
                         next.insert(transitions.next);
             }
-        }
-        if (next.size() == 0)
-            ret.add_edge(cur_state->get_id(), g_end, "");
-        else {
-            State *nxt;
-            nxt->set_nodes(&next), nxt->set_id(cur_state->get_id());
-            ret.add_node(nxt->get_id(), "");
-            ret.add_edge(cur_state->get_id(), nxt->get_id(), "");
-            push_state(nxt);
+            if (next.size() == 0)
+                ret.add_edge(cur_state->get_id(), g_end, trans);
+            else {
+                if ((*is_a_state).count(next)) {
+                    ret.add_edge(cur_state->get_id(), (*is_a_state).count(next), "");
+                }
+                else {
+                    State *nxt;
+                    nxt->set_nodes(&next), nxt->set_id(ret.get_nodes()->size() + 1);
+                    ret.add_node(nxt->get_id(), "");
+                    ret.add_edge(cur_state->get_id(), nxt->get_id(), "");
+                    push_state(nxt);
+                }
+            }
         }
     }
 }

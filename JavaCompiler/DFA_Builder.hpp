@@ -1,9 +1,10 @@
-#ifndef DFA_BUILDER_H_INCLUDED
-#define DFA_BUILDER_H_INCLUDED
+#ifndef DFA_BUILDER_HPP_INCLUDED
+#define DFA_BUILDER_HPP_INCLUDED
 
 #include <stdio.h>
 #include <stack>
 #include <unordered_map>
+#include <map>
 #include <unordered_set>
 #include <cstring>
 #include <iostream>
@@ -23,6 +24,7 @@ class DFA_Builder {
         stack<State*> stk;
         unordered_set<int> taken;
         unordered_map<int, unordered_set<int> > *epsillon;
+        map<set<int>, int> *is_a_state;
         void solve_epsillon(int v, bool *vis);
         void get_epsillon_closure(int v, unordered_set<int> *result);
         void push_state(State *state);
@@ -39,4 +41,4 @@ class DFA_Builder {
         Graph *get_DFA();
 };
 
-#endif // DFA_BUILDER_H_INCLUDED
+#endif // DFA_BUILDER_HPP_INCLUDED

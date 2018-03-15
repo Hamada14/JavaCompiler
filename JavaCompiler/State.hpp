@@ -2,17 +2,17 @@
 #define STATE_HPP_INCLUDED
 
 #include <stdio.h>
-#include <unordered_set>
+#include <set>
 #include "Graph.hpp"
 
 class State {
     private:
-        unordered_set<int> *nodes;
+        set<int> *nodes;
         int id;
     public:
-        unordered_set<int> *get_nodes();
+        set<int> *get_nodes();
         int get_id();
-        void set_nodes(unordered_set<int> *n);
+        void set_nodes(set<int> *n);
         void set_id(int idx);
 
 };
