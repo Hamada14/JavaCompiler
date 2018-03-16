@@ -27,18 +27,28 @@ struct node {
     bool acceptance;
     string type;
     vector< transition > transitions;
+
+    bool isAcceptance(){
+        return acceptance;
+    }
+
+    int makeTransition(string s){
+        for(transition t : transitions)
+            if(t.input == s) return t.next;
+        return -1;
+    }
 };
 
 class Graph {
-    
+
     static int numberOfNodes;
     unordered_map<int, node> adjList;
-    
+
     public:
         int add_node(bool acceptance, string type);  // returns node id
         void add_edge(int from, int to, string input); //function parameters(from, to) are node ids
         unordered_map<int, node>* get_nodes();
-    
+
 };
 
 

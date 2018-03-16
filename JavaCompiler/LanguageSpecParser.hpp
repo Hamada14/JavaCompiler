@@ -10,6 +10,7 @@
 #include <set>
 #include <stack>
 #include <vector>
+#include <cstdlib>
 
 class LanguageSpecParser {
   public:

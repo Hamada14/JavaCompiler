@@ -74,13 +74,13 @@ void DFA_Builder::subset_construction(Graph &ret) {
                 ret.add_edge(cur_state->get_id(), g_end, trans);
             else {
                 if ((*is_a_state).count(next)) {
-                    ret.add_edge(cur_state->get_id(), (*is_a_state).count(next), "");
+                    ret.add_edge(cur_state->get_id(), (*is_a_state).count(next), trans);
                 }
                 else {
                     State *nxt;
                     nxt->set_nodes(&next), nxt->set_id(ret.get_nodes()->size() + 1);
                     ret.add_node(nxt->get_id(), "");
-                    ret.add_edge(cur_state->get_id(), nxt->get_id(), "");
+                    ret.add_edge(cur_state->get_id(), nxt->get_id(), trans);
                     push_state(nxt);
                 }
             }
