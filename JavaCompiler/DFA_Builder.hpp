@@ -10,6 +10,7 @@
 #include <iostream>
 #include "Graph.hpp"
 #include "NFA.hpp"
+#include "DFA.h"
 #include "State.hpp"
 
 class DFA_Builder {
@@ -19,8 +20,6 @@ class DFA_Builder {
         int number_of_nodes;
         int start_node;
         int end_node;
-        int g_start;
-        int g_end;
         stack<State*> stk;
         unordered_set<int> taken;
         unordered_map<int, unordered_set<int> > *epsillon;
@@ -28,7 +27,8 @@ class DFA_Builder {
         void solve_epsillon(int v, bool *vis);
         void get_epsillon_closure(int v, unordered_set<int> *result);
         void push_state(State *state);
-        void subset_construction(Graph &ret);
+        void set_state(State *state);
+        void subset_construction(DFA &ret);
     public:
         DFA_Builder(NFA *nfa) {
             this->nfa = nfa;
@@ -38,7 +38,7 @@ class DFA_Builder {
             this->number_of_nodes = this->nfa_graph->get_nodes()->size();
         }
 
-        Graph *get_DFA();
+        DFA *get_DFA();
 };
 
 #endif // DFA_BUILDER_HPP_INCLUDED

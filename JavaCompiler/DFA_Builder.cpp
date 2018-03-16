@@ -1,27 +1,21 @@
 #include "DFA_Builder.hpp"
 
-Graph* DFA_Builder::get_DFA() {
+DFA* DFA_Builder::get_DFA() {
+    DFA *ret;
     bool visited[number_of_nodes];
     std::memset(visited, 0, sizeof visited);
     solve_epsillon(start_node, visited);
-    bool is_acceptance_state = false;
-    int type = INT_MAX;
     unordered_set<int> cur = (*epsillon)[start_node];
-    // missing type
-    for (auto v : cur) {
-        unordered_map<int, node> *cur = nfa_graph->get_nodes();
-        node tmp = (*cur)[v];
-        is_acceptance_state |= tmp.acceptance;
-    }
-    Graph *ret;
-    g_start = ret->add_node(is_acceptance_state, "");
-    g_end = ret->add_node(false, "");
-    State *cur_state;
-    set<int> *first_set;
+    State *first_state;
     for (auto x : cur)
-        first_set->insert(x);
-    cur_state->set_id(g_start), cur_state->set_nodes(first_set);
-    push_state(cur_state);
+        first_state->get_nodes()->insert(x);
+    set_state(first_state);
+    first_state->set_id(ret->get_start_node());
+
+    ret->set_start_node(ret->get_nodes()->add_node(first_state->get_acceptance(), first_state->get_type()));
+    ret->set_end_node(ret->get_nodes()->add_node(false, ""));
+
+    push_state(first_state);
     subset_construction(*ret);
 }
 
@@ -48,21 +42,14 @@ void DFA_Builder::solve_epsillon(int v, bool *vis) {
     }
 }
 
-void DFA_Builder::push_state(State *state) {
-    if (taken.count(state->get_id()))
-        return;
-    taken.insert(state->get_id());
-    stk.push(state);
-}
-
-void DFA_Builder::subset_construction(Graph &ret) {
+void DFA_Builder::subset_construction(DFA &ret) {
+    string trans;
     while (!stk.empty()) {
         State *cur_state = stk.top();
         stk.pop();
         for (char c = 0; c < 128; ++c) {
             set<int> next;
-            string trans;
-            trans += c;
+            trans = "" + c;
             for (int v : (*(*cur_state).get_nodes())) {
                 unordered_map<int, node> *cur = nfa_graph->get_nodes();
                 node tmp = (*cur)[v];
@@ -71,19 +58,45 @@ void DFA_Builder::subset_construction(Graph &ret) {
                         next.insert(transitions.next);
             }
             if (next.size() == 0)
-                ret.add_edge(cur_state->get_id(), g_end, trans);
+                ret.get_nodes()->add_edge(cur_state->get_id(), ret.get_end_node(), trans);
             else {
                 if ((*is_a_state).count(next)) {
-                    ret.add_edge(cur_state->get_id(), (*is_a_state).count(next), trans);
+                    ret.get_nodes()->add_edge(cur_state->get_id(), (*is_a_state)[next], trans);
                 }
                 else {
                     State *nxt;
-                    nxt->set_nodes(&next), nxt->set_id(ret.get_nodes()->size() + 1);
-                    ret.add_node(nxt->get_id(), "");
-                    ret.add_edge(cur_state->get_id(), nxt->get_id(), trans);
+                    nxt->set_nodes(&next), nxt->set_id(ret.get_nodes()->get_nodes()->size() + 1);
+                    set_state(nxt);
+                    ret.get_nodes()->add_node(nxt->get_acceptance(), nxt->get_type());
+                    ret.get_nodes()->add_edge(cur_state->get_id(), nxt->get_id(), trans);
                     push_state(nxt);
                 }
             }
         }
     }
+}
+
+
+void DFA_Builder::push_state(State *state) {
+    if (taken.count(state->get_id()))
+        return;
+    taken.insert(state->get_id());
+    stk.push(state);
+}
+
+void DFA_Builder::set_state(State *state) {
+    bool is_acceptance_state = false;
+    int prio = INT_MAX;
+    string type;
+    set<int> *cur = state->get_nodes();
+    for (auto v : *cur) {
+        unordered_map<int, node> *cur = nfa_graph->get_nodes();
+        node tmp = (*cur)[v];
+        is_acceptance_state |= tmp.acceptance;
+//        if (prio > tmp.prio)
+//            prio = tmp.prio, type = tmp.type;
+    }
+    state->set_acceptance(is_acceptance_state);
+    state->set_type(type);
+    state->set_priority(prio);
 }
