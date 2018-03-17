@@ -7,6 +7,7 @@
 //
 
 #include "Graph.hpp"
+#include <stdio.h>
 
 int Graph:: numberOfNodes = 0;
 
