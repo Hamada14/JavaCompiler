@@ -39,7 +39,7 @@ std::vector<LanguageToken*> LanguageSpecParser::infixToPostfix(std::string exp) 
                         pos++;
                         concat = true;
                 } else if((!Util::isWhiteSpace(exp[pos]) && !isReservedSymbol(exp[pos]))&&
-                          (pos == exp.length() - 1 || !(Util::isASCIIChar(exp[pos + 1]) || Util::isASCIIDigit(exp[pos + 1])))) {
+                          (pos == (int)exp.length() - 1 || !(Util::isASCIIChar(exp[pos + 1]) || Util::isASCIIDigit(exp[pos + 1])))) {
                         if(concat)
                                 addOperator('&', language_tokens, st);
                         language_tokens.push_back(new LanguageToken(exp.substr(pos, 1), LanguageTokenType::CHARACTER));
@@ -48,7 +48,7 @@ std::vector<LanguageToken*> LanguageSpecParser::infixToPostfix(std::string exp) 
                         if(concat)
                                 addOperator('&', language_tokens, st);
                         int i;
-                        for(i = 1; i + pos < exp.length()
+                        for(i = 1; i + pos < (int)exp.length()
                             && (Util::isASCIIChar(exp[pos + i]) || Util::isASCIIDigit(exp[pos + i])); i++) ;
                         std::string operand = exp.substr(pos, i);
                         language_tokens.push_back(new LanguageToken(operand, LanguageTokenType::EXPRESSION));

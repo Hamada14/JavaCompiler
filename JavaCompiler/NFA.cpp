@@ -25,6 +25,9 @@ NFA:: NFA(Graph &g, int start_node, int end_node, int priority) {
 
 NFA::NFA() {}
 
+NFA::~NFA() {
+
+}
 
 Graph* NFA:: get_graph() {
     return &g;
@@ -53,21 +56,25 @@ void NFA:: set_priority(int priority) {
     (*g.get_nodes())[end_node].priority = priority;
 }
 
-NFA NFA:: clone() {
+void NFA::set_type(std::string type) {
+    (*g.get_nodes())[end_node].type = type;
+}
+
+NFA* NFA:: clone() {
 
     Graph g;
-    
+
     unordered_map<int, node> *nodes = this->get_graph()->get_nodes();
     unordered_map<int, int> newId;
-    
+
     for(auto n:*nodes)
         newId[n.second.id] = g.add_node(n.second.acceptance, n.second.type);
-    
+
     for(auto n:*nodes)
         for(transition tr: n.second.transitions)
             g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
-    
-    return NFA(g,newId[start_node],newId[end_node],this->get_priority());
+
+    return new NFA(g,newId[start_node],newId[end_node],this->get_priority());
 }
 
 NFA* NFA::orOperation(NFA &nfa) {
@@ -198,6 +205,3 @@ NFA* NFA::plusOperation() {
 
     return new NFA(g,startNode,endNode,this->get_priority());
 }
-
-
-

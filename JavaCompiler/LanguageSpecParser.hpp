@@ -16,14 +16,14 @@ class LanguageSpecParser {
   public:
     NFA* parseRegularExpression(std::string, RegularExpressionTable*);
 
-  private:
-    std::vector<LanguageToken*> infixToPostfix(std::string);
-    NFA* postfixToNFA(std::vector<LanguageToken*>, RegularExpressionTable*);
-
     bool isValidOperator(char);
     bool isReservedSymbol(char);
     bool isUnaryOperator(char);
     bool isValidRegexRange(char, char);
+  private:
+    std::vector<LanguageToken*> infixToPostfix(std::string);
+    NFA* postfixToNFA(std::vector<LanguageToken*>, RegularExpressionTable*);
+
     int getOperatorPrecedence(char);
     void correctStackToken(LanguageToken*, RegularExpressionTable*);
 

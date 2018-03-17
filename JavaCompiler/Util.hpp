@@ -2,6 +2,7 @@
 #define Util_hpp
 
 #include <string>
+#include <vector>
 
 namespace Util {
 
@@ -10,5 +11,6 @@ namespace Util {
   bool isASCIIDigit(const char);
 
   std::string trim(const std::string);
+  std::vector<std::string> split(std::string, char);
 }
 #endif
