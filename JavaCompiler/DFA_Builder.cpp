@@ -17,6 +17,7 @@ DFA* DFA_Builder::get_DFA() {
 
     push_state(first_state);
     subset_construction(*ret);
+    return NULL;
 }
 
 void DFA_Builder::get_epsillon_closure(int v, unordered_set<int> *result) {
@@ -47,9 +48,9 @@ void DFA_Builder::subset_construction(DFA &ret) {
     while (!stk.empty()) {
         State *cur_state = stk.top();
         stk.pop();
-        for (char c = 0; c < 128; ++c) {
+        for (char c = 0; c < char(128); ++c) {
             set<int> next;
-            trans = "" + c;
+            trans = string(&c);
             for (int v : (*(*cur_state).get_nodes())) {
                 unordered_map<int, node> *cur = nfa_graph->get_nodes();
                 node tmp = (*cur)[v];
@@ -65,7 +66,7 @@ void DFA_Builder::subset_construction(DFA &ret) {
                 }
                 else {
                     State *nxt;
-                    nxt->set_nodes(&next), nxt->set_id(ret.get_nodes()->get_nodes()->size() + 1);
+                    nxt->set_nodes(&next), nxt->set_id((int)ret.get_nodes()->get_nodes()->size() + 1);
                     set_state(nxt);
                     ret.get_nodes()->add_node(nxt->get_acceptance(), nxt->get_type());
                     ret.get_nodes()->add_edge(cur_state->get_id(), nxt->get_id(), trans);

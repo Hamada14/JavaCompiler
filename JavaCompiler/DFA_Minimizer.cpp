@@ -28,6 +28,7 @@ DFA* DFA_Minimizer::get_minimized_DFA() {
         }
         partitions = cur_partitions;
     }
+    return NULL;
 }
 
 void DFA_Minimizer::get_initial_partitions(int v, bool *vis, State *acc, State *non_acc) {

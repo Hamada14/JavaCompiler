@@ -30,7 +30,7 @@ class DFA_Minimizer {
             this->g = dfa->get_nodes();
             this->start_node = dfa->get_start_node();
             this->end_node = dfa->get_end_node();
-            this->number_of_nodes = this->g->get_nodes()->size();
+            this->number_of_nodes = (int) (this->g->get_nodes()->size());
         }
 
         DFA *get_minimized_DFA();

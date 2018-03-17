@@ -14,12 +14,12 @@
 
 class NFA {
     int start_node, end_node; //node_ids
-    int priority;
     Graph g;
 
     public:
-        NFA(char ch, string type);
+        NFA(char ch);
         NFA(Graph &g, int start_node, int end_node, int priority);
+        NFA();
         Graph* get_graph();
         int get_start_node();
         int get_end_node();

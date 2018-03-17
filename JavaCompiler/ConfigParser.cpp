@@ -75,7 +75,7 @@ void ConfigParser::parseKeywords(std::string current_line, int priority) {
 }
 
 void ConfigParser::disassembleExpression(std::string expression, char operator_, std::string& operand_1, std::string& operand_2) {
-  int operator_index = expression.find(operator_);
+  int operator_index = (int)expression.find(operator_);
   operand_1 = Util::trim(expression.substr(0, operator_index));
   operand_2 = Util::trim(expression.substr(operator_index + 1));
 }

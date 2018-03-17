@@ -36,7 +36,7 @@ class DFA_Builder {
             this->nfa_graph = nfa->get_graph();
             this->start_node = nfa->get_start_node();
             this->end_node = nfa->get_end_node();
-            this->number_of_nodes = this->nfa_graph->get_nodes()->size();
+            this->number_of_nodes = (int)(this->nfa_graph->get_nodes()->size());
         }
 
         DFA *get_DFA();

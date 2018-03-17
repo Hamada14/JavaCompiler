@@ -12,6 +12,10 @@
 #include <string>
 #include <unordered_map>
 
+
+#define infi 1<<20
+
+
 using namespace std;
 
 
@@ -23,11 +27,13 @@ struct transition {
 
 // it can be pool design pattern for better performance
 struct node {
-    int id; // we still need valid mapping between id, pos
+    int id;
     bool acceptance;
     string type;
     vector< transition > transitions;
-
+    int priority = infi;
+    node(int id, bool acceptance, string type) :id(id), acceptance(acceptance), type(type){};
+    node(){};
     bool isAcceptance(){
         return acceptance;
     }
@@ -37,6 +43,7 @@ struct node {
             if(t.input == s) return t.next;
         return -1;
     }
+
 };
 
 class Graph {
