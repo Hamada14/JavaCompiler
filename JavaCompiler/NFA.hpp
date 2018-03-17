@@ -18,6 +18,7 @@ class NFA {
     Graph g;
     
     public:
+        NFA(char ch, string type);
         NFA(Graph &g, int start_node, int end_node, int priority);
         Graph* get_graph();
         int get_start_node();

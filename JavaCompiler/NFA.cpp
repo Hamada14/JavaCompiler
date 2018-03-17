@@ -15,6 +15,12 @@ NFA:: NFA(Graph &g, int start_node, int end_node, int priority) {
     this->priority = priority;
 }
 
+NFA:: NFA(char ch, string type) {
+    start_node = g.add_node(false, "");
+    end_node = g.add_node(true, type);
+    g.add_edge(start_node, end_node, string(&ch));
+}
+
 Graph* NFA:: get_graph() {
     return &g;
 }
@@ -174,3 +180,6 @@ NFA NFA:: operator+() {
     
     return NFA(g,startNode,endNode,priority);
 }
+
+
+
