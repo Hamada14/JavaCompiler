@@ -11,6 +11,7 @@
 #include "Graph.hpp"
 #include "DFA.h"
 #include "State.hpp"
+#include <climits>
 
 class DFA_Minimizer {
     private:

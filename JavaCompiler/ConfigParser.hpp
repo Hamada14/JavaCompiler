@@ -12,6 +12,8 @@
 class ConfigParser {
   public:
     ConfigParser(LanguageSpecParser*);
+    ~ConfigParser();
+    
     std::string getConfigFilePath();
     void readLanguageSpec(std::ifstream*);
   private:

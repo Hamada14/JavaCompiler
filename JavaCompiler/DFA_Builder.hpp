@@ -12,6 +12,7 @@
 #include "NFA.hpp"
 #include "DFA.h"
 #include "State.hpp"
+#include <climits>
 
 class DFA_Builder {
     private:

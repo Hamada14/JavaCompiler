@@ -14,6 +14,11 @@ ConfigParser::ConfigParser(LanguageSpecParser* lang_sp) : lang_sp(lang_sp) {
   this->regex_table = new RegularExpressionTable();
 }
 
+ConfigParser::~ConfigParser() {
+    delete regex_table;
+    delete lang_sp;
+}
+
 std::string ConfigParser::getConfigFilePath() {
   return CONFIG_FILE_PATH;
 }

@@ -22,14 +22,20 @@ class LanguageSpecParser {
 
     bool isValidOperator(char);
     bool isReservedSymbol(char);
+    bool isUnaryOperator(char);
+    bool isValidRegexRange(char, char);
     int getOperatorPrecedence(char);
+    void correctStackToken(LanguageToken*, RegularExpressionTable*);
 
     LanguageTokenType getTokenType(std::string);
 
     void addOperator(char, vector<LanguageToken*> &, stack<LanguageToken*> &);
 
+    NFA* plusOperation(LanguageToken*, LanguageToken*);
+
     static std::map<char, int> OPERATOR_PRECEDENCE;
     static const std::set<char> RESERVED_SYM;
     static const std::set<char> VALID_OPERATORS;
+    static const std::set<char> UNARY_OPERATORS;
 };
 #endif
