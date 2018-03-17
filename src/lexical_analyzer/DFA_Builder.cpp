@@ -1,4 +1,4 @@
-#include "DFA_Builder.hpp"
+#include "lexical_analyzer/DFA_Builder.hpp"
 
 DFA* DFA_Builder::get_DFA() {
     DFA *ret;

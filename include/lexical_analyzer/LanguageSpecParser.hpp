@@ -5,12 +5,12 @@
 #include "NFA.hpp"
 #include "RegularExpressionTable.hpp"
 #include "Util.hpp"
+#include <cstdlib>
 #include <iostream>
 #include <map>
 #include <set>
 #include <stack>
 #include <vector>
-#include <cstdlib>
 
 class LanguageSpecParser {
   public:

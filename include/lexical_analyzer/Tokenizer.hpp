@@ -1,9 +1,9 @@
 #ifndef TOKENIZER_H
 #define TOKENIZER_H
 
-#include "DFA.h"
-
 using namespace std;
+
+#include "DFA.hpp"
 #include <iostream>
 #include <stdio.h>
 #include <string>

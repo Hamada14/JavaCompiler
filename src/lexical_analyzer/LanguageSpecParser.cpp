@@ -1,4 +1,4 @@
-#include "LanguageSpecParser.hpp"
+#include "lexical_analyzer/LanguageSpecParser.hpp"
 
 
 std::map<char, int> LanguageSpecParser::OPERATOR_PRECEDENCE =

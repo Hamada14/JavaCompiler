@@ -1,23 +1,13 @@
-//
-//  Graph.hpp
-//  JavaCompiler
-//
-//  Created by Ahmed on 3/14/18.
-//  Copyright © 2018 Abdellah. All rights reserved.
-//
-
 #ifndef Graph_hpp
 #define Graph_hpp
-#include <vector>
+
 #include <string>
 #include <unordered_map>
-
+#include <vector>
 
 #define infi 1<<20
 
-
 using namespace std;
-
 
 struct transition {
     int next; // node id;

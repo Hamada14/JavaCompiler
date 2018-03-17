@@ -1,16 +1,8 @@
-//
-//  NFA.hpp
-//  JavaCompiler
-//
-//  Created by Ahmed on 3/13/18.
-//  Copyright © 2018 Abdellah. All rights reserved.
-//
-
 #ifndef NFA_hpp
 #define NFA_hpp
 
-#include <stdio.h>
 #include "Graph.hpp"
+#include <stdio.h>
 
 class NFA {
     int start_node, end_node; //node_ids

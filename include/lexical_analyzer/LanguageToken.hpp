@@ -1,8 +1,8 @@
 #ifndef LanguageTokens_hpp
 #define LanguageTokens_hpp
 
-#include <string>
 #include "NFA.hpp"
+#include <string>
 
 enum class LanguageTokenType {OPERATOR, EXPRESSION, CHARACTER, NULL_TOKEN, OPEN_BRACKET, CLOSED_BRACKET, NULL_CHARACTER};
 

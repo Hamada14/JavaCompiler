@@ -1,13 +1,13 @@
 #ifndef ConfigParser_hpp
 #define ConfigParser_hpp
 
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <regex>
-#include "Util.hpp"
 #include "LanguageSpecParser.hpp"
 #include "RegularExpressionTable.hpp"
+#include "Util.hpp"
+#include <fstream>
+#include <iostream>
+#include <regex>
+#include <string>
 
 class ConfigParser {
   public:
@@ -38,7 +38,7 @@ class ConfigParser {
     bool isValidKeywords(std::string);
 
     NFA* keywordToNFA(std::string, int priority);
-    
+
     void parseLine(std::string, int);
     void parseRegularExpression(std::string, int);
     void parseRegularDefinition(std::string, int);

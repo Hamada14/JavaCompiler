@@ -1,4 +1,4 @@
-#include "DFA_Minimizer.h"
+#include "lexical_analyzer/DFA_Minimizer.hpp"
 
 DFA* DFA_Minimizer::get_minimized_DFA() {
     State *acc, *non_acc;

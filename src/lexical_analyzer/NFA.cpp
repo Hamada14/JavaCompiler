@@ -1,12 +1,4 @@
-//
-//  NFA.cpp
-//  JavaCompiler
-//
-//  Created by Ahmed on 3/13/18.
-//  Copyright © 2018 Abdellah. All rights reserved.
-//
-
-#include "NFA.hpp"
+#include "lexical_analyzer/NFA.hpp"
 
 
 NFA::NFA(char ch) {

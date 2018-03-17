@@ -1,4 +1,4 @@
-#include "ConfigParser.hpp"
+#include "lexical_analyzer/ConfigParser.hpp"
 
 const std::string ConfigParser::CONFIG_FILE_PATH = "input";
 

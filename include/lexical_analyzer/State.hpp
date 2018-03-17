@@ -1,9 +1,9 @@
 #ifndef STATE_HPP_INCLUDED
 #define STATE_HPP_INCLUDED
 
-#include <stdio.h>
-#include <set>
 #include "Graph.hpp"
+#include <set>
+#include <stdio.h>
 
 class State {
     private:

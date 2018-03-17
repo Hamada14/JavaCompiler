@@ -1,17 +1,17 @@
 #ifndef DFA_MINIMIZER_H_INCLUDED
 #define DFA_MINIMIZER_H_INCLUDED
 
-#include <stdio.h>
-#include <stack>
-#include <unordered_map>
-#include <map>
-#include <unordered_set>
-#include <cstring>
-#include <iostream>
+#include "DFA.hpp"
 #include "Graph.hpp"
-#include "DFA.h"
 #include "State.hpp"
 #include <climits>
+#include <cstring>
+#include <iostream>
+#include <map>
+#include <stack>
+#include <stdio.h>
+#include <unordered_map>
+#include <unordered_set>
 
 class DFA_Minimizer {
     private:

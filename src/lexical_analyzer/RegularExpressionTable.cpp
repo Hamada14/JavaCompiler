@@ -1,4 +1,4 @@
-#include "RegularExpressionTable.hpp"
+#include "lexical_analyzer/RegularExpressionTable.hpp"
 
 RegularExpressionTable::~RegularExpressionTable() {
     clear();
