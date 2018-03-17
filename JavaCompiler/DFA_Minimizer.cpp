@@ -63,17 +63,20 @@ vector<State*>* DFA_Minimizer::construct_new_partition_by_type(State *state) {
 
 vector<State*>* DFA_Minimizer::construct_new_partition_by_transtion(State *state) {
     vector<State*> *ret;
-    map<string, int> mp;
+    map<set<string> , int> mp;
     int cnt = 1;
     for (auto v : (*state->get_nodes())) {
         unordered_map<int, node> *cur = g->get_nodes();
         node tmp = (*cur)[v];
-        if (!mp[tmp.type]) {
-            mp[tmp.type] = cnt++;
+        set<string> node_states;
+        for (transition nxt : tmp.transitions)
+            node_states.insert(nxt.input);
+        if (!mp[node_states]) {
+            mp[node_states] = cnt++;
             State *new_state;
             (*ret).push_back(new_state);
         }
-        (*ret)[mp[tmp.type] - 1]->get_nodes()->insert(v);
+        (*ret)[mp[node_states] - 1]->get_nodes()->insert(v);
     }
     return ret;
 }
