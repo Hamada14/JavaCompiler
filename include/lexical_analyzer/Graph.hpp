@@ -20,8 +20,8 @@ struct node {
     int id;
     bool acceptance;
     string type;
-    vector< transition > transitions;
     int priority = infi;
+    vector< transition > transitions;
     node(int id, bool acceptance, string type) :id(id), acceptance(acceptance), type(type){};
     node(){};
     bool isAcceptance(){

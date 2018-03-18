@@ -22,12 +22,13 @@ class NFA {
         void set_end_node(int node);
         void set_priority(int priority);
         void set_type(std::string);
+        void set_acceptnace(std::string type, int priority);
         virtual NFA* clone();
         NFA* orOperation(NFA &nfa);
         NFA* concatenateOperation (NFA &nfa);
         NFA* asteriskOperation ();
         NFA* plusOperation ();
-
+    
 
 
 };

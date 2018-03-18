@@ -9,6 +9,12 @@ int Graph:: add_node(bool acceptance, string type) {
     return id;
 }
 
+int Graph:: add_node(bool acceptance, string type, int priority) {
+    int id = ++numberOfNodes;
+    adjList[id] = {id, acceptance, type, priority};
+    return id;
+}
+
 
 void Graph:: add_edge(int from, int to, string input) {
     if(!adjList.count(from) || !adjList.count(to))
