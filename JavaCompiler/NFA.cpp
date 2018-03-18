@@ -97,8 +97,8 @@ NFA* NFA::orOperation(NFA &nfa) {
 
     string type2 = (*nodes)[nfa.get_end_node()].type;
 
-    g.add_edge(start_node, newId[this->start_node], "/L");
-    g.add_edge(start_node, newId[nfa.get_start_node()], "/L");
+    g.add_edge(startNode, newId[this->start_node], "/L");
+    g.add_edge(startNode, newId[nfa.get_start_node()], "/L");
 
     int endNode, pr;
 
