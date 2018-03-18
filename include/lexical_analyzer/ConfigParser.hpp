@@ -36,7 +36,8 @@ class ConfigParser {
     NFA* readLanguage(std::ifstream*);
 
     bool isValidKeywords(std::string);
-
+    bool isValidPunctuation(std::string);
+    
     NFA* keywordToNFA(std::string, int priority);
 
     void parseLine(std::string, int);

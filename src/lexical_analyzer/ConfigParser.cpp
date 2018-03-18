@@ -17,10 +17,10 @@ ConfigParser::ConfigParser(LanguageSpecParser* lang_sp) : lang_sp(lang_sp) {
 
 ConfigParser::~ConfigParser() {
         for(int i = 0; i < (int)keywords.size(); i++) {
-            delete keywords[i];
+                delete keywords[i];
         }
         for(int i = 0; i < (int)punctuations.size(); i++) {
-            delete punctuations[i];
+                delete punctuations[i];
         }
         delete regex_table;
         delete lang_sp;
@@ -40,7 +40,6 @@ NFA* ConfigParser::readLanguage(std::ifstream* input_file) {
         std::string current_line;
         int priority = -1;
         while(getline(*input_file, current_line)) {
-                std::cout << current_line << std::endl;
                 parseLine(Util::trim(current_line), priority);
                 priority--;
         }
@@ -103,49 +102,57 @@ void ConfigParser::parseRegularDefinition(std::string current_line, int priority
 }
 
 void ConfigParser::parsePunctuation(std::string current_line, int priority) {
-    std::vector<std::string> splitted_punctuations = Util::split(current_line.substr(1, current_line.length() - 2), ' ');
-    for(std::string punc : splitted_punctuations) {
-        if(!isValidKeywords(punc)) {
-            std::cerr << "Error! Invalid punctuation specified\nProgram is exitting...";
-            exit(-1);
+        std::vector<std::string> splitted_punctuations = Util::split(current_line.substr(1, current_line.length() - 2), ' ');
+        for(std::string punc : splitted_punctuations) {
+                if(!isValidPunctuation(punc)) {
+                        std::cerr << "Error! Invalid punctuation specified {" << punc << "}\nProgram is exitting...";
+                        exit(-1);
+                }
+                punctuations.push_back(keywordToNFA(punc.substr(punc.length() - 1), priority));
         }
-        punctuations.push_back(keywordToNFA(punc, priority));
-    }
 }
 
 void ConfigParser::parseKeywords(std::string current_line, int priority) {
-    std::vector<std::string> splitted_keywords = Util::split(current_line.substr(1, current_line.length() - 2), ' ');
-    for(std::string keyword : splitted_keywords) {
-        if(!isValidKeywords(keyword)) {
-            std::cerr << "Error! Invalid punctuation specified\nProgram is exitting...";
-            exit(-1);
+        std::vector<std::string> splitted_keywords = Util::split(current_line.substr(1, current_line.length() - 2), ' ');
+        for(std::string keyword : splitted_keywords) {
+                if(!isValidKeywords(keyword)) {
+                        std::cerr << "Error! Invalid keywords specified\nProgram is exitting...";
+                        exit(-1);
+                }
+                keywords.push_back(keywordToNFA(keyword, priority));
         }
-        keywords.push_back(keywordToNFA(keyword, priority));
-    }
 }
 
 bool ConfigParser::isValidKeywords(std::string keyword) {
-    for(int i = 0; i < (int)keyword.length(); i++) {
-        if(lang_sp->isReservedSymbol(keyword[i]) || (keyword[i] == '\\' && i != (int)keyword.length() - 1
-                && !lang_sp->isReservedSymbol(keyword[i + 1])))
-            return false;
-        if(keyword[i] == '\\') i++;
-    }
-    return true;
+        for(int i = 0; i < (int)keyword.length(); i++) {
+                if(lang_sp->isReservedSymbol(keyword[i]) || (keyword[i] == '\\' && i != (int)keyword.length() - 1
+                                                             && !lang_sp->isReservedSymbol(keyword[i + 1])))
+                        return false;
+                if(keyword[i] == '\\') i++;
+        }
+        return true;
+}
+
+bool ConfigParser::isValidPunctuation(std::string punc) {
+        if((punc.length() == 1 && !lang_sp->isReservedSymbol(punc[0])) ||
+           (punc.length() == 2 && punc[0] == '\\' && lang_sp->isReservedSymbol(punc[1]))) {
+                return true;
+        }
+        return false;
 }
 
 NFA* ConfigParser::keywordToNFA(std::string keyword, int priority) {
-    NFA* result = new NFA(keyword[0]);
-    for(int i = 1; i < (int)keyword.length(); i++) {
-        NFA* temp = result;
-        NFA* char_nfa = new NFA(keyword[i]);
-        result = result->concatenateOperation(*char_nfa);
-        delete temp;
-        delete char_nfa;
-    }
-    result->set_priority(priority);
-    result->set_type(keyword);
-    return result;
+        NFA* result = new NFA(keyword[0]);
+        for(int i = 1; i < (int)keyword.length(); i++) {
+                NFA* temp = result;
+                NFA* char_nfa = new NFA(keyword[i]);
+                result = result->concatenateOperation(*char_nfa);
+                delete temp;
+                delete char_nfa;
+        }
+        result->set_priority(priority);
+        result->set_type(keyword);
+        return result;
 }
 
 void ConfigParser::disassembleExpression(std::string expression, char operator_, std::string& operand_1, std::string& operand_2) {

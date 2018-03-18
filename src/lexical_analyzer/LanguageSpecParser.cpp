@@ -30,7 +30,7 @@ std::vector<LanguageToken*> LanguageSpecParser::infixToPostfix(std::string exp) 
                         if(concat)
                                 addOperator('&', language_tokens, st);
                         if(exp[pos + 1] == 'L')
-                                language_tokens.push_back(new LanguageToken("\0", LanguageTokenType::NULL_CHARACTER));
+                                language_tokens.push_back(new LanguageToken("\0", LanguageTokenType::CHARACTER));
                         else
                                 language_tokens.push_back(new LanguageToken(exp.substr(pos + 1, 1), LanguageTokenType::CHARACTER));
                         pos++;
@@ -101,6 +101,7 @@ NFA* LanguageSpecParser::postfixToNFA(std::vector<LanguageToken*> language_token
         std::stack<LanguageToken*> st;
         for(LanguageToken* cur_token : language_tokens) {
                 if(cur_token->getType() != LanguageTokenType::OPERATOR) {
+                    correctStackToken(cur_token, regex_table);
                     st.push(cur_token);
                 } else {
                     if(st.size() < 2) {
@@ -110,8 +111,6 @@ NFA* LanguageSpecParser::postfixToNFA(std::vector<LanguageToken*> language_token
                     st.pop();
                     LanguageToken* op2 = st.top();
                     st.pop();
-                    correctStackToken(op1, regex_table);
-                    correctStackToken(op2, regex_table);
                     NFA* result;
                     switch(cur_token->getValue()[0]) {
                         case '*':
@@ -143,7 +142,7 @@ NFA* LanguageSpecParser::postfixToNFA(std::vector<LanguageToken*> language_token
 void LanguageSpecParser::correctStackToken(LanguageToken* t1, RegularExpressionTable* regex_table) {
     if(t1->getType() == LanguageTokenType::EXPRESSION && !t1->hasNFA()) {
         if(!regex_table->hasExpression(t1->getValue())) {
-            std::cout << "Error! Unknown symbol {" << t1->getValue() << "}\bProgram is exitting..." << std::endl;
+            std::cerr << "Error! Unknown symbol {" << t1->getValue() << "}\bProgram is exitting..." << std::endl;
             exit(-1);
         }
         t1->setNFA(regex_table->getExpressionNFA(t1->getValue()), false);
@@ -158,7 +157,7 @@ NFA* LanguageSpecParser::rangeOperation(LanguageToken* t1, LanguageToken* t2) {
     char range_end = t2->getValue()[0];
     NFA* accumulated_NFA = new NFA(range_start);
     if(!isValidRegexRange(range_end, range_start)) {
-        std::cout << "Invalid Regex range" << std::endl;;
+        std::cerr << "Invalid Regex range" << std::endl;;
         exit(-1);
     }
     for(int i = range_start + 1; i <= range_end; i++) {
