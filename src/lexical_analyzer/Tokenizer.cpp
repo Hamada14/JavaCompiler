@@ -1,4 +1,4 @@
-#include "Tokenizer.h"
+#include "lexical_analyzer/Tokenizer.hpp"
 
 void tokenize(string inputFile, string outputFile, DFA dfa){
     freopen(inputFile.c_str(), "r", stdin);

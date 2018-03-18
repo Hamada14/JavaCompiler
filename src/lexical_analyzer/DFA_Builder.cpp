@@ -1,4 +1,4 @@
-#include "DFA_Builder.hpp"
+#include "lexical_analyzer/DFA_Builder.hpp"
 
 DFA* DFA_Builder::get_DFA() {
     DFA *ret;
@@ -17,7 +17,7 @@ DFA* DFA_Builder::get_DFA() {
 
     push_state(first_state);
     subset_construction(*ret);
-    return NULL;
+    return ret;
 }
 
 void DFA_Builder::get_epsillon_closure(int v, unordered_set<int> *result) {
@@ -94,8 +94,8 @@ void DFA_Builder::set_state(State *state) {
         unordered_map<int, node> *cur = nfa_graph->get_nodes();
         node tmp = (*cur)[v];
         is_acceptance_state |= tmp.acceptance;
-//        if (prio > tmp.prio)
-//            prio = tmp.prio, type = tmp.type;
+        if (prio > tmp.priority)
+            prio = tmp.priority, type = tmp.type;
     }
     state->set_acceptance(is_acceptance_state);
     state->set_type(type);

@@ -1,16 +1,8 @@
-//
-//  NFA.hpp
-//  JavaCompiler
-//
-//  Created by Ahmed on 3/13/18.
-//  Copyright © 2018 Abdellah. All rights reserved.
-//
-
 #ifndef NFA_hpp
 #define NFA_hpp
 
-#include <stdio.h>
 #include "Graph.hpp"
+#include <stdio.h>
 
 class NFA {
     int start_node, end_node; //node_ids
@@ -20,6 +12,7 @@ class NFA {
         NFA(char ch);
         NFA(Graph &g, int start_node, int end_node, int priority);
         NFA();
+        virtual ~NFA();
         Graph* get_graph();
         int get_start_node();
         int get_end_node();
@@ -28,7 +21,8 @@ class NFA {
         void set_start_node(int node);
         void set_end_node(int node);
         void set_priority(int priority);
-        virtual NFA clone();
+        void set_type(std::string);
+        virtual NFA* clone();
         NFA* orOperation(NFA &nfa);
         NFA* concatenateOperation (NFA &nfa);
         NFA* asteriskOperation ();

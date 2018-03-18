@@ -1,24 +1,26 @@
 #ifndef ConfigParser_hpp
 #define ConfigParser_hpp
 
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <regex>
-#include "Util.hpp"
 #include "LanguageSpecParser.hpp"
 #include "RegularExpressionTable.hpp"
+#include "Util.hpp"
+#include <fstream>
+#include <iostream>
+#include <regex>
+#include <string>
 
 class ConfigParser {
   public:
     ConfigParser(LanguageSpecParser*);
     ~ConfigParser();
-    
+
     std::string getConfigFilePath();
     void readLanguageSpec(std::ifstream*);
   private:
     LanguageSpecParser* lang_sp;
     RegularExpressionTable* regex_table;
+    RegularExpressionTable* definition_table;
+    std::vector<NFA*> keywords, punctuations;
 
     static const char DEFINITION_OPERATOR;
     static const char EXPRESSION_OPERATOR;
@@ -31,7 +33,11 @@ class ConfigParser {
     static const std::regex KEYWORDS_REGEX;
 
     void validateInputFile(std::ifstream*);
-    void readLanguage(std::ifstream*);
+    NFA* readLanguage(std::ifstream*);
+
+    bool isValidKeywords(std::string);
+
+    NFA* keywordToNFA(std::string, int priority);
 
     void parseLine(std::string, int);
     void parseRegularExpression(std::string, int);
@@ -40,5 +46,7 @@ class ConfigParser {
     void parseKeywords(std::string, int);
 
     void disassembleExpression(std::string, char, std::string&, std::string&);
+
+    NFA* getResultNFA();
 };
 #endif
