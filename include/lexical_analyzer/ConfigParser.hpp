@@ -15,7 +15,7 @@ class ConfigParser {
     ~ConfigParser();
 
     std::string getConfigFilePath();
-    void readLanguageSpec(std::ifstream*);
+    NFA* readLanguageSpec(std::ifstream*);
   private:
     LanguageSpecParser* lang_sp;
     RegularExpressionTable* regex_table;
@@ -36,6 +36,7 @@ class ConfigParser {
     NFA* readLanguage(std::ifstream*);
 
     bool isValidKeywords(std::string);
+    bool isValidPunctuation(std::string);
 
     NFA* keywordToNFA(std::string, int priority);
 

@@ -1,5 +1,4 @@
 #include "Util.hpp"
-#include <iostream>
 
 namespace Util {
   const std::string EMPTY_STRING = "";
