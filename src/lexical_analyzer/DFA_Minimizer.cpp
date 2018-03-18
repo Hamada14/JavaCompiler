@@ -30,13 +30,13 @@ DFA* DFA_Minimizer::get_minimized_DFA() {
         partitions = cur_partitions;
     }
 	int component_of[number_of_nodes];
-	for (State *x : (*partitions) {
+	for (State *x : (*partitions)) {
 		int cur_node = ret->get_nodes()->add_node(x->get_acceptance(), x->get_type());
 		for (auto v : (*x->get_nodes())) {
 			component_of[v] = cur_node;
 		}
 	}
-	for (State *x : (*partitions) {
+	for (State *x : (*partitions)) {
 		for (auto v : (*x->get_nodes())) {
 			unordered_map<int, node> *cur = g->get_nodes();
 			node tmp = (*cur)[v];

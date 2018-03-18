@@ -31,9 +31,9 @@ std::string ConfigParser::getConfigFilePath() {
         return CONFIG_FILE_PATH;
 }
 
-void ConfigParser::readLanguageSpec(std::ifstream* input_file) {
+NFA* ConfigParser::readLanguageSpec(std::ifstream* input_file) {
         validateInputFile(input_file);
-        readLanguage(input_file);
+        return readLanguage(input_file);
 }
 
 NFA* ConfigParser::readLanguage(std::ifstream* input_file) {
