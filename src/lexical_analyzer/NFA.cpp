@@ -52,7 +52,7 @@ void NFA:: set_type(std::string type) {
 }
 
 void NFA:: set_acceptnace(std::string type, int priority) {
-    if(priority > get_priority())
+    if(priority < get_priority())
         return;
     set_priority(priority);
     set_type(type);
