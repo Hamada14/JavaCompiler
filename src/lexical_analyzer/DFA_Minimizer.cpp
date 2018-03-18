@@ -1,6 +1,7 @@
 #include "lexical_analyzer/DFA_Minimizer.hpp"
 
 DFA* DFA_Minimizer::get_minimized_DFA() {
+	DFA *ret;
     State *acc, *non_acc;
     acc->set_acceptance(true), non_acc->set_acceptance(false);
     bool visited[number_of_nodes];
@@ -28,7 +29,23 @@ DFA* DFA_Minimizer::get_minimized_DFA() {
         }
         partitions = cur_partitions;
     }
-    return NULL;
+	int component_of[number_of_nodes];
+	for (State *x : (*partitions) {
+		int cur_node = ret->get_nodes()->add_node(x->get_acceptance(), x->get_type());
+		for (auto v : (*x->get_nodes())) {
+			component_of[v] = cur_node;
+		}
+	}
+	for (State *x : (*partitions) {
+		for (auto v : (*x->get_nodes())) {
+			unordered_map<int, node> *cur = g->get_nodes();
+			node tmp = (*cur)[v];
+			set<string> node_states;
+			for (transition nxt : tmp.transitions)
+				ret->get_nodes()->add_edge(component_of[v], component_of[nxt.next], nxt.input);
+		}
+	}
+    return ret;
 }
 
 void DFA_Minimizer::get_initial_partitions(int v, bool *vis, State *acc, State *non_acc) {
@@ -91,8 +108,8 @@ void DFA_Minimizer::set_state(State *state) {
         unordered_map<int, node> *cur = g->get_nodes();
         node tmp = (*cur)[v];
         is_acceptance_state |= tmp.acceptance;
-//        if (prio > tmp.prio)
-//            prio = tmp.prio, type = tmp.type;
+        if (prio > tmp.priority)
+            prio = tmp.priority, type = tmp.type;
     }
     state->set_acceptance(is_acceptance_state);
     state->set_type(type);
