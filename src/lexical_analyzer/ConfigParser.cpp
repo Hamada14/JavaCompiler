@@ -40,8 +40,8 @@ NFA* ConfigParser::readLanguage(std::ifstream* input_file) {
         std::string current_line;
         int priority = -1;
         while(getline(*input_file, current_line)) {
+                std::cout << current_line << std::endl;
                 parseLine(Util::trim(current_line), priority);
-                std::cout << " : " << current_line << std::endl;
                 priority--;
         }
         return getResultNFA();

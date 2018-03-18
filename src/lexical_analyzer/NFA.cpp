@@ -2,7 +2,6 @@
 
 
 NFA::NFA(char ch) {
-    Graph g;
     start_node = g.add_node(false, "");
     end_node = g.add_node(false, "");
     g.add_edge(start_node, end_node, string(&ch));
@@ -96,8 +95,8 @@ NFA* NFA::orOperation(NFA &nfa) {
 
     string type2 = (*nodes)[nfa.get_end_node()].type;
 
-    g.add_edge(start_node, newId[this->start_node], "/L");
-    g.add_edge(start_node, newId[nfa.get_start_node()], "/L");
+    g.add_edge(startNode, newId[this->start_node], "/L");
+    g.add_edge(startNode, newId[nfa.get_start_node()], "/L");
 
     int endNode, pr;
 
@@ -139,7 +138,7 @@ NFA* NFA::concatenateOperation(NFA &nfa) {
             g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
 
 
-    g.add_edge(start_node, newId[this->start_node], "/L");
+    g.add_edge(startNode, newId[this->start_node], "/L");
 
 
     int endNode = g.add_node(true, (*nodes)[nfa.get_end_node()].type);

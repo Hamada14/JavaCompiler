@@ -31,7 +31,7 @@ class LanguageSpecParser {
 
     void addOperator(char, vector<LanguageToken*> &, stack<LanguageToken*> &);
 
-    NFA* plusOperation(LanguageToken*, LanguageToken*);
+    NFA* rangeOperation(LanguageToken*, LanguageToken*);
 
     static std::map<char, int> OPERATOR_PRECEDENCE;
     static const std::set<char> RESERVED_SYM;

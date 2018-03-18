@@ -10,9 +10,6 @@ const std::set<char> LanguageSpecParser::RESERVED_SYM = {'-', '*', '+', '|', '\\
 NFA* LanguageSpecParser::parseRegularExpression(std::string exp, RegularExpressionTable* regex_table) {
         std::vector<LanguageToken*> postfix = infixToPostfix(exp);
         NFA* result_nfa =  postfixToNFA(postfix, regex_table);
-        for(int i = 0; i < (int)postfix.size(); i++) {
-                delete postfix[i];
-        }
         return result_nfa;
 }
 
@@ -33,7 +30,7 @@ std::vector<LanguageToken*> LanguageSpecParser::infixToPostfix(std::string exp) 
                         if(concat)
                                 addOperator('&', language_tokens, st);
                         if(exp[pos + 1] == 'L')
-                                language_tokens.push_back(new LanguageToken("", LanguageTokenType::NULL_CHARACTER));
+                                language_tokens.push_back(new LanguageToken("\0", LanguageTokenType::NULL_CHARACTER));
                         else
                                 language_tokens.push_back(new LanguageToken(exp.substr(pos + 1, 1), LanguageTokenType::CHARACTER));
                         pos++;
@@ -118,24 +115,24 @@ NFA* LanguageSpecParser::postfixToNFA(std::vector<LanguageToken*> language_token
                     NFA* result;
                     switch(cur_token->getValue()[0]) {
                         case '*':
-                            result = op1->getNFA()->asteriskOperation();
+                            result = op2->getNFA()->asteriskOperation();
                             break;
                         case '-':
-                            result = plusOperation(op1, op2);
+                            result = rangeOperation(op2, op1);
                             break;
                         case '|':
                             result = op1->getNFA()->orOperation(*op2->getNFA());
                             break;
                         case '&':
-                            result = op1->getNFA()->concatenateOperation(*op2->getNFA());
+                            result = op2->getNFA()->concatenateOperation(*op1->getNFA());
                             break;
                         case '+':
-                            result = op1->getNFA()->plusOperation();
+                            result = op2->getNFA()->plusOperation();
                             break;
                         default:
                             exit(-1);
                     }
-                    st.push(new LanguageToken(result));
+                    st.push(new LanguageToken(result, true));
                     delete op1;
                     delete op2;
                 }
@@ -146,19 +143,22 @@ NFA* LanguageSpecParser::postfixToNFA(std::vector<LanguageToken*> language_token
 void LanguageSpecParser::correctStackToken(LanguageToken* t1, RegularExpressionTable* regex_table) {
     if(t1->getType() == LanguageTokenType::EXPRESSION && !t1->hasNFA()) {
         if(!regex_table->hasExpression(t1->getValue())) {
-            std::cout << " Error" << std::endl;
+            std::cout << "Error! Unknown symbol {" << t1->getValue() << "}\bProgram is exitting..." << std::endl;
             exit(-1);
         }
-        t1->setNFA(regex_table->getExpressionNFA(t1->getValue()));
+        t1->setNFA(regex_table->getExpressionNFA(t1->getValue()), false);
+    }
+    if(t1->getType() == LanguageTokenType::CHARACTER) {
+        t1->setNFA(new NFA(t1->getValue()[0]), true);
     }
 }
 
-NFA* LanguageSpecParser::plusOperation(LanguageToken* t1, LanguageToken* t2) {
+NFA* LanguageSpecParser::rangeOperation(LanguageToken* t1, LanguageToken* t2) {
     char range_start = t1->getValue()[0];
     char range_end = t2->getValue()[0];
     NFA* accumulated_NFA = new NFA(range_start);
-    if(!isValidRegexRange(range_start, range_end)) {
-        std::cout << "Invalid Rege range" << std::endl;;
+    if(!isValidRegexRange(range_end, range_start)) {
+        std::cout << "Invalid Regex range" << std::endl;;
         exit(-1);
     }
     for(int i = range_start + 1; i <= range_end; i++) {
@@ -169,7 +169,7 @@ NFA* LanguageSpecParser::plusOperation(LanguageToken* t1, LanguageToken* t2) {
     return accumulated_NFA;
 }
 
-bool LanguageSpecParser::isValidRegexRange(char range_start, char range_end) {
+bool LanguageSpecParser::isValidRegexRange(char range_end, char range_start) {
         return (range_start == 'a' && range_end == 'z') || (range_start == 'A' && range_end == 'Z')
                 || (range_start == '0' && range_end == '9');
 }

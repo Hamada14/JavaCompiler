@@ -1,5 +1,5 @@
 #include "lexical_analyzer/RegularExpressionTable.hpp"
-
+#include <iostream>
 RegularExpressionTable::~RegularExpressionTable() {
     clear();
 }

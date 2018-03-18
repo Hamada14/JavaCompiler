@@ -1,4 +1,5 @@
 #include "Util.hpp"
+#include <iostream>
 
 namespace Util {
   const std::string EMPTY_STRING = "";
@@ -29,7 +30,7 @@ namespace Util {
           if(str[i] == delimiter)
             continue;
           int j = i;
-          for(int j = i; j < (int)str.length() && str[j] != delimiter; j++);
+          for(j = i; j < (int)str.length() && str[j] != delimiter; j++);
           result.push_back(str.substr(i, j - i));
           i = j - 1;
       }
