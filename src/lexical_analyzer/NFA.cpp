@@ -98,18 +98,12 @@ NFA* NFA::orOperation(NFA &nfa) {
     g.add_edge(startNode, newId[this->start_node], "/L");
     g.add_edge(startNode, newId[nfa.get_start_node()], "/L");
 
-    int endNode, pr;
-
-
-    if(this->get_priority() > nfa.get_priority())
-        endNode = g.add_node(true, type1), pr = this->get_priority();
-    else
-        endNode = g.add_node(true, type2), pr = nfa.get_priority();
-
+    int endNode = g.add_node(false, "");
+    
     g.add_edge(newId[this->end_node], endNode,"/L");
     g.add_edge(newId[nfa.get_end_node()], endNode,"/L");
 
-    return new NFA(g,startNode,endNode,pr);
+    return new NFA(g,startNode,endNode,infi);
 }
 
 NFA* NFA::concatenateOperation(NFA &nfa) {
@@ -141,11 +135,11 @@ NFA* NFA::concatenateOperation(NFA &nfa) {
     g.add_edge(startNode, newId[this->start_node], "/L");
 
 
-    int endNode = g.add_node(true, (*nodes)[nfa.get_end_node()].type);
+    int endNode = g.add_node(false, "");
 
     g.add_edge(newId[nfa.get_end_node()], endNode,"/L");
 
-    return new NFA(g,startNode,endNode,this->get_priority());
+    return new NFA(g,startNode,endNode,infi);
 }
 
 
@@ -156,7 +150,7 @@ NFA* NFA::asteriskOperation() {
     unordered_map<int, node> *nodes = this->get_graph()->get_nodes();
     unordered_map<int, int> newId;
 
-    int endNode = g.add_node(true, (*nodes)[this->end_node].type);
+    int endNode = g.add_node(false, "");
 
     for(auto n:*nodes)
         newId[n.second.id] = g.add_node(n.second.acceptance, n.second.type);
@@ -170,7 +164,7 @@ NFA* NFA::asteriskOperation() {
     g.add_edge(startNode, endNode, "/L");
     g.add_edge(endNode, startNode, "/L");
 
-    return new NFA(g,startNode,endNode,this->get_priority());
+    return new NFA(g,startNode,endNode,infi);
 }
 
 
@@ -181,7 +175,7 @@ NFA* NFA::plusOperation() {
     unordered_map<int, node> *nodes = this->get_graph()->get_nodes();
     unordered_map<int, int> newId;
 
-    int endNode = g.add_node(true, (*nodes)[this->end_node].type);
+    int endNode = g.add_node(false, "");
 
     for(auto n:*nodes)
         newId[n.second.id] = g.add_node(n.second.acceptance, n.second.type);
@@ -194,5 +188,5 @@ NFA* NFA::plusOperation() {
     g.add_edge(newId[end_node], endNode, "/L");
     g.add_edge(endNode, startNode, "/L");
 
-    return new NFA(g,startNode,endNode,this->get_priority());
+    return new NFA(g,startNode,endNode,infi);
 }
