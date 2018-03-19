@@ -52,16 +52,12 @@ void NFA:: set_type(std::string type) {
 }
 
 
-void NFA:: set_acceptnace(std::string type, int priority) {
+void NFA:: set_acceptance(std::string type, int priority) {
     if(priority < get_priority())
         return;
-    g[end_node].acceptance = true;
+    (*g.get_nodes())[end_node].acceptance = true;
     set_priority(priority);
     set_type(type);
-    std::cout << "Current Expression => " << type << std::endl;
-    unordered_set<int> x;
-    g.dfs(x, start_node);
-    exit(0);
 }
 
 NFA* NFA:: clone() {
@@ -136,21 +132,18 @@ NFA* NFA::concatenateOperation(NFA &nfa) {
             g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
 
     g.add_edge(startNode, newId[this->start_node], "/L");
-    
-    int middle_end_node = newId[this->get_end_node()];
+
     nodes = nfa.get_graph()->get_nodes();
 
     for(auto n:*nodes)
         newId[n.second.id] = g.add_node(n.second.acceptance, n.second.type, n.second.priority);
-    int middle_start_node = newId[this->get_start_node()];
 
     for(auto n:*nodes)
         for(transition tr: n.second.transitions)
             g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
 
 
-    
-    g.add_edge(newId[this->end_node], newId[nfa.start_node]);
+    g.add_edge(newId[this->end_node], newId[nfa.start_node], "/L");
     int endNode = g.add_node(false, "");
 
     g.add_edge(newId[nfa.get_end_node()], endNode,"/L");

@@ -23,7 +23,7 @@ struct node {
     int id;
     bool acceptance;
     string type;
-    int priority = -infi;
+    int priority = -(infi);
     vector< transition > transitions;
 
     node(int id, bool acceptance, string type) :id(id), acceptance(acceptance), type(type){};
@@ -40,14 +40,16 @@ struct node {
             std::cout << "Type=>" << type << ", priority=> " << priority << std::endl;
         }
         std::cout << "Neighbors => ";
-        for(int i = 0; i < transitions.size(); i++) cout << "{" << transitions[i].next << ", /" << transitions[i].input << "/" << "}, ";
+        for(transition trans : transitions) {
+            cout << "{" << trans.next << ", /" << trans.input << "/" << "}, ";
+        }
         std::cout << endl;
     }
 
     std::vector<int> getNeighbors() {
         std::vector<int> res;
-        for(int i = 0; i < transitions.size(); i++) {
-            res.push_back(transitions[i].next);
+        for(transition trans : transitions) {
+            res.push_back(trans.next);
         }
         std::sort( res.begin(), res.end() );
         res.erase( std::unique( res.begin(), res.end() ), res.end() );

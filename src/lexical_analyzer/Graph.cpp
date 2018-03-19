@@ -28,8 +28,8 @@ void Graph::dfs(unordered_set<int> vis, int cur_node) {
     vis.insert(cur_node);
     adjList[cur_node].print();
     std::vector<int> neighbors = adjList[cur_node].getNeighbors();
-    for(int i = 0; i < neighbors.size(); i++) {
-        dfs(vis, neighbors[i]);
+    for(int neighbor : neighbors) {
+        dfs(vis, neighbor);
     }
 }
 
