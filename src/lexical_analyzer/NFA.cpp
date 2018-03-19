@@ -136,6 +136,7 @@ NFA* NFA::concatenateOperation(NFA &nfa) {
             g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
 
     g.add_edge(startNode, newId[this->start_node], "/L");
+    
     int middle_end_node = newId[this->get_end_node()];
     nodes = nfa.get_graph()->get_nodes();
 
@@ -148,8 +149,8 @@ NFA* NFA::concatenateOperation(NFA &nfa) {
             g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
 
 
-
-
+    
+    g.add_edge(newId[this->end_node], newId[nfa.start_node]);
     int endNode = g.add_node(false, "");
 
     g.add_edge(newId[nfa.get_end_node()], endNode,"/L");
