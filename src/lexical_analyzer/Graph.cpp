@@ -23,6 +23,15 @@ void Graph:: add_edge(int from, int to, string input) {
 }
 
 
+void Graph::dfs(unordered_set<int> vis, int cur_node) {
+    if(vis.find(cur_node) != vis.end()) return;
+    vis.insert(cur_node);
+    adjList[cur_node].print();
+    std::vector<int> neighbors = adjList[cur_node].getNeighbors();
+    for(int i = 0; i < neighbors.size(); i++) {
+        dfs(vis, neighbors[i]);
+    }
+}
 
 unordered_map<int, node>* Graph:: get_nodes() {
     return &adjList;

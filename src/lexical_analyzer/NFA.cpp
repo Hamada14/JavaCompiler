@@ -7,17 +7,16 @@ NFA::NFA(char ch) {
     g.add_edge(start_node, end_node, string(&ch));
 }
 
-NFA:: NFA(Graph &g, int start_node, int end_node, int priority) {
+NFA:: NFA(Graph &g, int start_node, int end_node) {
     this->g = g;
     this->start_node = start_node;
     this->end_node = end_node;
-    this->set_priority(priority);
 }
 
 NFA::NFA() {}
 
 NFA::~NFA() {
-    
+
 }
 
 Graph* NFA:: get_graph() {
@@ -49,13 +48,18 @@ void NFA:: set_priority(int priority) {
 
 void NFA:: set_type(std::string type) {
     (*g.get_nodes())[end_node].type = type;
+    (*g.get_nodes())[end_node].acceptance = true;
 }
 
-void NFA:: set_acceptnace(std::string type, int priority) {
+void NFA:: set_acceptance(std::string type, int priority) {
     if(priority < get_priority())
         return;
     set_priority(priority);
     set_type(type);
+    std::cout << "Current Expression => " << type << std::endl;
+    unordered_set<int> x;
+    g.dfs(x, start_node);
+    exit(0);
 }
 
 NFA* NFA:: clone() {
@@ -72,8 +76,8 @@ NFA* NFA:: clone() {
         for(transition tr: n.second.transitions)
             g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
 
-    
-    return new NFA(g,newId[start_node],newId[end_node],this->get_priority());
+
+    return new NFA(g,newId[start_node],newId[end_node]);
 }
 
 NFA* NFA::orOperation(NFA &nfa) {
@@ -107,7 +111,7 @@ NFA* NFA::orOperation(NFA &nfa) {
     g.add_edge(startNode, newId[nfa.get_start_node()], "/L");
 
     int endNode = g.add_node(false, "");
-    
+
     g.add_edge(newId[this->end_node], endNode,"/L");
     g.add_edge(newId[nfa.get_end_node()], endNode,"/L");
 
@@ -129,18 +133,19 @@ NFA* NFA::concatenateOperation(NFA &nfa) {
         for(transition tr: n.second.transitions)
             g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
 
-
+    g.add_edge(startNode, newId[this->start_node], "/L");
+    int middle_end_node = newId[this->get_end_node()];
     nodes = nfa.get_graph()->get_nodes();
 
     for(auto n:*nodes)
         newId[n.second.id] = g.add_node(n.second.acceptance, n.second.type, n.second.priority);
+    int middle_start_node = newId[this->get_start_node()];
 
     for(auto n:*nodes)
         for(transition tr: n.second.transitions)
             g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
 
 
-    g.add_edge(startNode, newId[this->start_node], "/L");
 
 
     int endNode = g.add_node(false, "");
@@ -198,6 +203,3 @@ NFA* NFA::plusOperation() {
 
     return new NFA(g,startNode,endNode);
 }
-
-
-
