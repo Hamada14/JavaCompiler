@@ -51,9 +51,11 @@ void NFA:: set_type(std::string type) {
     (*g.get_nodes())[end_node].type = type;
 }
 
+
 void NFA:: set_acceptnace(std::string type, int priority) {
     if(priority < get_priority())
         return;
+    g[end_node].acceptance = true;
     set_priority(priority);
     set_type(type);
 }
