@@ -14,18 +14,44 @@ struct transition {
     string input; // string because /L == lamda
 };
 
+#include <iostream>
+#include <algorithm>
+#include <unordered_set>
 
 // it can be pool design pattern for better performance
 struct node {
     int id;
     bool acceptance;
     string type;
-    int priority = infi;
+    int priority = -infi;
     vector< transition > transitions;
+
     node(int id, bool acceptance, string type) :id(id), acceptance(acceptance), type(type){};
+    node(int id, bool acceptance, string type, int priority) :id(id), acceptance(acceptance), type(type), priority(priority){};
     node(){};
+
     bool isAcceptance(){
         return acceptance;
+    }
+
+    void print() {
+        printf("Current Node=>%d\n", id);
+        if(acceptance) {
+            std::cout << "Type=>" << type << ", priority=> " << priority << std::endl;
+        }
+        std::cout << "Neighbors => ";
+        for(int i = 0; i < transitions.size(); i++) cout << "{" << transitions[i].next << ", /" << transitions[i].input << "/" << "}, ";
+        std::cout << endl;
+    }
+
+    std::vector<int> getNeighbors() {
+        std::vector<int> res;
+        for(int i = 0; i < transitions.size(); i++) {
+            res.push_back(transitions[i].next);
+        }
+        std::sort( res.begin(), res.end() );
+        res.erase( std::unique( res.begin(), res.end() ), res.end() );
+        return res;
     }
 
     int makeTransition(string s){
@@ -42,7 +68,9 @@ class Graph {
     unordered_map<int, node> adjList;
 
     public:
+        void dfs(unordered_set<int>, int);
         int add_node(bool acceptance, string type);  // returns node id
+        int add_node(bool acceptance, string type, int priority);  // returns node id
         void add_edge(int from, int to, string input); //function parameters(from, to) are node ids
         unordered_map<int, node>* get_nodes();
 

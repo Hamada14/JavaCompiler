@@ -10,7 +10,7 @@ class NFA {
 
     public:
         NFA(char ch);
-        NFA(Graph &g, int start_node, int end_node, int priority);
+        NFA(Graph &g, int start_node, int end_node);
         NFA();
         virtual ~NFA();
         Graph* get_graph();
@@ -20,17 +20,16 @@ class NFA {
         void set_graph(const Graph &g);
         void set_start_node(int node);
         void set_end_node(int node);
-        void set_priority(int priority);
-        void set_type(std::string);
-        void set_acceptnace(std::string type, int priority);
+        void set_acceptance(std::string type, int priority);
         virtual NFA* clone();
         NFA* orOperation(NFA &nfa);
         NFA* concatenateOperation (NFA &nfa);
         NFA* asteriskOperation ();
         NFA* plusOperation ();
-    
 
-
+    private:
+        void set_priority(int priority);
+        void set_type(std::string);
 };
 
 

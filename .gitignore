@@ -39,6 +39,7 @@
 *.xcbkptlist
 *.xcscheme
 *.plist
+*.xcsettings
 
 # build file
 **/build/*

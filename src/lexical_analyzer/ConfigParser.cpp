@@ -89,7 +89,7 @@ void ConfigParser::parseRegularExpression(std::string current_line, int priority
         std::string operand_1, operand_2;
         disassembleExpression(current_line, EXPRESSION_OPERATOR, operand_1, operand_2);
         NFA* result = lang_sp->parseRegularExpression(operand_2, regex_table);
-        result->set_priority(priority);
+        result->set_acceptance(operand_1, priority);
         regex_table->addExpressionNFA(operand_1, result);
 }
 
@@ -97,7 +97,7 @@ void ConfigParser::parseRegularDefinition(std::string current_line, int priority
         std::string operand_1, operand_2;
         disassembleExpression(current_line, DEFINITION_OPERATOR, operand_1, operand_2);
         NFA* result = lang_sp->parseRegularExpression(operand_2, regex_table);
-        result->set_priority(priority);
+        result->set_acceptance(operand_1, priority);
         definition_table->addExpressionNFA(operand_1, result);
 }
 
@@ -150,8 +150,7 @@ NFA* ConfigParser::keywordToNFA(std::string keyword, int priority) {
                 delete temp;
                 delete char_nfa;
         }
-        result->set_priority(priority);
-        result->set_type(keyword);
+        result->set_acceptance(keyword, priority);
         return result;
 }
 
