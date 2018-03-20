@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <stdio.h>
 
 #define infi 1<<20
 

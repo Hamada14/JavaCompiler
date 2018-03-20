@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="JavaCompiler" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/JavaCompiler" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="../include" />
+					<Add directory="../include/lexical_analyzer" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/JavaCompiler" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="../include/Util.hpp" />
+		<Unit filename="../include/lexical_analyzer/ConfigParser.hpp" />
+		<Unit filename="../include/lexical_analyzer/DFA.hpp" />
+		<Unit filename="../include/lexical_analyzer/DFA_Builder.hpp" />
+		<Unit filename="../include/lexical_analyzer/DFA_Minimizer.hpp" />
+		<Unit filename="../include/lexical_analyzer/Graph.hpp" />
+		<Unit filename="../include/lexical_analyzer/LanguageSpecParser.hpp" />
+		<Unit filename="../include/lexical_analyzer/LanguageToken.hpp" />
+		<Unit filename="../include/lexical_analyzer/NFA.hpp" />
+		<Unit filename="../include/lexical_analyzer/RegularExpressionTable.hpp" />
+		<Unit filename="../include/lexical_analyzer/State.hpp" />
+		<Unit filename="../include/lexical_analyzer/Tokenizer.hpp" />
+		<Unit filename="../src/Util.cpp" />
+		<Unit filename="../src/lexical_analyzer/ConfigParser.cpp" />
+		<Unit filename="../src/lexical_analyzer/DFA.cpp" />
+		<Unit filename="../src/lexical_analyzer/DFA_Builder.cpp" />
+		<Unit filename="../src/lexical_analyzer/DFA_Minimizer.cpp" />
+		<Unit filename="../src/lexical_analyzer/Graph.cpp" />
+		<Unit filename="../src/lexical_analyzer/LanguageSpecParser.cpp" />
+		<Unit filename="../src/lexical_analyzer/LanguageToken.cpp" />
+		<Unit filename="../src/lexical_analyzer/NFA.cpp" />
+		<Unit filename="../src/lexical_analyzer/RegularExpressionTable.cpp" />
+		<Unit filename="../src/lexical_analyzer/State.cpp" />
+		<Unit filename="../src/lexical_analyzer/Tokenizer.cpp" />
+		<Unit filename="../src/main.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

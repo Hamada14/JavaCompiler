@@ -1,8 +1,9 @@
 #include "lexical_analyzer/DFA_Minimizer.hpp"
 
 DFA* DFA_Minimizer::get_minimized_DFA() {
-	DFA *ret;
-    State *acc, *non_acc;
+	DFA *ret = new DFA;
+    State *acc = new State;
+    State *non_acc = new State;
     acc->set_acceptance(true), non_acc->set_acceptance(false);
     bool visited[number_of_nodes];
     memset(visited, 0, sizeof visited);
@@ -16,7 +17,7 @@ DFA* DFA_Minimizer::get_minimized_DFA() {
     }
     bool changed = true;
     while (changed) {
-        vector<State*> *cur_partitions;
+        vector<State*> *cur_partitions = new vector<State*>;
         changed = false;
         for (State *x : (*partitions)) {
             vector<State*> *parts = construct_new_partition_by_transtion(x);
@@ -63,7 +64,7 @@ void DFA_Minimizer::get_initial_partitions(int v, bool *vis, State *acc, State *
 }
 
 vector<State*>* DFA_Minimizer::construct_new_partition_by_type(State *state) {
-    vector<State*> *ret;
+    vector<State*> *ret = new vector<State*>;
     map<string, int> mp;
     int cnt = 1;
     for (auto v : (*state->get_nodes())) {
@@ -80,7 +81,7 @@ vector<State*>* DFA_Minimizer::construct_new_partition_by_type(State *state) {
 }
 
 vector<State*>* DFA_Minimizer::construct_new_partition_by_transtion(State *state) {
-    vector<State*> *ret;
+    vector<State*> *ret = new vector<State*>;
     map<set<string> , int> mp;
     int cnt = 1;
     for (auto v : (*state->get_nodes())) {

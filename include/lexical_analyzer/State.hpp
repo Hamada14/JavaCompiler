@@ -13,6 +13,7 @@ class State {
         string type;
         int priority;
     public:
+        State(){ nodes = new set<int>; };
         set<int> *get_nodes();
         int get_id();
         int get_priority();

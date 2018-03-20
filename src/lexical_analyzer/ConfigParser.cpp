@@ -1,4 +1,4 @@
-#include "lexical_analyzer/ConfigParser.hpp"
+#include "ConfigParser.hpp"
 
 const std::string ConfigParser::CONFIG_FILE_PATH = "input";
 
@@ -80,7 +80,7 @@ void ConfigParser::parseLine(std::string current_line, int priority) {
         } else if(regex_match(current_line, KEYWORDS_REGEX)) {
                 parseKeywords(current_line, priority);
         } else {
-                std::cerr << "Error! Line doesn't follow the required description.\nProgram is exitting...";
+                std::cerr << "Error! Line doesn't follow the required description.\nProgram is exiting...";
                 exit(0);
         }
 }
@@ -105,7 +105,7 @@ void ConfigParser::parsePunctuation(std::string current_line, int priority) {
         std::vector<std::string> splitted_punctuations = Util::split(current_line.substr(1, current_line.length() - 2), ' ');
         for(std::string punc : splitted_punctuations) {
                 if(!isValidPunctuation(punc)) {
-                        std::cerr << "Error! Invalid punctuation specified {" << punc << "}\nProgram is exitting...";
+                        std::cerr << "Error! Invalid punctuation specified {" << punc << "}\nProgram is exiting...";
                         exit(-1);
                 }
                 punctuations.push_back(keywordToNFA(punc.substr(punc.length() - 1), priority));
@@ -116,7 +116,7 @@ void ConfigParser::parseKeywords(std::string current_line, int priority) {
         std::vector<std::string> splitted_keywords = Util::split(current_line.substr(1, current_line.length() - 2), ' ');
         for(std::string keyword : splitted_keywords) {
                 if(!isValidKeywords(keyword)) {
-                        std::cerr << "Error! Invalid keywords specified\nProgram is exitting...";
+                        std::cerr << "Error! Invalid keywords specified\nProgram is exiting...";
                         exit(-1);
                 }
                 keywords.push_back(keywordToNFA(keyword, priority));
@@ -162,7 +162,7 @@ void ConfigParser::disassembleExpression(std::string expression, char operator_,
 
 void ConfigParser::validateInputFile(std::ifstream* input_file) {
         if(!*input_file) {
-                std::cerr << "Couldn't read the input file.\nProgram is exitting...";
+                std::cerr << "Couldn't read the input file.\nProgram is exiting...";
                 exit(0);
         }
 }
