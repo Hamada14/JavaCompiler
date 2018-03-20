@@ -188,10 +188,10 @@
 1521373066 d:\downloads\javacompiler\include\lexical_analyzer\dfa.hpp
 	"Graph.hpp"
 
-1521575467 source:d:\downloads\javacompiler\src\lexical_analyzer\dfa_minimizer.cpp
+1521583362 source:d:\downloads\javacompiler\src\lexical_analyzer\dfa_minimizer.cpp
 	"lexical_analyzer/DFA_Minimizer.hpp"
 
-1521575467 d:\downloads\javacompiler\include\lexical_analyzer\dfa_minimizer.hpp
+1521583416 d:\downloads\javacompiler\include\lexical_analyzer\dfa_minimizer.hpp
 	"DFA.hpp"
 	"Graph.hpp"
 	"State.hpp"
@@ -238,12 +238,13 @@
 	<stdio.h>
 	<string>
 
-1521575467 source:d:\downloads\javacompiler\src\main.cpp
+1521583280 source:d:\downloads\javacompiler\src\main.cpp
 	"lexical_analyzer/ConfigParser.hpp"
 	<fstream>
 	<iostream>
 	"lexical_analyzer/NFA.hpp"
 	"DFA_Builder.hpp"
+	"DFA_Minimizer.hpp"
 
 1521575467 d:\downloads\javacompiler\include\lexical_analyzer\dfa_builder.hpp
 	"DFA.hpp"
@@ -262,6 +263,6 @@
 1521566175 source:d:\downloads\javacompiler\src\util.cpp
 	"Util.hpp"
 
-1521572107 source:d:\downloads\javacompiler\src\lexical_analyzer\dfa_builder.cpp
+1521576435 source:d:\downloads\javacompiler\src\lexical_analyzer\dfa_builder.cpp
 	"lexical_analyzer/DFA_Builder.hpp"
 

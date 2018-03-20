@@ -31,6 +31,7 @@ class DFA_Minimizer {
             this->start_node = dfa->get_start_node();
             this->end_node = dfa->get_end_node();
             this->number_of_nodes = (int) (this->g->get_nodes()->size());
+            this->partitions = new vector<State*>;
         }
 
         DFA *get_minimized_DFA();

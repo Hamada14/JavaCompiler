@@ -3,6 +3,7 @@
 #include <iostream>
 #include "lexical_analyzer/NFA.hpp"
 #include "DFA_Builder.hpp"
+#include "DFA_Minimizer.hpp"
 
 using namespace std;
 
@@ -19,9 +20,11 @@ int main(int argc, const char * argv[]) {
 
     DFA_Builder *builder = new DFA_Builder(language_nfa);
     DFA* dfa = (*builder).get_DFA();
+    DFA_Minimizer *minimizer = new DFA_Minimizer(dfa);
+    DFA* minimized_dfa = (*minimizer).get_minimized_DFA();
 
-    cout <<"Start node: " <<(*dfa).get_start_node() <<"\nEnd node: " <<(*dfa).get_end_node() <<endl;
-    Graph *g = (*dfa).get_nodes();
+    cout <<"Start node: " <<(*minimized_dfa).get_start_node() <<"\nEnd node: " <<(*minimized_dfa).get_end_node() <<endl;
+    Graph *g = (*minimized_dfa).get_nodes();
     auto adjList = (*g).get_nodes();
     cout <<"Number of nodes: " <<(*adjList).size() <<endl;
     for(auto p : *adjList) p.second.print();

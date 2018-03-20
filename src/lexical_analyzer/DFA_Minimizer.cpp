@@ -5,7 +5,7 @@ DFA* DFA_Minimizer::get_minimized_DFA() {
     State *acc = new State;
     State *non_acc = new State;
     acc->set_acceptance(true), non_acc->set_acceptance(false);
-    unordered_map<int,bool> visited;
+    unordered_map<int, bool> visited;
     get_initial_partitions(start_node, visited, acc, non_acc);
     set_state(non_acc);
     (*partitions).push_back(non_acc);
@@ -29,13 +29,15 @@ DFA* DFA_Minimizer::get_minimized_DFA() {
         }
         partitions = cur_partitions;
     }
-	int component_of[number_of_nodes];
+    map<int, int> component_of;
 	for (State *x : (*partitions)) {
 		int cur_node = ret->get_nodes()->add_node(x->get_acceptance(), x->get_type(), x->get_priority());
 		for (auto v : (*x->get_nodes())) {
 			component_of[v] = cur_node;
 		}
 	}
+	ret->set_start_node(component_of[start_node]);
+	ret->set_end_node(component_of[end_node]);
 	for (State *x : (*partitions)) {
 		for (auto v : (*x->get_nodes())) {
 			unordered_map<int, node> *cur = g->get_nodes();
@@ -71,10 +73,10 @@ vector<State*>* DFA_Minimizer::construct_new_partition_by_type(State *state) {
         node tmp = (*cur)[v];
         if (!mp[tmp.type]) {
             mp[tmp.type] = cnt++;
-            State *new_state;
+            State *new_state = new State;
             (*ret).push_back(new_state);
         }
-        (*ret)[mp[tmp.type] - 1]->get_nodes()->insert(v);
+        (*ret)[mp[tmp.type] - 1]->insert_node(v);
     }
     return ret;
 }
@@ -91,10 +93,10 @@ vector<State*>* DFA_Minimizer::construct_new_partition_by_transtion(State *state
             node_states.insert(nxt.input);
         if (!mp[node_states]) {
             mp[node_states] = cnt++;
-            State *new_state;
+            State *new_state = new State;
             (*ret).push_back(new_state);
         }
-        (*ret)[mp[node_states] - 1]->get_nodes()->insert(v);
+        (*ret)[mp[node_states] - 1]->insert_node(v);
     }
     return ret;
 }
