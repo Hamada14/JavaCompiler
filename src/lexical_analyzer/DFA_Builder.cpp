@@ -34,10 +34,20 @@ void DFA_Builder::solve_epsillon(int v, unordered_map<int,bool> &vis) {
     unordered_set<int> *eps = new unordered_set<int>();
     get_epsillon_closure(v, eps);
     (*epsillon)[v] = (*eps);
+    cout << v << endl;
+    for (auto x : (*eps))
+        cout << x << " ";
+    cout << endl;
     unordered_map<int, node> *cur = nfa_graph->get_nodes();
     node tmp = (*cur)[v];
     for (transition &x: tmp.transitions) {
+        cout << v << " " << x.next << " " << x.input << endl;
         if (!vis[x.next] && x.input != "/L")
+            solve_epsillon(x.next, vis);
+    }
+    for (transition &x: tmp.transitions) {
+        cout << v << " " << x.next << " " << x.input << endl;
+        if (!vis[x.next] && x.input == "/L")
             solve_epsillon(x.next, vis);
     }
 }
