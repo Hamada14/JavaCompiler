@@ -48,11 +48,16 @@ void DFA_Builder::solve_epsillon(int v, unordered_map<int,bool> &vis) {
 
 void DFA_Builder::subset_construction(DFA &ret) {
     string trans;
+    vector<string> possible_transitions;
+    for (unsigned char c = 0; c < 128; ++c) {
+        trans = "", trans += c;
+        possible_transitions.push_back(trans);
+    }
+    possible_transitions.push_back("/L");
     while (!stk.empty()) {
         State *cur_state = stk.top();
         stk.pop();
-        for (unsigned char c = 0; c < 128; ++c) {
-            trans = "", trans += c;
+        for (auto trans : possible_transitions) {
             set<int> next;
             for (int v : (*(*cur_state).get_nodes())) {
                 unordered_map<int, node> *cur = nfa_graph->get_nodes();
