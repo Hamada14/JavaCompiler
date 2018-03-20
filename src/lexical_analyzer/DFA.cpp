@@ -2,7 +2,7 @@
 
 DFA::DFA()
 {
-    //ctor
+    g = new Graph;
 }
 
 DFA::~DFA()

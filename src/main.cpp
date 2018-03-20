@@ -16,13 +16,11 @@ NFA* readLanguageSpecs() {
 
 int main(int argc, const char * argv[]) {
     NFA* language_nfa = readLanguageSpecs();
-    cout <<(*language_nfa).get_start_node() <<endl;
-    cout <<(*language_nfa).get_graph()->get_nodes()->size() <<endl;
 
     DFA_Builder *builder = new DFA_Builder(language_nfa);
     DFA* dfa = (*builder).get_DFA();
 
-    cout <<(*dfa).get_start_node() <<" " <<(*dfa).get_end_node();
+    cout <<"Start node: " <<(*dfa).get_start_node() <<"\nEnd node: " <<(*dfa).get_end_node() <<endl;
     Graph *g = (*dfa).get_nodes();
     auto adjList = (*g).get_nodes();
     cout <<"Number of nodes: " <<(*adjList).size() <<endl;

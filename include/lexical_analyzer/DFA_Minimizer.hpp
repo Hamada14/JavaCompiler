@@ -20,7 +20,7 @@ class DFA_Minimizer {
         int number_of_nodes;
         Graph *g;
         vector<State*> *partitions;
-        void get_initial_partitions(int cur, bool *vis, State *acc, State *non_acc);
+        void get_initial_partitions(int cur, unordered_map<int,bool> &vis, State *acc, State *non_acc);
         vector<State*>* construct_new_partition_by_type(State *state);
         vector<State*>* construct_new_partition_by_transtion(State *state);
         void set_state(State *state);

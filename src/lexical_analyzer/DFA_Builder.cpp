@@ -64,10 +64,9 @@ void DFA_Builder::subset_construction(DFA &ret) {
                     ret.get_nodes()->add_edge(cur_state->get_id(), (*is_a_state)[next], trans);
                 }
                 else {
-                    State *nxt;
-                    nxt->set_nodes(&next), nxt->set_id((int)ret.get_nodes()->get_nodes()->size() + 1);
+                    State *nxt = new State;
+                    nxt->set_nodes(&next), nxt->set_id(ret.get_nodes()->add_node(nxt->get_acceptance(), nxt->get_type(), nxt->get_priority()));
                     set_state(nxt);
-                    ret.get_nodes()->add_node(nxt->get_acceptance(), nxt->get_type(), nxt->get_priority());
                     ret.get_nodes()->add_edge(cur_state->get_id(), nxt->get_id(), trans);
                     push_state(nxt);
                 }
