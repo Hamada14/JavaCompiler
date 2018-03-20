@@ -24,6 +24,10 @@ void State::set_nodes(set<int> *n) {
     nodes = n;
 }
 
+void State::insert_node(int n) {
+    nodes->insert(n);
+}
+
 void State::set_id(int idx) {
     id = idx;
 }

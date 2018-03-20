@@ -13,12 +13,14 @@ class State {
         string type;
         int priority;
     public:
+        State(){ nodes = new set<int>; };
         set<int> *get_nodes();
         int get_id();
         int get_priority();
         bool get_acceptance();
         string get_type();
         void set_nodes(set<int> *n);
+        void insert_node(int n);
         void set_id(int idx);
         void set_priority(int prio);
         void set_acceptance(bool s);

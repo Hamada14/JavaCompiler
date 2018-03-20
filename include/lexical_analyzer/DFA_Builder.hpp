@@ -25,7 +25,7 @@ class DFA_Builder {
         unordered_set<int> taken;
         unordered_map<int, unordered_set<int> > *epsillon;
         map<set<int>, int> *is_a_state;
-        void solve_epsillon(int v, bool *vis);
+        void solve_epsillon(int v, unordered_map<int,bool> &vis);
         void get_epsillon_closure(int v, unordered_set<int> *result);
         void push_state(State *state);
         void set_state(State *state);
@@ -37,6 +37,9 @@ class DFA_Builder {
             this->start_node = nfa->get_start_node();
             this->end_node = nfa->get_end_node();
             this->number_of_nodes = (int)(this->nfa_graph->get_nodes()->size());
+
+            epsillon = new unordered_map<int, unordered_set<int> >;
+            is_a_state = new map<set<int>, int>;
         }
 
         DFA *get_DFA();

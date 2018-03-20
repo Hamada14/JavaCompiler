@@ -15,10 +15,9 @@ int Graph:: add_node(bool acceptance, string type, int priority) {
     return id;
 }
 
-
 void Graph:: add_edge(int from, int to, string input) {
     if(!adjList.count(from) || !adjList.count(to))
-        printf("in add edge function there node isn't in graph added edge from or to");
+        printf("add_edge: Invalid node.");
     adjList[from].transitions.push_back({to,input});
 }
 
