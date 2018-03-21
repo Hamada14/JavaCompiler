@@ -1,10 +1,11 @@
 #include "lexical_analyzer/NFA.hpp"
 
-
 NFA::NFA(char ch) {
     start_node = g.add_node(false, "");
     end_node = g.add_node(false, "");
-    g.add_edge(start_node, end_node, string(&ch));
+    string edge_input = "";
+    edge_input += ch;
+    g.add_edge(start_node, end_node, edge_input);
 }
 
 NFA:: NFA(Graph &g, int start_node, int end_node) {

@@ -26,6 +26,7 @@ struct node {
     string type;
     int priority = -(infi);
     vector< transition > transitions;
+    unordered_map<string, vector<int> > input_to_node_map;
 
     node(int id, bool acceptance, string type) :id(id), acceptance(acceptance), type(type){};
     node(int id, bool acceptance, string type, int priority) :id(id), acceptance(acceptance), type(type), priority(priority){};
@@ -71,10 +72,11 @@ class Graph {
     unordered_map<int, node> adjList;
 
     public:
-        void dfs(unordered_set<int>, int);
+        void dfs(unordered_set<int>&, int);
         int add_node(bool acceptance, string type);  // returns node id
         int add_node(bool acceptance, string type, int priority);  // returns node id
         void add_edge(int from, int to, string input); //function parameters(from, to) are node ids
+        vector<int> get_nodes_of_transitions(int, string);
         unordered_map<int, node>* get_nodes();
 
 };

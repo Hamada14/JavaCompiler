@@ -14,35 +14,99 @@
 #include <unordered_map>
 #include <unordered_set>
 
-class DFA_Builder {
-    private:
-        NFA *nfa;
-        Graph *nfa_graph;
-        int number_of_nodes;
-        int start_node;
-        int end_node;
-        stack<State*> stk;
-        unordered_set<int> taken;
-        unordered_map<int, unordered_set<int> > *epsillon;
-        map<set<int>, int> *is_a_state;
-        void solve_epsillon(int v, unordered_map<int,bool> &vis);
-        void get_epsillon_closure(int v, unordered_set<int> *result);
-        void push_state(State *state);
-        void set_state(State *state);
-        void subset_construction(DFA &ret);
-    public:
-        DFA_Builder(NFA *nfa) {
-            this->nfa = nfa;
-            this->nfa_graph = nfa->get_graph();
-            this->start_node = nfa->get_start_node();
-            this->end_node = nfa->get_end_node();
-            this->number_of_nodes = (int)(this->nfa_graph->get_nodes()->size());
+/*
+    the main class in building DFA
+    input of the class is NFA with the graph, start node and end node
+    output is a DFA accepting the same expressions as input NFA
+*/
 
-            epsillon = new unordered_map<int, unordered_set<int> >;
-            is_a_state = new map<set<int>, int>;
-        }
+class DFA_Builder
+{
+private:
+    /*
+        NFA Graph which is processed in the class
+    */
+    Graph* nfa_graph;
+    /*
+        start node of the graph
+    */
+    int start_node;
+    /*
+        end node of the graph
+    */
+    int end_node;
+    /*
+        epsillon closure of each node of the NFA graph
+    */
+    unordered_map<int, unordered_set<int> >* epsillon;
+    /*
+        stack which hold states that should be built in the DFA
+    */
+    stack<State*> stk;
+    /*
+        taken array to mark visited states
+    */
+    unordered_map<int, bool> taken;
+    /*
+        array to check if a state is formed before or not
+    */
+    map<set<int>, int>* is_a_state;
+    /*
+        A DFS function that visits all nodes in the NFA graph and set the epsillon closure for each
+       node
+    */
+    void solve_epsillon(int v, unordered_map<int, bool>& vis);
+    /*
+        A DFS function which get epsillon closure for a certain node
+    */
+    void get_epsillon_closure(int v, unordered_set<int>* result);
+    /*
+        Main algorithm of forming DFA
+        start with the state of the start node of the graph
+        pushing all possible states to the graph
+    */
+    void subset_construction(DFA& ret);
+    /*
+        a functions to get all possible transitions in a graph
+    */
+    vector<string> get_possible_transitions();
+    /*
+        search all possible transitions for a certain transitions and the add the epsillon closure
+            of it to the graph
+    */
+    void search_transtion(int node_id, State* next, string trans);
+    /*
+        connect two states if the is a valid edge between 'em in the graph
+        or add edge to PHI state otherwise
+    */
+    void connect_edge(State* cur_state, State* next, DFA& ret, string transition);
+    /*
+        helper function which pushes a state to the stack if this state is not pushed before
+    */
+    void push_state(State* state);
+    /*
+        helper function to set attributes of a certain state
+    */
+    void set_state(State* state);
 
-        DFA *get_DFA();
+public:
+    /*
+        Constructor of the class
+    */
+    DFA_Builder(NFA* nfa)
+    {
+        this->nfa_graph = nfa->get_graph();
+        this->start_node = nfa->get_start_node();
+        this->end_node = nfa->get_end_node();
+        epsillon = new unordered_map<int, unordered_set<int> >;
+        is_a_state = new map<set<int>, int>;
+    }
+
+    /*
+        factory of the class which runs the steps of the algorithm,
+        build the graph and return DFA
+    */
+    DFA* get_DFA();
 };
 
 #endif // DFA_BUILDER_HPP_INCLUDED
