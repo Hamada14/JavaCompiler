@@ -89,7 +89,6 @@ void ConfigParser::parseRegularExpression(std::string current_line, int priority
         std::string operand_1, operand_2;
         disassembleExpression(current_line, EXPRESSION_OPERATOR, operand_1, operand_2);
         NFA* result = lang_sp->parseRegularExpression(operand_2, regex_table);
-        result->set_acceptance(operand_1, priority);
         regex_table->addExpressionNFA(operand_1, result);
 }
 
