@@ -19,10 +19,15 @@ void Graph:: add_edge(int from, int to, string input) {
     if(!adjList.count(from) || !adjList.count(to))
         printf("add_edge: Invalid node.");
     adjList[from].transitions.push_back({to,input});
+    adjList[from].input_to_node_map[input].push_back(to);
+}
+
+vector<int> Graph::get_nodes_of_transitions(int node, string input) {
+    return adjList[node].input_to_node_map[input];
 }
 
 
-void Graph::dfs(unordered_set<int> vis, int cur_node) {
+void Graph::dfs(unordered_set<int>& vis, int cur_node) {
     if(vis.find(cur_node) != vis.end()) return;
     vis.insert(cur_node);
     adjList[cur_node].print();
