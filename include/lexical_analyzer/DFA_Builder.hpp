@@ -29,6 +29,7 @@ class DFA_Builder {
         void get_epsillon_closure(int v, unordered_set<int> *result);
         void push_state(State *state);
         void set_state(State *state);
+        void connect_edge(State *cur_state, State *next, DFA &ret, string transition);
         void subset_construction(DFA &ret);
     public:
         DFA_Builder(NFA *nfa) {
