@@ -26,23 +26,18 @@ void trace(DFA *dfa) {
 }
 
 int main(int argc, const char * argv[]) {
-    //freopen("output.txt", "w", stdout);
+//    freopen("output.txt", "w", stdout);
 
     NFA* language_nfa = readLanguageSpecs();
 
     DFA_Builder *builder = new DFA_Builder(language_nfa);
     DFA* dfa = (*builder).get_DFA();
 
-    //trace(dfa);
+    DFA_Minimizer *minimizer = new DFA_Minimizer(dfa);
+    DFA* minimized_dfa = (*minimizer).get_minimal_DFA();
+
 
     Tokenizer tokenizer;
-    tokenizer.tokenize("tokens.txt", "out.txt", dfa);
+    tokenizer.tokenize("tokens.txt", "out.txt", minimized_dfa);
 
-    /*
-    DFA_Minimizer *minimizer = new DFA_Minimizer(dfa);
-    DFA* minimized_dfa = (*minimizer).get_minimized_DFA();
-
-    trace(dfa);
-    trace(minimized_dfa);
-    */
 }
