@@ -1,12 +1,13 @@
-#include "ConfigParser.hpp"
+#include "lexical_analyzer/ConfigParser.hpp"
+#include "lexical_analyzer/LexicalErrorReporter.hpp"
 
 const std::string ConfigParser::CONFIG_FILE_PATH = "input";
 
 const char ConfigParser::DEFINITION_OPERATOR = ':';
 const char ConfigParser::EXPRESSION_OPERATOR = '=';
 
-const std::regex ConfigParser::REGULAR_EXPRESSION_REGEX("[a-zA-z][a-zA-z0-9]+\\s*\\=.*");
-const std::regex ConfigParser::REGULAR_DEFINITION_REGEX("[a-zA-z][a-zA-z0-9]+\\s*\\:.*");
+const std::regex ConfigParser::REGULAR_EXPRESSION_REGEX("[a-zA-z][a-zA-z0-9]+\\s*\\=.+");
+const std::regex ConfigParser::REGULAR_DEFINITION_REGEX("[a-zA-z][a-zA-z0-9]+\\s*\\:.+");
 const std::regex ConfigParser::PUNCTUATION_REGEX("\\[.*\\]");
 const std::regex ConfigParser::KEYWORDS_REGEX("\\{.*\\}");
 
@@ -40,6 +41,7 @@ NFA* ConfigParser::readLanguage(std::ifstream* input_file) {
         std::string current_line;
         int priority = -1;
         while(getline(*input_file, current_line)) {
+                LexicalErrorReporter::getInstance()->setLine(-priority);
                 parseLine(Util::trim(current_line), priority);
                 priority--;
         }
@@ -80,8 +82,8 @@ void ConfigParser::parseLine(std::string current_line, int priority) {
         } else if(regex_match(current_line, KEYWORDS_REGEX)) {
                 parseKeywords(current_line, priority);
         } else {
-                std::cerr << "Error! Line doesn't follow the required description.\nProgram is exiting...";
-                exit(0);
+            LexicalErrorReporter* reporter = LexicalErrorReporter::getInstance();
+            reporter->report(ReportMechanism::REPORT_AND_EXIT, ErrorType::INVALID_LINE_SPEC, {});
         }
 }
 
@@ -104,8 +106,8 @@ void ConfigParser::parsePunctuation(std::string current_line, int priority) {
         std::vector<std::string> splitted_punctuations = Util::split(current_line.substr(1, current_line.length() - 2), ' ');
         for(std::string punc : splitted_punctuations) {
                 if(!isValidPunctuation(punc)) {
-                        std::cerr << "Error! Invalid punctuation specified {" << punc << "}\nProgram is exiting...";
-                        exit(-1);
+                    LexicalErrorReporter* reporter = LexicalErrorReporter::getInstance();
+                    reporter->report(ReportMechanism::REPORT_AND_EXIT, ErrorType::INVALID_PUNCTUATION, {punc});
                 }
                 punctuations.push_back(keywordToNFA(punc.substr(punc.length() - 1), priority));
         }
@@ -115,8 +117,8 @@ void ConfigParser::parseKeywords(std::string current_line, int priority) {
         std::vector<std::string> splitted_keywords = Util::split(current_line.substr(1, current_line.length() - 2), ' ');
         for(std::string keyword : splitted_keywords) {
                 if(!isValidKeywords(keyword)) {
-                        std::cerr << "Error! Invalid keywords specified\nProgram is exiting...";
-                        exit(-1);
+                        LexicalErrorReporter* reporter = LexicalErrorReporter::getInstance();
+                        reporter->report(ReportMechanism::REPORT_AND_EXIT, ErrorType::INVALID_KEYWORD, {keyword});
                 }
                 keywords.push_back(keywordToNFA(keyword, priority));
         }
@@ -161,7 +163,7 @@ void ConfigParser::disassembleExpression(std::string expression, char operator_,
 
 void ConfigParser::validateInputFile(std::ifstream* input_file) {
         if(!*input_file) {
-                std::cerr << "Couldn't read the input file.\nProgram is exiting...";
-                exit(0);
+                LexicalErrorReporter* reporter = LexicalErrorReporter::getInstance();
+                reporter->report(ReportMechanism::REPORT_AND_EXIT, ErrorType::MISSING_INPUT_FILE, {});
         }
 }

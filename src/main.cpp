@@ -2,8 +2,8 @@
 #include <fstream>
 #include <iostream>
 #include "lexical_analyzer/NFA.hpp"
-#include "DFA_Builder.hpp"
-#include "DFA_Minimizer.hpp"
+#include "lexical_analyzer/DFA_Builder.hpp"
+#include "lexical_analyzer/DFA_Minimizer.hpp"
 
 using namespace std;
 
