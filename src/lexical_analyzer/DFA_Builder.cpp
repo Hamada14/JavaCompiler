@@ -54,6 +54,11 @@ void DFA_Builder::subset_construction(DFA& ret)
             connect_edge(cur_state, next, ret, trans);
         }
     }
+    for (transition &x: tmp.transitions) {
+        cout << v << " " << x.next << " " << x.input << endl;
+        if (!vis[x.next] && x.input == "/L")
+            solve_epsillon(x.next, vis);
+    }
 }
 
 vector<string> DFA_Builder::get_possible_transitions()
