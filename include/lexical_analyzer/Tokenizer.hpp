@@ -11,7 +11,7 @@ using namespace std;
 class Tokenizer
 {
     public:
-        void tokenize(string inputFile, string outputFile, DFA dfa);
+        void tokenize(string inputFile, string outputFile, DFA *dfa);
 };
 
 #endif // TOKENIZER_H

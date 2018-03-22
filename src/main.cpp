@@ -4,6 +4,8 @@
 #include "lexical_analyzer/NFA.hpp"
 #include "DFA_Builder.hpp"
 #include "DFA_Minimizer.hpp"
+#include "Tokenizer.hpp"
+#include "DFA.hpp"
 
 using namespace std;
 
@@ -24,16 +26,23 @@ void trace(DFA *dfa) {
 }
 
 int main(int argc, const char * argv[]) {
-    freopen("output.txt", "w", stdout);
+    //freopen("output.txt", "w", stdout);
 
     NFA* language_nfa = readLanguageSpecs();
 
     DFA_Builder *builder = new DFA_Builder(language_nfa);
     DFA* dfa = (*builder).get_DFA();
 
+    //trace(dfa);
+
+    Tokenizer tokenizer;
+    tokenizer.tokenize("tokens.txt", "out.txt", dfa);
+
+    /*
     DFA_Minimizer *minimizer = new DFA_Minimizer(dfa);
     DFA* minimized_dfa = (*minimizer).get_minimized_DFA();
 
     trace(dfa);
     trace(minimized_dfa);
+    */
 }
