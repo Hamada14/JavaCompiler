@@ -1,4 +1,5 @@
 #include "lexical_analyzer/LexicalErrorReporter.hpp"
+#include <cstdlib>
 
 LexicalErrorReporter* LexicalErrorReporter::instance = NULL;
 
@@ -20,7 +21,7 @@ void LexicalErrorReporter::report(ReportMechanism report_mech, ErrorType error_t
     std::string error_message = buildErrorMessage(error_type, params);
     std::cerr << error_message << std::endl;
     if(report_mech == ReportMechanism::REPORT_AND_EXIT) {
-            std::cerr << "Program is exitting...\n \\o babai" << std::endl;
+            std::cerr << "Program is exiting...\n \\o babai" << std::endl;
             exit(-1);
     }
 }

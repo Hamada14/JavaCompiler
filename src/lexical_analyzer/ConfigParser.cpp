@@ -63,7 +63,7 @@ NFA* ConfigParser::getResultNFA() {
                 result = new_result;
                 delete temp;
         }
-        for(int i = 1; i < (int)punctuations.size(); i++) {
+        for(int i = 0; i < (int)punctuations.size(); i++) {
                 NFA* new_result = result->orOperation(*punctuations[i]);
                 NFA* temp = result;
                 result = new_result;
@@ -109,7 +109,7 @@ void ConfigParser::parsePunctuation(std::string current_line, int priority) {
                     LexicalErrorReporter* reporter = LexicalErrorReporter::getInstance();
                     reporter->report(ReportMechanism::REPORT_AND_EXIT, ErrorType::INVALID_PUNCTUATION, {punc});
                 }
-                punctuations.push_back(keywordToNFA(punc.substr(punc.length() - 1), priority));
+                punctuations.push_back(keywordToNFA(punc.substr(punc.length() - 1), 0));
         }
 }
 
@@ -120,7 +120,7 @@ void ConfigParser::parseKeywords(std::string current_line, int priority) {
                         LexicalErrorReporter* reporter = LexicalErrorReporter::getInstance();
                         reporter->report(ReportMechanism::REPORT_AND_EXIT, ErrorType::INVALID_KEYWORD, {keyword});
                 }
-                keywords.push_back(keywordToNFA(keyword, priority));
+                keywords.push_back(keywordToNFA(keyword, 0));
         }
 }
 

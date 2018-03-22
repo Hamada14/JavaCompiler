@@ -7,5 +7,5 @@ DFA::DFA()
 
 DFA::~DFA()
 {
-    //dtor
+    delete g;
 }

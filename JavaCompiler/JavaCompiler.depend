@@ -1,6 +1,7 @@
 # depslib dependency file v1.0
-1521674845 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\configparser.cpp
-	"ConfigParser.hpp"
+1521744632 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\configparser.cpp
+	"lexical_analyzer/ConfigParser.hpp"
+	"lexical_analyzer/LexicalErrorReporter.hpp"
 
 1521474782 d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\include\lexical_analyzer\configparser.hpp
 	"LanguageSpecParser.hpp"
@@ -49,7 +50,7 @@
 	<string>
 	<vector>
 
-1521566483 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\dfa.cpp
+1521744579 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\dfa.cpp
 	"lexical_analyzer/DFA.hpp"
 
 1521331416 d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\include\lexical_analyzer\dfa.hpp
@@ -97,8 +98,9 @@
 	"lexical_analyzer/Graph.hpp"
 	<stdio.h>
 
-1521474782 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\languagespecparser.cpp
+1521742776 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\languagespecparser.cpp
 	"lexical_analyzer/LanguageSpecParser.hpp"
+	"lexical_analyzer/LexicalErrorReporter.hpp"
 
 1521392473 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\languagetoken.cpp
 	"lexical_analyzer/LanguageToken.hpp"
@@ -124,7 +126,7 @@
 1521474782 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\util.cpp
 	"Util.hpp"
 
-1521741705 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\main.cpp
+1521742821 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\main.cpp
 	"lexical_analyzer/ConfigParser.hpp"
 	<fstream>
 	<iostream>
@@ -266,4 +268,14 @@
 
 1521654619 source:d:\downloads\javacompiler\src\lexical_analyzer\dfa_builder.cpp
 	"lexical_analyzer/DFA_Builder.hpp"
+
+1521742776 d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\include\lexical_analyzer\lexicalerrorreporter.hpp
+	<iostream>
+	<sstream>
+	<string>
+	<vector>
+
+1521743355 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\lexicalerrorreporter.cpp
+	"lexical_analyzer/LexicalErrorReporter.hpp"
+	<cstdlib>
 
