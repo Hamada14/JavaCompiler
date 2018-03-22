@@ -3,14 +3,11 @@
 DFA* DFA_Builder::get_DFA()
 {
     DFA* ret = new DFA;
-    unordered_map<int, bool> visited;
 
-    solve_epsillon(start_node, visited);
-
-    unordered_set<int> fitst_state_nodes = (*epsillon)[start_node];
+    solve_epsillon(start_node);
+    unordered_set<int> first_state_nodes = (*epsillon)[start_node];
     State* first_state = new State;
-    for (auto cur_node : fitst_state_nodes)
-        first_state->insert_node(cur_node);
+    first_state->get_nodes()->insert(first_state_nodes.begin(), first_state_nodes.end());
 
     set_state(first_state);
     ret->set_start_node(ret->get_nodes()->add_node(
@@ -24,20 +21,12 @@ DFA* DFA_Builder::get_DFA()
     return ret;
 }
 
-void DFA_Builder::solve_epsillon(int v, unordered_map<int, bool>& vis)
+void DFA_Builder::solve_epsillon(int v)
 {
-    vis[v] = true;
     unordered_set<int>* eps = new unordered_set<int>();
     get_epsillon_closure(v, eps);
     (*epsillon)[v] = (*eps);
-    unordered_map<int, node>* graph_nodes = nfa_graph->get_nodes();
-    node adjlist = (*graph_nodes)[v];
-    for (transition& x : adjlist.transitions)
-        if (!vis[x.next] && x.input != "/L")
-            solve_epsillon(x.next, vis);
-    for (transition& x : adjlist.transitions)
-        if (!vis[x.next] && x.input == "/L")
-            solve_epsillon(x.next, vis);
+    epsillon_computed[v] = true;
 }
 
 void DFA_Builder::get_epsillon_closure(int v, unordered_set<int>* result)
@@ -71,27 +60,24 @@ vector<string> DFA_Builder::get_possible_transitions()
 {
     string trans;
     vector<string> possible_transitions;
-    possible_transitions.push_back("/L");
     for (unsigned char c = 0; c < 128; ++c)
     {
         trans = "", trans += c;
         possible_transitions.push_back(trans);
     }
+    possible_transitions.push_back(trans);
     return possible_transitions;
 }
 
 void DFA_Builder::search_transtion(int node_id, State* next, string trans)
 {
-    unordered_map<int, node>* graph_nodes = nfa_graph->get_nodes();
-    node adjlist = (*graph_nodes)[node_id];
-    for (transition& transitions : adjlist.transitions)
+    vector<int> nodes_of_transition = nfa_graph->get_nodes_of_transitions(node_id, trans);
+    for (int cur_node : nodes_of_transition)
     {
-        if (transitions.input == trans)
-        {
-            unordered_set<int> eps = (*epsillon)[transitions.next];
-            for (auto v : eps)
-                next->insert_node(v);
-        }
+        if (!epsillon_computed[cur_node])
+            solve_epsillon(cur_node);
+        unordered_set<int> eps = (*epsillon)[cur_node];
+        next->get_nodes()->insert(eps.begin(), eps.end());
     }
 }
 

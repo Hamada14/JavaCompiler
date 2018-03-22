@@ -36,6 +36,10 @@ private:
     */
     int end_node;
     /*
+        determine if epsillon closure for a node is computed
+    */
+    unordered_map<int, bool> epsillon_computed;
+    /*
         epsillon closure of each node of the NFA graph
     */
     unordered_map<int, unordered_set<int> >* epsillon;
@@ -52,10 +56,9 @@ private:
     */
     map<set<int>, int>* is_a_state;
     /*
-        A DFS function that visits all nodes in the NFA graph and set the epsillon closure for each
-       node
+        function to compute the epsillon closure of a certain node
     */
-    void solve_epsillon(int v, unordered_map<int, bool>& vis);
+    void solve_epsillon(int v);
     /*
         A DFS function which get epsillon closure for a certain node
     */
