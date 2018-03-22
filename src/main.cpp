@@ -23,7 +23,6 @@ void trace(DFA *dfa) {
     for(auto p : *adjList) p.second.print();
 }
 
-
 int main(int argc, const char * argv[]) {
     freopen("output.txt", "w", stdout);
 
