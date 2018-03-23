@@ -184,7 +184,7 @@ NFA* LanguageSpecParser::rangeOperation(LanguageToken* t1, LanguageToken* t2) {
 
 bool LanguageSpecParser::isValidRegexRange(char range_end, char range_start) {
         return (range_start == 'a' && range_end == 'z') || (range_start == 'A' && range_end == 'Z')
-               || (range_start == '0' && range_end == '9');
+               || (range_start == '0' && range_end == '9') || (range_start == 'A' && range_end == 'z');
 }
 
 bool LanguageSpecParser::isValidOperator(char oper) {
