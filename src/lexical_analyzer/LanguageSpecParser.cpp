@@ -47,7 +47,7 @@ std::vector<LanguageToken*> LanguageSpecParser::infixToPostfix(std::string exp) 
                                 addOperator('&', language_tokens, st);
                         int i;
                         for(i = 1; i + pos < (int)exp.length()
-                            && (Util::isASCIIChar(exp[pos + i]) || Util::isASCIIDigit(exp[pos + i])); i++) ;
+                            && (Util::isASCIIChar(exp[pos + i]) || Util::isASCIIDigit(exp[pos + i]) || exp[pos + i] == '_'); i++) ;
                         std::string operand = exp.substr(pos, i);
                         language_tokens.push_back(new LanguageToken(operand, LanguageTokenType::EXPRESSION));
                         pos += i - 1;
