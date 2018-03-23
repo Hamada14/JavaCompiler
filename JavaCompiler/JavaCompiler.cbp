@@ -43,6 +43,7 @@
 		<Unit filename="../include/lexical_analyzer/Graph.hpp" />
 		<Unit filename="../include/lexical_analyzer/LanguageSpecParser.hpp" />
 		<Unit filename="../include/lexical_analyzer/LanguageToken.hpp" />
+		<Unit filename="../include/lexical_analyzer/LexicalErrorReporter.hpp" />
 		<Unit filename="../include/lexical_analyzer/NFA.hpp" />
 		<Unit filename="../include/lexical_analyzer/RegularExpressionTable.hpp" />
 		<Unit filename="../include/lexical_analyzer/State.hpp" />
@@ -55,6 +56,7 @@
 		<Unit filename="../src/lexical_analyzer/Graph.cpp" />
 		<Unit filename="../src/lexical_analyzer/LanguageSpecParser.cpp" />
 		<Unit filename="../src/lexical_analyzer/LanguageToken.cpp" />
+		<Unit filename="../src/lexical_analyzer/LexicalErrorReporter.cpp" />
 		<Unit filename="../src/lexical_analyzer/NFA.cpp" />
 		<Unit filename="../src/lexical_analyzer/RegularExpressionTable.cpp" />
 		<Unit filename="../src/lexical_analyzer/State.cpp" />

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1521744632 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\configparser.cpp
+1521780571 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\configparser.cpp
 	"lexical_analyzer/ConfigParser.hpp"
 	"lexical_analyzer/LexicalErrorReporter.hpp"
 
@@ -28,7 +28,7 @@
 	"NFA.hpp"
 	<string>
 
-1521551765 d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\include\lexical_analyzer\nfa.hpp
+1521780571 d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\include\lexical_analyzer\nfa.hpp
 	"Graph.hpp"
 	<stdio.h>
 
@@ -56,14 +56,15 @@
 1521331416 d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\include\lexical_analyzer\dfa.hpp
 	"Graph.hpp"
 
-1521735826 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\dfa_builder.cpp
+1521807795 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\dfa_builder.cpp
 	"lexical_analyzer/DFA_Builder.hpp"
 
-1521735826 d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\include\lexical_analyzer\dfa_builder.hpp
+1521799768 d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\include\lexical_analyzer\dfa_builder.hpp
 	"DFA.hpp"
 	"Graph.hpp"
 	"NFA.hpp"
 	"State.hpp"
+	"Print.hpp"
 	<climits>
 	<cstring>
 	<iostream>
@@ -78,13 +79,14 @@
 	<set>
 	<stdio.h>
 
-1521674992 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\dfa_minimizer.cpp
+1521799768 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\dfa_minimizer.cpp
 	"lexical_analyzer/DFA_Minimizer.hpp"
 
-1521674845 d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\include\lexical_analyzer\dfa_minimizer.hpp
+1521799768 d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\include\lexical_analyzer\dfa_minimizer.hpp
 	"DFA.hpp"
 	"Graph.hpp"
 	"State.hpp"
+	"Print.hpp"
 	<climits>
 	<cstring>
 	<iostream>
@@ -98,14 +100,14 @@
 	"lexical_analyzer/Graph.hpp"
 	<stdio.h>
 
-1521742776 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\languagespecparser.cpp
+1521780571 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\languagespecparser.cpp
 	"lexical_analyzer/LanguageSpecParser.hpp"
 	"lexical_analyzer/LexicalErrorReporter.hpp"
 
 1521392473 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\languagetoken.cpp
 	"lexical_analyzer/LanguageToken.hpp"
 
-1521674845 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\nfa.cpp
+1521780571 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\nfa.cpp
 	"lexical_analyzer/NFA.hpp"
 
 1521674845 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\regularexpressiontable.cpp
@@ -114,10 +116,11 @@
 1521674845 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\state.cpp
 	"lexical_analyzer/State.hpp"
 
-1521742453 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\tokenizer.cpp
+1521808454 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\tokenizer.cpp
 	"lexical_analyzer/Tokenizer.hpp"
+	<fstream>
 
-1521738669 d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\include\lexical_analyzer\tokenizer.hpp
+1521808224 d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\include\lexical_analyzer\tokenizer.hpp
 	"DFA.hpp"
 	<iostream>
 	<stdio.h>
@@ -126,15 +129,15 @@
 1521474782 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\util.cpp
 	"Util.hpp"
 
-1521742821 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\main.cpp
+1521799768 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\main.cpp
 	"lexical_analyzer/ConfigParser.hpp"
 	<fstream>
 	<iostream>
 	"lexical_analyzer/NFA.hpp"
-	"DFA_Builder.hpp"
-	"DFA_Minimizer.hpp"
-	"Tokenizer.hpp"
-	"DFA.hpp"
+	"lexical_analyzer/DFA_Builder.hpp"
+	"lexical_analyzer/DFA_Minimizer.hpp"
+	"lexical_analyzer/Tokenizer.hpp"
+	"lexical_analyzer/DFA.hpp"
 
 1521789532 source:d:\downloads\javacompiler\src\lexical_analyzer\configparser.cpp
 	"lexical_analyzer/ConfigParser.hpp"
@@ -305,5 +308,17 @@
 	<sstream>
 
 1521797244 source:d:\downloads\javacompiler\src\lexical_analyzer\print.cpp
+	"lexical_analyzer/Print.hpp"
+
+1521799768 d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\include\lexical_analyzer\print.hpp
+	<climits>
+	<cstring>
+	<iostream>
+	<stdio.h>
+	<string>
+	<vector>
+	<sstream>
+
+1521799768 source:d:\csed\csed 19\3rd year\2nd term\compilers\project\phase 1\javacompiler\src\lexical_analyzer\print.cpp
 	"lexical_analyzer/Print.hpp"
 
