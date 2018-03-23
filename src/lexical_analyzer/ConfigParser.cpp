@@ -95,7 +95,7 @@ void ConfigParser::parsePunctuation(std::string current_line) {
                         LexicalErrorReporter* reporter = LexicalErrorReporter::getInstance();
                         reporter->report(ReportMechanism::REPORT_AND_EXIT, ErrorType::INVALID_PUNCTUATION, {punc});
                 }
-                punctuations.push_back(keywordToNFA(punc.substr(punc.length() - 1), MAX_PRIORITY));
+                punctuations.push_back(punctuationToNFA(punc.substr(punc.length() - 1)[0], MAX_PRIORITY));
         }
 }
 
@@ -129,16 +129,15 @@ bool ConfigParser::isValidPunctuation(std::string punc) {
 }
 
 NFA* ConfigParser::keywordToNFA(std::string keyword, int priority) {
-        NFA* result = new NFA(keyword[0]);
-        for(int i = 1; i < (int)keyword.length(); i++) {
-                NFA* temp = result;
-                NFA* char_nfa = new NFA(keyword[i]);
-                result = result->concatenateOperation(*char_nfa);
-                delete temp;
-                delete char_nfa;
-        }
+        NFA* result = new NFA(keyword);
         result->set_acceptance(keyword, priority);
         return result;
+}
+
+NFA* ConfigParser::punctuationToNFA(char ch, int priority) {
+      NFA* result = new NFA(ch);
+      result->set_acceptance(string(1, ch), priority);
+      return result;
 }
 
 void ConfigParser::disassembleExpression(std::string expression, char operator_, std::string& operand_1, std::string& operand_2) {

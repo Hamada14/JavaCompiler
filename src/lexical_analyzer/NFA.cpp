@@ -11,6 +11,17 @@ NFA::NFA(char ch) {
     g.add_edge(start_node, end_node, edge_input);
 }
 
+NFA:: NFA(std::string str) {
+    if(str.empty()) return;
+    start_node = g.add_node(false, "");
+    int end_node = start_node;
+    for(char ch: str) {
+        int cur = g.add_node(false, "");
+        g.add_edge(end_node,cur,string(1,ch));
+        end_node = cur;
+    }
+}
+
 NFA:: NFA(Graph &g, int start_node, int end_node) {
     this->g = g;
     this->start_node = start_node;

@@ -10,6 +10,7 @@ class NFA {
 
     public:
         NFA(char ch);
+        NFA(std::string);
         NFA(Graph &g, int start_node, int end_node);
         NFA();
         virtual ~NFA();

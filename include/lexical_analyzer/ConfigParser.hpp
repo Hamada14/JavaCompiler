@@ -37,6 +37,7 @@ private:
     bool isValidPunctuation(std::string);
 
     NFA* keywordToNFA(std::string, int priority);
+    NFA* punctuationToNFA(char, int);
 
     void parseLine(std::string, int);
     void parseRegularExpression(std::string);
