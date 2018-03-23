@@ -163,18 +163,18 @@ void LanguageSpecParser::correctStackToken(LanguageToken* t1, RegularExpressionT
 NFA* LanguageSpecParser::rangeOperation(LanguageToken* t1, LanguageToken* t2) {
         char range_start = t1->getValue()[0];
         char range_end = t2->getValue()[0];
-        NFA* accumulated_NFA = new NFA(range_start);
         if(!isValidRegexRange(range_end, range_start)) {
                 LexicalErrorReporter* reporter = LexicalErrorReporter::getInstance();
                 std::string range_str = range_start + "-" + range_end;
                 reporter->report(ReportMechanism::REPORT_AND_EXIT, ErrorType::INVALID_REGEX_RANGE, {range_str});
         }
-        for(int i = range_start + 1; i <= range_end; i++) {
-                NFA* char_NFA = new NFA(i);
-                accumulated_NFA = accumulated_NFA->orOperation(*char_NFA);
-                delete char_NFA;
-        }
-        return accumulated_NFA;
+        vector<NFA*> nfa_vec;
+        for(int i = range_start; i <= range_end; i++)
+                nfa_vec.push_back(new NFA(i));
+        NFA* result = NFA::combine(nfa_vec);
+        for(int i = 0; i < nfa_vec.size(); i++)
+            delete nfa_vec[i];
+        return result;
 }
 
 bool LanguageSpecParser::isValidRegexRange(char range_end, char range_start) {

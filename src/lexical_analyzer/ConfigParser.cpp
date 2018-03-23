@@ -50,26 +50,9 @@ NFA* ConfigParser::readLanguage(std::ifstream* input_file) {
 
 NFA* ConfigParser::getResultNFA() {
         std::vector<NFA*> result_items = definition_table->getValues();
-        NFA* result = result_items[0]->clone();
-        for(int i = 1; i < (int)result_items.size(); i++) {
-                NFA* new_result = result->orOperation(*result_items[i]);
-                NFA* temp = result;
-                result = new_result;
-                delete temp;
-        }
-        for(int i = 0; i < (int)keywords.size(); i++) {
-                NFA* new_result = result->orOperation(*keywords[i]);
-                NFA* temp = result;
-                result = new_result;
-                delete temp;
-        }
-        for(int i = 0; i < (int)punctuations.size(); i++) {
-                NFA* new_result = result->orOperation(*punctuations[i]);
-                NFA* temp = result;
-                result = new_result;
-                delete temp;
-        }
-        return result;
+        for(int i = 0; i < punctuations.size(); i++) result_items.push_back(punctuations[i]);
+        for(int i = 0; i < keywords.size(); i++) result_items.push_back(keywords[i]);
+        return NFA::combine(result_items);
 }
 
 void ConfigParser::parseLine(std::string current_line, int priority) {

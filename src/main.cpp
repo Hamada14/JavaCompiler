@@ -2,10 +2,10 @@
 #include <fstream>
 #include <iostream>
 #include "lexical_analyzer/NFA.hpp"
-#include "DFA_Builder.hpp"
-#include "DFA_Minimizer.hpp"
-#include "Tokenizer.hpp"
-#include "DFA.hpp"
+#include "lexical_analyzer/DFA_Builder.hpp"
+#include "lexical_analyzer/DFA_Minimizer.hpp"
+#include "lexical_analyzer/Tokenizer.hpp"
+#include "lexical_analyzer/DFA.hpp"
 
 using namespace std;
 
@@ -26,18 +26,24 @@ void trace(DFA *dfa) {
 }
 
 int main(int argc, const char * argv[]) {
-//    freopen("output.txt", "w", stdout);
+    std::cout << "Building NFA..." << std::endl;
+    clock_t begin = clock();
 
     NFA* language_nfa = readLanguageSpecs();
+
+    printf("Built NFA successfully in %.3f sec\nConverting NFA to DFA...\n", (double)(clock() - begin) / CLOCKS_PER_SEC);
+    begin = clock();
 
     DFA_Builder *builder = new DFA_Builder(language_nfa);
     DFA* dfa = (*builder).get_DFA();
 
+    printf("Converted NFA successfully in %.3f sec\nMinimizing DFA...\n", (double)(clock() - begin) / CLOCKS_PER_SEC);
+    begin = clock();
     DFA_Minimizer *minimizer = new DFA_Minimizer(dfa);
     DFA* minimized_dfa = (*minimizer).get_minimal_DFA();
 
+    printf("Minimization done successfully in %.3f sec\n", (double)(clock() - begin) / CLOCKS_PER_SEC);
 
     Tokenizer tokenizer;
     tokenizer.tokenize("tokens.txt", "out.txt", minimized_dfa);
-
 }

@@ -200,3 +200,27 @@ NFA* NFA::plusOperation() {
 
     return new NFA(g,startNode,endNode);
 }
+
+NFA* NFA ::combine(vector<NFA*> &nfas) {
+    Graph g;
+    int startNode = g.add_node(false, "");
+    unordered_map<int ,int> new_id;
+    vector<int> endNodes;
+    for(NFA* nfa: nfas) {
+        unordered_map<int, node> *nodes = nfa->get_graph()->get_nodes();
+        for(auto n:*nodes)
+            new_id[n.second.id] = g.add_node(n.second.acceptance, n.second.type, n.second.priority);
+
+            for(auto n:*nodes)
+                for(transition tr: n.second.transitions)
+                    g.add_edge(new_id[n.second.id], new_id[tr.next], tr.input);
+
+        g.add_edge(startNode, new_id[nfa->get_start_node()], "/L");
+        endNodes.push_back(new_id[nfa->get_end_node()]);
+    }
+    int endNode = g.add_node(false, "");
+    for(int x: endNodes)
+        g.add_edge(x, endNode, "/L");
+
+    return new NFA(g,startNode,endNode);
+}

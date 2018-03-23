@@ -26,6 +26,7 @@ class NFA {
         NFA* concatenateOperation (NFA &nfa);
         NFA* asteriskOperation ();
         NFA* plusOperation ();
+        static NFA* combine(vector<NFA*> &nfas);
 
     private:
         void set_priority(int priority);
