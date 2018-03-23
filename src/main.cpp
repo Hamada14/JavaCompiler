@@ -2,10 +2,10 @@
 #include <fstream>
 #include <iostream>
 #include "lexical_analyzer/NFA.hpp"
-#include "DFA_Builder.hpp"
-#include "DFA_Minimizer.hpp"
-#include "Tokenizer.hpp"
-#include "DFA.hpp"
+#include "lexical_analyzer/DFA_Builder.hpp"
+#include "lexical_analyzer/DFA_Minimizer.hpp"
+#include "lexical_analyzer/Tokenizer.hpp"
+#include "lexical_analyzer/DFA.hpp"
 
 using namespace std;
 
@@ -22,7 +22,7 @@ void trace(DFA *dfa) {
     Graph *g = (*dfa).get_nodes();
     auto adjList = (*g).get_nodes();
     cout <<"Number of nodes: " <<(*adjList).size() <<endl;
-    for(auto p : *adjList) p.second.print();
+    for(auto p : *adjList) p.print();
 }
 
 int main(int argc, const char * argv[]) {
@@ -30,8 +30,10 @@ int main(int argc, const char * argv[]) {
 
     NFA* language_nfa = readLanguageSpecs();
 
+
     DFA_Builder *builder = new DFA_Builder(language_nfa);
     DFA* dfa = (*builder).get_DFA();
+
 
     DFA_Minimizer *minimizer = new DFA_Minimizer(dfa);
     DFA* minimized_dfa = (*minimizer).get_minimal_DFA();
@@ -39,5 +41,4 @@ int main(int argc, const char * argv[]) {
 
     Tokenizer tokenizer;
     tokenizer.tokenize("tokens.txt", "out.txt", minimized_dfa);
-
 }

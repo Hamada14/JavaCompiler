@@ -9,7 +9,7 @@ class NFA {
     Graph g;
 
     public:
-        NFA(int ch);
+        NFA(char ch);
         NFA(Graph &g, int start_node, int end_node);
         NFA();
         virtual ~NFA();

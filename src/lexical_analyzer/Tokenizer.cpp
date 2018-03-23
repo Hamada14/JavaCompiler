@@ -26,7 +26,7 @@ void Tokenizer::tokenize(string inputFile, string outputFile, DFA *dfa){
                 currentNode = (*(*dfa->get_nodes()).get_nodes())[dfa->get_start_node()];
             }
             else{
-                int nxtNodeID = currentNode.makeTransition(string(1, line[i]));
+                int nxtNodeID = currentNode.makeTransition(line[i]);
                 currentNode = (*(*dfa->get_nodes()).get_nodes())[nxtNodeID];
                 if(currentNode.id == dfa->get_end_node()){
                     if(lastAcceptanceIndex == -1){

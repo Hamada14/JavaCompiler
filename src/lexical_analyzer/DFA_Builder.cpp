@@ -14,8 +14,7 @@ DFA* DFA_Builder::get_DFA()
         first_state->get_acceptance(), first_state->get_type(), first_state->get_priority()));
     first_state->set_id(ret->get_start_node());
 
-    ret->set_end_node(ret->get_nodes()->add_node(false, "", -(1 << 20)));
-
+    ret->set_end_node(ret->get_nodes()->add_node(false, "", -(infi)));
     push_state(first_state);
     subset_construction(*ret);
     return ret;
@@ -32,21 +31,24 @@ void DFA_Builder::solve_epsillon(int v)
 void DFA_Builder::get_epsillon_closure(int v, unordered_set<int>* result)
 {
     result->insert(v);
-    unordered_map<int, node>* graph_nodes = nfa_graph->get_nodes();
-    node adjlist = (*graph_nodes)[v];
-    for (transition& x : adjlist.transitions)
-        if (!(*result).count(x.next) && x.input == "/L")
-            get_epsillon_closure(x.next, result);
+    vector<node>* graph_nodes = nfa_graph->get_nodes();
+    vector<int> &tr = (*graph_nodes)[v].transitions[lambda];
+    for(int n: tr)
+        if(!(*result).count(n))
+            get_epsillon_closure(n, result);
+
 }
+
+
 
 void DFA_Builder::subset_construction(DFA& ret)
 {
-    vector<string> possible_transitions = get_possible_transitions();
+    vector<int> possible_transitions = get_possible_transitions();
     while (!stk.empty())
     {
         State* cur_state = stk.top();
         stk.pop();
-        for (auto trans : possible_transitions)
+        for (int trans : possible_transitions)
         {
             State* next = new State;
             for (int state_node : (*cur_state->get_nodes()))
@@ -56,24 +58,19 @@ void DFA_Builder::subset_construction(DFA& ret)
     }
 }
 
-vector<string> DFA_Builder::get_possible_transitions()
+vector<int> DFA_Builder::get_possible_transitions()
 {
-    string trans;
-    vector<string> possible_transitions;
-    for (unsigned char c = 0; c < 128; ++c)
-    {
-        trans = "", trans += c;
-        possible_transitions.push_back(trans);
-    }
-    possible_transitions.push_back(trans);
+    vector<int> possible_transitions;
+    for (int c = 0; c < MAX_INPUT_SIZE; ++c)
+        possible_transitions.push_back(c);
+
     return possible_transitions;
 }
 
-void DFA_Builder::search_transtion(int node_id, State* next, string trans)
+void DFA_Builder::search_transtion(int node_id, State* next, int trans)
 {
-    vector<int> nodes_of_transition = nfa_graph->get_nodes_of_transitions(node_id, trans);
-    for (int cur_node : nodes_of_transition)
-    {
+    vector<int>* cur_nodes = nfa_graph->get_nodes_of_transitions(node_id, trans);
+    for(int cur_node : *cur_nodes) {
         if (!epsillon_computed[cur_node])
             solve_epsillon(cur_node);
         unordered_set<int> eps = (*epsillon)[cur_node];
@@ -81,7 +78,7 @@ void DFA_Builder::search_transtion(int node_id, State* next, string trans)
     }
 }
 
-void DFA_Builder::connect_edge(State* cur_state, State* next, DFA& ret, string transition)
+void DFA_Builder::connect_edge(State* cur_state, State* next, DFA& ret, int transition)
 {
     if (next->get_nodes()->size() == 0)
         ret.get_nodes()->add_edge(cur_state->get_id(), ret.get_end_node(), transition);
@@ -119,7 +116,7 @@ void DFA_Builder::set_state(State* state)
     set<int>* cur = state->get_nodes();
     for (auto v : *cur)
     {
-        unordered_map<int, node>* cur = nfa_graph->get_nodes();
+        vector<node>* cur = nfa_graph->get_nodes();
         node tmp = (*cur)[v];
         is_acceptance_state |= tmp.acceptance;
         if (prio < tmp.priority)

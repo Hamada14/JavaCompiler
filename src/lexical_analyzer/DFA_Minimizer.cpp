@@ -24,16 +24,20 @@ void DFA_Minimizer::get_initial_partitions(
     int v, unordered_map<int, bool>& vis, State* acc, State* non_acc)
 {
     vis[v] = true;
-    unordered_map<int, node>* graph_node = dfa_graph->get_nodes();
+    vector<node>* graph_node = dfa_graph->get_nodes();
     node adjlist = (*graph_node)[v];
     if (adjlist.isAcceptance())
         acc->insert_node(v);
     else
         non_acc->insert_node(v);
-    for (transition& x : adjlist.transitions)
-        if (!vis[x.next])
-            get_initial_partitions(x.next, vis, acc, non_acc);
+    for(int i =0; i < MAX_INPUT_SIZE; ++i) {
+        for(int x: adjlist.transitions[i]) {
+            if (!vis[x])
+                get_initial_partitions(x, vis, acc, non_acc);
+        }
+    }
 }
+
 
 vector<State*>* DFA_Minimizer::separate_accepting_states(State* state)
 {
@@ -42,7 +46,7 @@ vector<State*>* DFA_Minimizer::separate_accepting_states(State* state)
     int cnt = 1;
     for (int cur_node : (*state->get_nodes()))
     {
-        unordered_map<int, node>* graph_nodes = dfa_graph->get_nodes();
+        vector<node>* graph_nodes = dfa_graph->get_nodes();
         node adjlist = (*graph_nodes)[cur_node];
         if (!index[adjlist.type])
         {
@@ -85,12 +89,22 @@ vector<State*>* DFA_Minimizer::construct_new_partitions(State* state)
     int cnt = 1;
     for (int cur_node : (*state->get_nodes()))
     {
-        unordered_map<int, node>* graph_nodes = dfa_graph->get_nodes();
+        vector<node>* graph_nodes = dfa_graph->get_nodes();
         node adjlist = (*graph_nodes)[cur_node];
         vector<int> next_state(128, -1);
-        for (transition& x : adjlist.transitions)
-            if (x.input != "/L")
-                next_state[x.input[0]] = component_of[x.next];
+        //
+        // for(int i=0; i < MAX_INPUT_SIZE-1 ; ++i) {
+        //     if(~ adjlist.transitions[i]) {
+        //         next_state[i] = component_of[adjlist.transitions[i]];
+        //     }
+        // }
+
+        for(int i =0; i < MAX_INPUT_SIZE - 1; ++i) {
+            for(int x: adjlist.transitions[i]) {
+                    next_state[i] = component_of[x];
+            }
+        }
+
         if (!index[next_state])
         {
             index[next_state] = cnt++;
@@ -115,20 +129,34 @@ void DFA_Minimizer::build_graph(DFA& dfa)
     }
     dfa.set_start_node(component_of[start_node]);
     dfa.set_end_node(component_of[end_node]);
-    map<pair<pair<int, int>, string>, bool> is_edge;
+    map<pair<pair<int, int>, int>, bool> is_edge;
     for (State* cur_state : (*partitions))
     {
         for (auto v : (*cur_state->get_nodes()))
         {
-            unordered_map<int, node>* graph_nodes = dfa_graph->get_nodes();
+            vector<node>* graph_nodes = dfa_graph->get_nodes();
             node adjlist = (*graph_nodes)[v];
-            for (transition nxt : adjlist.transitions)
-            {
-                auto edge
-                    = make_pair(make_pair(component_of[v], component_of[nxt.next]), nxt.input);
-                if (!is_edge[edge])
-                    dfa.get_nodes()->add_edge(component_of[v], component_of[nxt.next], nxt.input);
-                is_edge[edge] = true;
+
+            // 
+            // for(int i=0; i < MAX_INPUT_SIZE; ++i) {
+            //     if(~ adjlist.transitions[i]) {
+            //         int nxt = adjlist.transitions[i];
+            //         auto edge
+            //             = make_pair(make_pair(component_of[v], component_of[nxt]), i);
+            //         if (!is_edge[edge])
+            //             dfa.get_nodes()->add_edge(component_of[v], component_of[nxt], i);
+            //         is_edge[edge] = true;
+            //     }
+            // }
+
+            for(int i =0; i < MAX_INPUT_SIZE; ++i) {
+                for(int nxt: adjlist.transitions[i]) {
+                    auto edge
+                        = make_pair(make_pair(component_of[v], component_of[nxt]), i);
+                    if (!is_edge[edge])
+                        dfa.get_nodes()->add_edge(component_of[v], component_of[nxt], i);
+                    is_edge[edge] = true;
+                }
             }
         }
     }
@@ -153,7 +181,7 @@ void DFA_Minimizer::set_state(State* state)
     set<int>* cur = state->get_nodes();
     for (auto v : *cur)
     {
-        unordered_map<int, node>* cur = dfa_graph->get_nodes();
+        vector<node>* cur = dfa_graph->get_nodes();
         node tmp = (*cur)[v];
         is_acceptance_state |= tmp.acceptance;
         if (prio < tmp.priority)

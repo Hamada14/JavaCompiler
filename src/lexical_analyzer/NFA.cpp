@@ -1,11 +1,11 @@
 #include "lexical_analyzer/NFA.hpp"
 
-NFA::NFA(char ch) {
+NFA::NFA(int ch) {
+    if(ch == '\0')
+        ch = lambda;
     start_node = g.add_node(false, "");
     end_node = g.add_node(false, "");
-    string edge_input = "";
-    edge_input += ch;
-    g.add_edge(start_node, end_node, edge_input);
+    g.add_edge(start_node, end_node, ch);
 }
 
 NFA:: NFA(Graph &g, int start_node, int end_node) {
@@ -62,141 +62,142 @@ void NFA:: set_acceptance(std::string type, int priority) {
 }
 
 NFA* NFA:: clone() {
+    return new NFA(*this);
+}
 
-    Graph g;
-
-    unordered_map<int, node> *nodes = this->get_graph()->get_nodes();
-    unordered_map<int, int> newId;
-
-    for(auto n:*nodes)
-        newId[n.second.id] = g.add_node(n.second.acceptance, n.second.type, n.second.priority);
-
-    for(auto n:*nodes)
-        for(transition tr: n.second.transitions)
-            g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
-
-
-    return new NFA(g,newId[start_node],newId[end_node]);
+int get_new_id(int id, int shift) {
+    return id+shift;
 }
 
 NFA* NFA::orOperation(NFA &nfa) {
+    int s1 = 1, s2 = 1+this->get_graph()->size();
     Graph g;
     int startNode = g.add_node(false, "");
 
-    unordered_map<int, node> *nodes = this->get_graph()->get_nodes();
-    unordered_map<int, int> newId;
+    vector<node> *nodes = this->get_graph()->get_nodes();
     string type1 = (*nodes)[end_node].type;
 
-    for(auto n:*nodes)
-        newId[n.second.id] = g.add_node(n.second.acceptance, n.second.type, n.second.priority);
+    for(node &n:*nodes)
+        g.add_node(n.acceptance, n.type, n.priority);
 
-    for(auto n:*nodes)
-        for(transition tr: n.second.transitions)
-            g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
+    for(node &n:*nodes)
+        for(int i = 0; i < MAX_INPUT_SIZE ; ++i)
+            for(int j: n.transitions[i])
+                g.add_edge(get_new_id(n.id,s1), get_new_id(j,s1), i);
+
 
 
     nodes = nfa.get_graph()->get_nodes();
 
-    for(auto n:*nodes)
-        newId[n.second.id] = g.add_node(n.second.acceptance, n.second.type, n.second.priority);
+    for(node &n:*nodes)
+        g.add_node(n.acceptance, n.type, n.priority);
 
-    for(auto n:*nodes)
-        for(transition tr: n.second.transitions)
-            g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
+    for(node &n:*nodes)
+        for(int i = 0; i < MAX_INPUT_SIZE ; ++i)
+            for(int j: n.transitions[i])
+                g.add_edge(get_new_id(n.id, s2), get_new_id(j,s2), i);
+
 
     string type2 = (*nodes)[nfa.get_end_node()].type;
 
-    g.add_edge(startNode, newId[this->start_node], "/L");
-    g.add_edge(startNode, newId[nfa.get_start_node()], "/L");
+    g.add_edge(startNode, get_new_id(this->start_node,s1), lambda);
+    g.add_edge(startNode, get_new_id(nfa.get_start_node(), s2), lambda);
 
     int endNode = g.add_node(false, "");
 
-    g.add_edge(newId[this->end_node], endNode,"/L");
-    g.add_edge(newId[nfa.get_end_node()], endNode,"/L");
+    g.add_edge(get_new_id(this->end_node,s1), endNode,lambda);
+    g.add_edge(get_new_id(nfa.get_end_node(), s2), endNode,lambda);
 
     return new NFA(g,startNode,endNode);
 }
 
+
 NFA* NFA::concatenateOperation(NFA &nfa) {
+
+    int s1 = 1, s2 = 1+this->get_graph()->size();
     Graph g;
     int startNode = g.add_node(false, "");
 
-    unordered_map<int, node> *nodes = this->get_graph()->get_nodes();
-    unordered_map<int, int> newId;
+    vector<node> *nodes = this->get_graph()->get_nodes();
 
+    for(node &n:*nodes)
+        g.add_node(n.acceptance, n.type, n.priority);
 
-    for(auto n:*nodes)
-        newId[n.second.id] = g.add_node(n.second.acceptance, n.second.type, n.second.priority);
+    for(node &n:*nodes)
+        for(int i = 0; i < MAX_INPUT_SIZE ; ++i)
+            for(int j: n.transitions[i])
+                g.add_edge(get_new_id(n.id,s1), get_new_id(j,s1), i);
 
-    for(auto n:*nodes)
-        for(transition tr: n.second.transitions)
-            g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
-
-    g.add_edge(startNode, newId[this->start_node], "/L");
+    g.add_edge(startNode, get_new_id(this->start_node,s1), lambda);
 
     nodes = nfa.get_graph()->get_nodes();
 
-    for(auto n:*nodes)
-        newId[n.second.id] = g.add_node(n.second.acceptance, n.second.type, n.second.priority);
+    for(node &n:*nodes)
+        g.add_node(n.acceptance, n.type, n.priority);
+    for(node &n:*nodes)
+        for(int i = 0; i < MAX_INPUT_SIZE ; ++i)
+            for(int j: n.transitions[i])
+                g.add_edge(get_new_id(n.id,s2), get_new_id(j,s2), i);
 
-    for(auto n:*nodes)
-        for(transition tr: n.second.transitions)
-            g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
 
 
-    g.add_edge(newId[this->end_node], newId[nfa.start_node], "/L");
+    g.add_edge(get_new_id(this->end_node,s1), get_new_id(nfa.get_start_node(),s2), lambda);
     int endNode = g.add_node(false, "");
 
-    g.add_edge(newId[nfa.get_end_node()], endNode,"/L");
+    g.add_edge(get_new_id(nfa.get_end_node(),s2), endNode,lambda);
 
     return new NFA(g,startNode,endNode);
 }
 
 
 NFA* NFA::asteriskOperation() {
+    int s1 = 1;
+
     Graph g;
     int startNode = g.add_node(false, "");
 
-    unordered_map<int, node> *nodes = this->get_graph()->get_nodes();
-    unordered_map<int, int> newId;
+    vector<node> *nodes = this->get_graph()->get_nodes();
+
+
+    for(node &n:*nodes)
+        g.add_node(n.acceptance, n.type, n.priority);
+
+    for(node &n:*nodes)
+        for(int i = 0; i < MAX_INPUT_SIZE ; ++i)
+            for(int j: n.transitions[i])
+                g.add_edge(get_new_id(n.id,s1), get_new_id(j,s1), i);
 
     int endNode = g.add_node(false, "");
-
-    for(auto n:*nodes)
-        newId[n.second.id] = g.add_node(n.second.acceptance, n.second.type, n.second.priority);
-
-    for(auto n:*nodes)
-        for(transition tr: n.second.transitions)
-            g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
-
-    g.add_edge(startNode, newId[start_node], "/L");
-    g.add_edge(newId[end_node], endNode, "/L");
-    g.add_edge(startNode, endNode, "/L");
-    g.add_edge(endNode, startNode, "/L");
+    g.add_edge(startNode, get_new_id(startNode, s1), lambda);
+    g.add_edge(get_new_id(end_node, s1), endNode, lambda);
+    g.add_edge(startNode, endNode, lambda);
+    g.add_edge(endNode, startNode, lambda);
 
     return new NFA(g,startNode,endNode);
 }
 
 
 NFA* NFA::plusOperation() {
+
+    int s1 = 1;
     Graph g;
     int startNode = g.add_node(false, "");
 
-    unordered_map<int, node> *nodes = this->get_graph()->get_nodes();
-    unordered_map<int, int> newId;
+    vector<node> *nodes = this->get_graph()->get_nodes();
+
+
+    for(node &n:*nodes)
+        g.add_node(n.acceptance, n.type, n.priority);
+
+    for(node &n:*nodes)
+        for(int i = 0; i < MAX_INPUT_SIZE ; ++i)
+            for(int j: n.transitions[i])
+                g.add_edge(get_new_id(n.id,s1), get_new_id(j,s1), i);
 
     int endNode = g.add_node(false, "");
-
-    for(auto n:*nodes)
-        newId[n.second.id] = g.add_node(n.second.acceptance, n.second.type, n.second.priority);
-
-    for(auto n:*nodes)
-        for(transition tr: n.second.transitions)
-            g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
-
-    g.add_edge(startNode, newId[start_node], "/L");
-    g.add_edge(newId[end_node], endNode, "/L");
-    g.add_edge(endNode, startNode, "/L");
+    g.add_edge(startNode, get_new_id(startNode, s1), lambda);
+    g.add_edge(get_new_id(end_node, s1), endNode, lambda);
+    g.add_edge(endNode, startNode, lambda);
 
     return new NFA(g,startNode,endNode);
 }

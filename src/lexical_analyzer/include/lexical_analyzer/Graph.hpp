@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 #define infi 1<<20
-#define lambda 128
+#define epsilon 128
 #define MAX_INPUT_SIZE 129
 
 
@@ -51,7 +51,7 @@ struct node {
             std::cout << "Type=>" << type << ", priority=> " << priority << std::endl;
         }
         std::cout << "Neighbors => ";
-
+       
         for(int i = 0; i < MAX_INPUT_SIZE ; ++i) {
             for(int j: transitions[i])
                 std:: cout << "{" << j << ", /" << i << "/" << "}, ";
@@ -61,11 +61,11 @@ struct node {
 
     std::vector<int> getNeighbors() {
         std::vector<int> res;
-
+    
         for(int i = 0; i < MAX_INPUT_SIZE ; ++i)
             for(int j: transitions[i])
                 res.push_back(j);
-
+        
         std::sort( res.begin(), res.end() );
         res.erase( std::unique( res.begin(), res.end() ), res.end() );
         return res;
@@ -87,6 +87,7 @@ struct node {
 
 class Graph {
 
+    int numberOfNodes = 0;
     vector<node> adjList;
 
     public:

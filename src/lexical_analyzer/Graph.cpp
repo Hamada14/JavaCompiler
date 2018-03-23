@@ -1,29 +1,27 @@
 #include "lexical_analyzer/Graph.hpp"
 #include <stdio.h>
 
-int Graph:: numberOfNodes = 0;
 
 int Graph:: add_node(bool acceptance, string type) {
-    int id = ++numberOfNodes;
-    adjList[id] = {id, acceptance, type};
+    int id = (int)adjList.size();
+    adjList.push_back(node(id, acceptance, type));
     return id;
 }
 
 int Graph:: add_node(bool acceptance, string type, int priority) {
-    int id = ++numberOfNodes;
-    adjList[id] = {id, acceptance, type, priority};
+    int id = (int)adjList.size();;
+    adjList.push_back(node(id, acceptance, type, priority));
     return id;
 }
 
-void Graph:: add_edge(int from, int to, string input) {
-    if(!adjList.count(from) || !adjList.count(to))
-        printf("add_edge: Invalid node.");
-    adjList[from].transitions.push_back({to,input});
-    adjList[from].input_to_node_map[input].push_back(to);
+void Graph:: add_edge(int from, int to, int input) {
+    if(from >= (int)adjList.size() || to >= (int)adjList.size())
+        cerr << "add_edge: Invalid node.\n";
+    adjList[from].transitions[input].push_back(to);
 }
 
-vector<int> Graph::get_nodes_of_transitions(int node, string input) {
-    return adjList[node].input_to_node_map[input];
+vector<int>* Graph::get_nodes_of_transitions(int node, int input) {
+    return &adjList[node].transitions[input];
 }
 
 
@@ -37,6 +35,10 @@ void Graph::dfs(unordered_set<int>& vis, int cur_node) {
     }
 }
 
-unordered_map<int, node>* Graph:: get_nodes() {
+vector<node>* Graph:: get_nodes() {
     return &adjList;
+}
+
+int Graph:: size() {
+    return (int)adjList.size();
 }
