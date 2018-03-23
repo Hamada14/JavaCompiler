@@ -14,7 +14,7 @@ NFA::NFA(char ch) {
 NFA:: NFA(std::string str) {
     if(str.empty()) return;
     start_node = g.add_node(false, "");
-    int end_node = start_node;
+    end_node = start_node;
     for(char ch: str) {
         int cur = g.add_node(false, "");
         g.add_edge(end_node,cur,string(1,ch));
@@ -235,6 +235,5 @@ NFA* NFA ::combine(vector<NFA*> &nfas) {
     int endNode = g.add_node(false, "");
     for(int x: endNodes)
         g.add_edge(x, endNode, LAMBDA);
-
     return new NFA(g,startNode,endNode);
 }

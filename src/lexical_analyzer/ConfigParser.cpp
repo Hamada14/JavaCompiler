@@ -135,9 +135,9 @@ NFA* ConfigParser::keywordToNFA(std::string keyword, int priority) {
 }
 
 NFA* ConfigParser::punctuationToNFA(char ch, int priority) {
-      NFA* result = new NFA(ch);
-      result->set_acceptance(string(1, ch), priority);
-      return result;
+        NFA* result = new NFA(ch);
+        result->set_acceptance(string(1, ch), priority);
+        return result;
 }
 
 void ConfigParser::disassembleExpression(std::string expression, char operator_, std::string& operand_1, std::string& operand_2) {
