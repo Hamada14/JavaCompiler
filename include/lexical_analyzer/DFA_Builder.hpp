@@ -5,6 +5,7 @@
 #include "Graph.hpp"
 #include "NFA.hpp"
 #include "State.hpp"
+#include "Print.hpp"
 #include <climits>
 #include <cstring>
 #include <iostream>
@@ -82,7 +83,8 @@ private:
         connect two states if the is a valid edge between 'em in the graph
         or add edge to PHI state otherwise
     */
-    void connect_edge(State* cur_state, State* next, DFA& ret, string transition);
+    void connect_edge(
+        State* cur_state, State* next, DFA& ret, string transition, vector<int>& data);
     /*
         helper function which pushes a state to the stack if this state is not pushed before
     */

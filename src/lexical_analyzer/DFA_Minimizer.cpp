@@ -110,14 +110,17 @@ void DFA_Minimizer::build_graph(DFA& dfa)
     {
         int cur_node = dfa.get_nodes()->add_node(
             cur_state->get_acceptance(), cur_state->get_type(), cur_state->get_priority());
+        cur_state->set_id(cur_node);
         for (int v : (*cur_state->get_nodes()))
             component_of[v] = cur_node;
     }
     dfa.set_start_node(component_of[start_node]);
     dfa.set_end_node(component_of[end_node]);
+    Print* minial_transition_table = new Print(dfa.get_start_node(), "minial_transition_table.txt");
     map<pair<pair<int, int>, string>, bool> is_edge;
     for (State* cur_state : (*partitions))
     {
+        vector<int> data(128, component_of[end_node]);
         for (auto v : (*cur_state->get_nodes()))
         {
             unordered_map<int, node>* graph_nodes = dfa_graph->get_nodes();
@@ -127,11 +130,17 @@ void DFA_Minimizer::build_graph(DFA& dfa)
                 auto edge
                     = make_pair(make_pair(component_of[v], component_of[nxt.next]), nxt.input);
                 if (!is_edge[edge])
+                {
+                    data[nxt.input[0]] = component_of[nxt.next];
                     dfa.get_nodes()->add_edge(component_of[v], component_of[nxt.next], nxt.input);
+                }
                 is_edge[edge] = true;
             }
         }
+        minial_transition_table->pirnt_data(cur_state->get_id(), cur_state->get_type(),
+            cur_state->get_priority(), cur_state->get_acceptance(), data);
     }
+    minial_transition_table->close_file();
 }
 
 void DFA_Minimizer::set_partiotions()

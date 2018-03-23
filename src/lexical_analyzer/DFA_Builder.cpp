@@ -14,7 +14,7 @@ DFA* DFA_Builder::get_DFA()
         first_state->get_acceptance(), first_state->get_type(), first_state->get_priority()));
     first_state->set_id(ret->get_start_node());
 
-    ret->set_end_node(ret->get_nodes()->add_node(false, "", -(1 << 20)));
+    ret->set_end_node(ret->get_nodes()->add_node(false, "PHI", -(1 << 20)));
 
     push_state(first_state);
     subset_construction(*ret);
@@ -41,19 +41,24 @@ void DFA_Builder::get_epsillon_closure(int v, unordered_set<int>* result)
 
 void DFA_Builder::subset_construction(DFA& ret)
 {
+    Print* transition_table = new Print(ret.get_start_node(), "transition_table.txt");
     vector<string> possible_transitions = get_possible_transitions();
+    vector<int> data;
     while (!stk.empty())
     {
         State* cur_state = stk.top();
-        stk.pop();
+        stk.pop(), data.clear();
         for (auto trans : possible_transitions)
         {
             State* next = new State;
             for (int state_node : (*cur_state->get_nodes()))
                 search_transtion(state_node, next, trans);
-            connect_edge(cur_state, next, ret, trans);
+            connect_edge(cur_state, next, ret, trans, data);
         }
+        transition_table->pirnt_data(cur_state->get_id(), cur_state->get_type(),
+            cur_state->get_priority(), cur_state->get_acceptance(), data);
     }
+    transition_table->close_file();
 }
 
 vector<string> DFA_Builder::get_possible_transitions()
@@ -65,7 +70,6 @@ vector<string> DFA_Builder::get_possible_transitions()
         trans = "", trans += c;
         possible_transitions.push_back(trans);
     }
-    possible_transitions.push_back(trans);
     return possible_transitions;
 }
 
@@ -81,21 +85,29 @@ void DFA_Builder::search_transtion(int node_id, State* next, string trans)
     }
 }
 
-void DFA_Builder::connect_edge(State* cur_state, State* next, DFA& ret, string transition)
+void DFA_Builder::connect_edge(
+    State* cur_state, State* next, DFA& ret, string transition, vector<int>& data)
 {
     if (next->get_nodes()->size() == 0)
+    {
+        data.push_back(ret.get_end_node());
         ret.get_nodes()->add_edge(cur_state->get_id(), ret.get_end_node(), transition);
+    }
     else
     {
         set<int>* nodes_of_state = next->get_nodes();
         if ((*is_a_state).count(*nodes_of_state))
+        {
+            data.push_back((*is_a_state)[*nodes_of_state]);
             ret.get_nodes()->add_edge(
                 cur_state->get_id(), (*is_a_state)[*nodes_of_state], transition);
+        }
         else
         {
             set_state(next);
             next->set_id(ret.get_nodes()->add_node(
                 next->get_acceptance(), next->get_type(), next->get_priority()));
+            data.push_back(next->get_id());
             ret.get_nodes()->add_edge(cur_state->get_id(), next->get_id(), transition);
             push_state(next);
         }

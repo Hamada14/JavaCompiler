@@ -4,6 +4,7 @@
 #include "DFA.hpp"
 #include "Graph.hpp"
 #include "State.hpp"
+#include "Print.hpp"
 #include <climits>
 #include <cstring>
 #include <iostream>
