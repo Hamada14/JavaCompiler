@@ -37,7 +37,9 @@ std::vector<LanguageToken*> LanguageSpecParser::infixToPostfix(std::string exp) 
                         pos++;
                         concat = true;
                 } else if((!Util::isWhiteSpace(exp[pos]) && !isReservedSymbol(exp[pos]))&&
-                          (pos == (int)exp.length() - 1 || !(Util::isASCIIChar(exp[pos + 1]) || Util::isASCIIDigit(exp[pos + 1])))) {
+                          (pos == (int)exp.length() - 1 ||
+                            ((!Util::isASCIIChar(exp[pos])  || !(Util::isASCIIChar(exp[pos + 1]) || Util::isASCIIDigit(exp[pos + 1])))))
+                          ) {
                         if(concat)
                                 addOperator('&', language_tokens, st);
                         language_tokens.push_back(new LanguageToken(exp.substr(pos, 1), LanguageTokenType::CHARACTER));

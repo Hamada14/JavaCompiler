@@ -1,0 +1,15 @@
+letter = a - z | A - Z
+digit = 0 - 9
+digits = digit+
+optional_sign = ( \+ | \- | \L )
+optional_fraction =  digits . digits | digits | \L
+optional_exponent = ( \L |  E optional_sign digits)
+num: optional_sign optional_fraction optional_exponent
+
+
+
+-3.2879
+3.234E-10
+3.234E10
++1
+10E5

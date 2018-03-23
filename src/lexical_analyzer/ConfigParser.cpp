@@ -8,8 +8,8 @@ const std::string ConfigParser::CONFIG_FILE_PATH = "input";
 const char ConfigParser::DEFINITION_OPERATOR = ':';
 const char ConfigParser::EXPRESSION_OPERATOR = '=';
 
-const std::regex ConfigParser::REGULAR_EXPRESSION_REGEX("[a-zA-z][a-zA-z0-9]+\\s*\\=.+");
-const std::regex ConfigParser::REGULAR_DEFINITION_REGEX("[a-zA-z][a-zA-z0-9]+\\s*\\:.+");
+const std::regex ConfigParser::REGULAR_EXPRESSION_REGEX("[a-zA-z][a-zA-z0-9-_]+\\s*\\=.+");
+const std::regex ConfigParser::REGULAR_DEFINITION_REGEX("[a-zA-z][a-zA-z0-9-_]+\\s*\\:.+");
 const std::regex ConfigParser::PUNCTUATION_REGEX("\\[.*\\]");
 const std::regex ConfigParser::KEYWORDS_REGEX("\\{.*\\}");
 
