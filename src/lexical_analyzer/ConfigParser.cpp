@@ -1,6 +1,8 @@
 #include "lexical_analyzer/ConfigParser.hpp"
+
 #include "lexical_analyzer/LexicalErrorReporter.hpp"
 
+const int ConfigParser::MAX_PRIORITY = 0;
 const std::string ConfigParser::CONFIG_FILE_PATH = "input";
 
 const char ConfigParser::DEFINITION_OPERATOR = ':';
@@ -17,11 +19,11 @@ ConfigParser::ConfigParser(LanguageSpecParser* lang_sp) : lang_sp(lang_sp) {
 }
 
 ConfigParser::~ConfigParser() {
-        for(int i = 0; i < (int)keywords.size(); i++) {
-                delete keywords[i];
+        for(NFA* keyword : keywords) {
+                delete keyword;
         }
-        for(int i = 0; i < (int)punctuations.size(); i++) {
-                delete punctuations[i];
+        for(NFA* punctuation : punctuations) {
+                delete punctuation;
         }
         delete regex_table;
         delete lang_sp;
@@ -39,38 +41,39 @@ NFA* ConfigParser::readLanguageSpec(std::ifstream* input_file) {
 
 NFA* ConfigParser::readLanguage(std::ifstream* input_file) {
         std::string current_line;
-        int priority = -1;
+        int priority = MAX_PRIORITY - 1;
         while(getline(*input_file, current_line)) {
                 LexicalErrorReporter::getInstance()->setLine(-priority);
                 parseLine(Util::trim(current_line), priority);
                 priority--;
         }
+        input_file->close();
         return getResultNFA();
 }
 
 NFA* ConfigParser::getResultNFA() {
         std::vector<NFA*> result_items = definition_table->getValues();
-        for(int i = 0; i < punctuations.size(); i++) result_items.push_back(punctuations[i]);
-        for(int i = 0; i < keywords.size(); i++) result_items.push_back(keywords[i]);
+        result_items.insert(std::begin(result_items), std::begin(punctuations), std::end(punctuations));
+        result_items.insert(std::begin(result_items), std::begin(keywords), std::end(keywords));
         return NFA::combine(result_items);
 }
 
 void ConfigParser::parseLine(std::string current_line, int priority) {
         if(regex_match(current_line, REGULAR_EXPRESSION_REGEX)) {
-                parseRegularExpression(current_line, priority);
+                parseRegularExpression(current_line);
         } else if(regex_match(current_line, REGULAR_DEFINITION_REGEX)) {
                 parseRegularDefinition(current_line, priority);
         } else if(regex_match(current_line, PUNCTUATION_REGEX)) {
-                parsePunctuation(current_line, priority);
+                parsePunctuation(current_line);
         } else if(regex_match(current_line, KEYWORDS_REGEX)) {
-                parseKeywords(current_line, priority);
+                parseKeywords(current_line);
         } else {
-            LexicalErrorReporter* reporter = LexicalErrorReporter::getInstance();
-            reporter->report(ReportMechanism::REPORT_AND_EXIT, ErrorType::INVALID_LINE_SPEC, {});
+                LexicalErrorReporter* reporter = LexicalErrorReporter::getInstance();
+                reporter->report(ReportMechanism::REPORT_AND_EXIT, ErrorType::INVALID_LINE_SPEC, {});
         }
 }
 
-void ConfigParser::parseRegularExpression(std::string current_line, int priority) {
+void ConfigParser::parseRegularExpression(std::string current_line) {
         std::string operand_1, operand_2;
         disassembleExpression(current_line, EXPRESSION_OPERATOR, operand_1, operand_2);
         NFA* result = lang_sp->parseRegularExpression(operand_2, regex_table);
@@ -85,25 +88,25 @@ void ConfigParser::parseRegularDefinition(std::string current_line, int priority
         definition_table->addExpressionNFA(operand_1, result);
 }
 
-void ConfigParser::parsePunctuation(std::string current_line, int priority) {
-        std::vector<std::string> splitted_punctuations = Util::split(current_line.substr(1, current_line.length() - 2), ' ');
+void ConfigParser::parsePunctuation(std::string current_line) {
+        std::vector<std::string> splitted_punctuations = Util::split(current_line.substr(1, current_line.length() - 2));
         for(std::string punc : splitted_punctuations) {
                 if(!isValidPunctuation(punc)) {
-                    LexicalErrorReporter* reporter = LexicalErrorReporter::getInstance();
-                    reporter->report(ReportMechanism::REPORT_AND_EXIT, ErrorType::INVALID_PUNCTUATION, {punc});
+                        LexicalErrorReporter* reporter = LexicalErrorReporter::getInstance();
+                        reporter->report(ReportMechanism::REPORT_AND_EXIT, ErrorType::INVALID_PUNCTUATION, {punc});
                 }
-                punctuations.push_back(keywordToNFA(punc.substr(punc.length() - 1), 0));
+                punctuations.push_back(keywordToNFA(punc.substr(punc.length() - 1), MAX_PRIORITY));
         }
 }
 
-void ConfigParser::parseKeywords(std::string current_line, int priority) {
-        std::vector<std::string> splitted_keywords = Util::split(current_line.substr(1, current_line.length() - 2), ' ');
+void ConfigParser::parseKeywords(std::string current_line) {
+        std::vector<std::string> splitted_keywords = Util::split(current_line.substr(1, current_line.length() - 2));
         for(std::string keyword : splitted_keywords) {
                 if(!isValidKeywords(keyword)) {
                         LexicalErrorReporter* reporter = LexicalErrorReporter::getInstance();
                         reporter->report(ReportMechanism::REPORT_AND_EXIT, ErrorType::INVALID_KEYWORD, {keyword});
                 }
-                keywords.push_back(keywordToNFA(keyword, 0));
+                keywords.push_back(keywordToNFA(keyword, MAX_PRIORITY));
         }
 }
 

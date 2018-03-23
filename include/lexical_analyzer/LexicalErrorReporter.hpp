@@ -13,17 +13,17 @@ enum class ErrorType { INVALID_LINE_SPEC, MISSING_INPUT_FILE, INVALID_KEYWORD,
                    };
 
 class LexicalErrorReporter {
-
 public:
     static LexicalErrorReporter* getInstance();
     void setLine(int);
     void report(ReportMechanism, ErrorType, std::vector<std::string>);
 
 private:
+    static LexicalErrorReporter* instance;
+
     LexicalErrorReporter();
     std::string buildErrorMessage(ErrorType, std::vector<std::string>);
 
-    static LexicalErrorReporter* instance;
     int current_line;
 };
 #endif

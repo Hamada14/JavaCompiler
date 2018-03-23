@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 #define infi 1<<20
+#define LAMBDA "/L"
 
 using namespace std;
 

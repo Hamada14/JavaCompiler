@@ -6,11 +6,13 @@
 
 namespace Util {
 
-  bool isWhiteSpace(const char);
-  bool isASCIIChar(const char);
-  bool isASCIIDigit(const char);
+    bool isWhiteSpace(const char);
+    bool isASCIIChar(const char);
+    bool isASCIIDigit(const char);
 
-  std::string trim(const std::string);
-  std::vector<std::string> split(std::string, char);
+    std::string trim(const std::string);
+    std::vector<std::string> split(std::string, char = ' ');
+
+    std::string int_to_string(int);
 }
 #endif

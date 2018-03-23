@@ -6,7 +6,7 @@
 #include <string>
 
 class RegularExpressionTable {
-  public:
+public:
       ~RegularExpressionTable();
 
       bool hasExpression(std::string);
@@ -14,7 +14,8 @@ class RegularExpressionTable {
       NFA* getExpressionNFA(std::string);
       std::vector<NFA*> getValues();
       void clear();
-  private:
+
+private:
       std::map<std::string, NFA*> nfa_map;
 };
 #endif

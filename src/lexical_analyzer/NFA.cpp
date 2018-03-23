@@ -6,7 +6,7 @@ NFA::NFA(char ch) {
     string edge_input = "";
     edge_input += ch;
     if(ch == '\0') {
-        edge_input = "/L";
+        edge_input = LAMBDA;
     }
     g.add_edge(start_node, end_node, edge_input);
 }
@@ -109,13 +109,13 @@ NFA* NFA::orOperation(NFA &nfa) {
 
     string type2 = (*nodes)[nfa.get_end_node()].type;
 
-    g.add_edge(startNode, newId[this->start_node], "/L");
-    g.add_edge(startNode, newId[nfa.get_start_node()], "/L");
+    g.add_edge(startNode, newId[this->start_node], LAMBDA);
+    g.add_edge(startNode, newId[nfa.get_start_node()], LAMBDA);
 
     int endNode = g.add_node(false, "");
 
-    g.add_edge(newId[this->end_node], endNode,"/L");
-    g.add_edge(newId[nfa.get_end_node()], endNode,"/L");
+    g.add_edge(newId[this->end_node], endNode,LAMBDA);
+    g.add_edge(newId[nfa.get_end_node()], endNode,LAMBDA);
 
     return new NFA(g,startNode,endNode);
 }
@@ -135,7 +135,7 @@ NFA* NFA::concatenateOperation(NFA &nfa) {
         for(transition tr: n.second.transitions)
             g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
 
-    g.add_edge(startNode, newId[this->start_node], "/L");
+    g.add_edge(startNode, newId[this->start_node], LAMBDA);
 
     nodes = nfa.get_graph()->get_nodes();
 
@@ -147,10 +147,10 @@ NFA* NFA::concatenateOperation(NFA &nfa) {
             g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
 
 
-    g.add_edge(newId[this->end_node], newId[nfa.start_node], "/L");
+    g.add_edge(newId[this->end_node], newId[nfa.start_node], LAMBDA);
     int endNode = g.add_node(false, "");
 
-    g.add_edge(newId[nfa.get_end_node()], endNode,"/L");
+    g.add_edge(newId[nfa.get_end_node()], endNode,LAMBDA);
 
     return new NFA(g,startNode,endNode);
 }
@@ -172,10 +172,10 @@ NFA* NFA::asteriskOperation() {
         for(transition tr: n.second.transitions)
             g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
 
-    g.add_edge(startNode, newId[start_node], "/L");
-    g.add_edge(newId[end_node], endNode, "/L");
-    g.add_edge(startNode, endNode, "/L");
-    g.add_edge(endNode, startNode, "/L");
+    g.add_edge(startNode, newId[start_node], LAMBDA);
+    g.add_edge(newId[end_node], endNode, LAMBDA);
+    g.add_edge(startNode, endNode, LAMBDA);
+    g.add_edge(endNode, startNode, LAMBDA);
 
     return new NFA(g,startNode,endNode);
 }
@@ -197,9 +197,9 @@ NFA* NFA::plusOperation() {
         for(transition tr: n.second.transitions)
             g.add_edge(newId[n.second.id], newId[tr.next], tr.input);
 
-    g.add_edge(startNode, newId[start_node], "/L");
-    g.add_edge(newId[end_node], endNode, "/L");
-    g.add_edge(endNode, startNode, "/L");
+    g.add_edge(startNode, newId[start_node], LAMBDA);
+    g.add_edge(newId[end_node], endNode, LAMBDA);
+    g.add_edge(endNode, startNode, LAMBDA);
 
     return new NFA(g,startNode,endNode);
 }
@@ -214,16 +214,16 @@ NFA* NFA ::combine(vector<NFA*> &nfas) {
         for(auto n:*nodes)
             new_id[n.second.id] = g.add_node(n.second.acceptance, n.second.type, n.second.priority);
 
-            for(auto n:*nodes)
-                for(transition tr: n.second.transitions)
-                    g.add_edge(new_id[n.second.id], new_id[tr.next], tr.input);
+        for(auto n:*nodes)
+            for(transition tr: n.second.transitions)
+                g.add_edge(new_id[n.second.id], new_id[tr.next], tr.input);
 
-        g.add_edge(startNode, new_id[nfa->get_start_node()], "/L");
+        g.add_edge(startNode, new_id[nfa->get_start_node()], LAMBDA);
         endNodes.push_back(new_id[nfa->get_end_node()]);
     }
     int endNode = g.add_node(false, "");
     for(int x: endNodes)
-        g.add_edge(x, endNode, "/L");
+        g.add_edge(x, endNode, LAMBDA);
 
     return new NFA(g,startNode,endNode);
 }

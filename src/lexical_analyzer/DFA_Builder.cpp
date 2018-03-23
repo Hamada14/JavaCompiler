@@ -14,7 +14,7 @@ DFA* DFA_Builder::get_DFA()
         first_state->get_acceptance(), first_state->get_type(), first_state->get_priority()));
     first_state->set_id(ret->get_start_node());
 
-    ret->set_end_node(ret->get_nodes()->add_node(false, "PHI", -(1 << 20)));
+    ret->set_end_node(ret->get_nodes()->add_node(false, "PHI", -(infi)));
 
     push_state(first_state);
     subset_construction(*ret);
@@ -35,13 +35,14 @@ void DFA_Builder::get_epsillon_closure(int v, unordered_set<int>* result)
     unordered_map<int, node>* graph_nodes = nfa_graph->get_nodes();
     node adjlist = (*graph_nodes)[v];
     for (transition& x : adjlist.transitions)
-        if (!(*result).count(x.next) && x.input == "/L")
+        if (!(*result).count(x.next) && x.input == LAMBDA)
             get_epsillon_closure(x.next, result);
 }
 
 void DFA_Builder::subset_construction(DFA& ret)
 {
     Print* transition_table = new Print(ret.get_start_node(), "transition_table.txt");
+    transition_table->printHeader();
     vector<string> possible_transitions = get_possible_transitions();
     vector<int> data;
     while (!stk.empty())
@@ -55,8 +56,8 @@ void DFA_Builder::subset_construction(DFA& ret)
                 search_transtion(state_node, next, trans);
             connect_edge(cur_state, next, ret, trans, data);
         }
-        transition_table->pirnt_data(cur_state->get_id(), cur_state->get_type(),
-            cur_state->get_priority(), cur_state->get_acceptance(), data);
+       transition_table->pirnt_data(cur_state->get_id(), cur_state->get_type(),
+           cur_state->get_priority(), cur_state->get_acceptance(), data);
     }
     transition_table->close_file();
 }

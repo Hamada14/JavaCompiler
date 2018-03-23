@@ -1,27 +1,25 @@
 #ifndef ConfigParser_hpp
 #define ConfigParser_hpp
 
-#include "LanguageSpecParser.hpp"
-#include "RegularExpressionTable.hpp"
-#include "Util.hpp"
 #include <fstream>
 #include <iostream>
 #include <regex>
 #include <string>
 
+#include "LanguageSpecParser.hpp"
+#include "RegularExpressionTable.hpp"
+#include "Util.hpp"
+
 class ConfigParser {
-  public:
+public:
     ConfigParser(LanguageSpecParser*);
     ~ConfigParser();
 
     std::string getConfigFilePath();
     NFA* readLanguageSpec(std::ifstream*);
-  private:
-    LanguageSpecParser* lang_sp;
-    RegularExpressionTable* regex_table;
-    RegularExpressionTable* definition_table;
-    std::vector<NFA*> keywords, punctuations;
 
+private:
+    static const int MAX_PRIORITY;
     static const char DEFINITION_OPERATOR;
     static const char EXPRESSION_OPERATOR;
 
@@ -41,13 +39,18 @@ class ConfigParser {
     NFA* keywordToNFA(std::string, int priority);
 
     void parseLine(std::string, int);
-    void parseRegularExpression(std::string, int);
+    void parseRegularExpression(std::string);
     void parseRegularDefinition(std::string, int);
-    void parsePunctuation(std::string, int);
-    void parseKeywords(std::string, int);
+    void parsePunctuation(std::string);
+    void parseKeywords(std::string);
 
     void disassembleExpression(std::string, char, std::string&, std::string&);
 
     NFA* getResultNFA();
+
+    LanguageSpecParser* lang_sp;
+    RegularExpressionTable* regex_table;
+    RegularExpressionTable* definition_table;
+    std::vector<NFA*> keywords, punctuations;
 };
 #endif

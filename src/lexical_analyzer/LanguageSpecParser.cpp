@@ -1,4 +1,5 @@
 #include "lexical_analyzer/LanguageSpecParser.hpp"
+
 #include "lexical_analyzer/LexicalErrorReporter.hpp"
 
 std::map<char, int> LanguageSpecParser::OPERATOR_PRECEDENCE =
@@ -172,8 +173,8 @@ NFA* LanguageSpecParser::rangeOperation(LanguageToken* t1, LanguageToken* t2) {
         for(int i = range_start; i <= range_end; i++)
                 nfa_vec.push_back(new NFA(i));
         NFA* result = NFA::combine(nfa_vec);
-        for(int i = 0; i < nfa_vec.size(); i++)
-            delete nfa_vec[i];
+        for(NFA* nfa_elem : nfa_vec)
+                delete nfa_elem;
         return result;
 }
 

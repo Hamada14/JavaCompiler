@@ -1,10 +1,6 @@
 #ifndef LanguageSpecParser_hpp
 #define LanguageSpecParser_hpp
 
-#include "LanguageToken.hpp"
-#include "NFA.hpp"
-#include "RegularExpressionTable.hpp"
-#include "Util.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <map>
@@ -12,15 +8,26 @@
 #include <stack>
 #include <vector>
 
+#include "LanguageToken.hpp"
+#include "NFA.hpp"
+#include "RegularExpressionTable.hpp"
+#include "Util.hpp"
+
 class LanguageSpecParser {
-  public:
+public:
     NFA* parseRegularExpression(std::string, RegularExpressionTable*);
 
     bool isValidOperator(char);
     bool isReservedSymbol(char);
     bool isUnaryOperator(char);
     bool isValidRegexRange(char, char);
-  private:
+
+private:
+    static std::map<char, int> OPERATOR_PRECEDENCE;
+    static const std::set<char> RESERVED_SYM;
+    static const std::set<char> VALID_OPERATORS;
+    static const std::set<char> UNARY_OPERATORS;
+
     std::vector<LanguageToken*> infixToPostfix(std::string);
     NFA* postfixToNFA(std::vector<LanguageToken*>, RegularExpressionTable*);
 
@@ -32,10 +39,5 @@ class LanguageSpecParser {
     void addOperator(char, vector<LanguageToken*> &, stack<LanguageToken*> &);
 
     NFA* rangeOperation(LanguageToken*, LanguageToken*);
-
-    static std::map<char, int> OPERATOR_PRECEDENCE;
-    static const std::set<char> RESERVED_SYM;
-    static const std::set<char> VALID_OPERATORS;
-    static const std::set<char> UNARY_OPERATORS;
 };
 #endif

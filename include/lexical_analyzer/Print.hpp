@@ -3,7 +3,7 @@
 
 #include <climits>
 #include <cstring>
-#include <iostream>
+#include <fstream>
 #include <stdio.h>
 #include <string>
 #include <vector>
@@ -42,7 +42,7 @@ private:
     /*
         file to write table
     */
-    FILE* file;
+    ofstream output_file;
     /*
         print horizontal line of table
     */
@@ -60,25 +60,11 @@ public:
     /*
         constructor of the class
     */
-    Print(int start_node, string file_name)
-    {
-        file = freopen(file_name.c_str(), "w", stdout);
-        this->shift = start_node;
-        print_horizntal_line();
-        vector<string> head;
-        head.push_back("Node"), head.push_back("Type"), head.push_back("Priority"),
-            head.push_back("Acceptance");
-        for (int c = 0; c < 128; ++c)
-            head.push_back("\"" + int_to_string(c) + "\"");
-        cout << vertical;
-        for (string str : head)
-        {
-            str = handle_length(str);
-            cout << str << vertical;
-        }
-        cout << endl;
-        print_horizntal_line();
-    }
+    Print(int, string);
+    /*
+      Prints the table header to the output file specified in the constructor.
+    */
+    void printHeader();
     /*
         print data of one node
     */

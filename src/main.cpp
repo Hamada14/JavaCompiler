@@ -36,21 +36,18 @@ int main(int argc, const char* argv[])
 
     NFA* language_nfa = readLanguageSpecs();
 
-    printf("Built NFA successfully in %.3f sec\nConverting NFA to DFA...\n",
-        (double)(clock() - begin) / CLOCKS_PER_SEC);
+    printf("Built NFA successfully in %.3f sec\nConverting NFA to DFA...\n", (double)(clock() - begin) / CLOCKS_PER_SEC);
     begin = clock();
 
     DFA_Builder* builder = new DFA_Builder(language_nfa);
     DFA* dfa = (*builder).get_DFA();
 
-    printf("Converted NFA successfully in %.3f sec\nMinimizing DFA...\n",
-        (double)(clock() - begin) / CLOCKS_PER_SEC);
+    printf("Converted NFA successfully in %.3f sec\nMinimizing DFA...\n", (double)(clock() - begin) / CLOCKS_PER_SEC);
     begin = clock();
     DFA_Minimizer* minimizer = new DFA_Minimizer(dfa);
     DFA* minimized_dfa = (*minimizer).get_minimal_DFA();
 
-    printf(
-        "Minimization done successfully in %.3f sec\n", (double)(clock() - begin) / CLOCKS_PER_SEC);
+    printf("Minimization done successfully in %.3f sec\n", (double)(clock() - begin) / CLOCKS_PER_SEC);
 
     Tokenizer tokenizer;
     tokenizer.tokenize("tokens.txt", "out.txt", minimized_dfa);
