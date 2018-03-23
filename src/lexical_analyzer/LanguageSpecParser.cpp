@@ -94,8 +94,7 @@ void LanguageSpecParser::addOperator(char oper, vector<LanguageToken*> &language
                 language_tokens.push_back(st.top());
                 st.pop();
         }
-        string oper_str = " ";
-        oper_str[0] = oper;
+        string oper_str(1, oper);
         st.push(new LanguageToken(oper_str, LanguageTokenType::OPERATOR));
         if(isUnaryOperator(oper)) {
                 language_tokens.push_back(new LanguageToken(LanguageTokenType::NULL_TOKEN));
@@ -168,7 +167,10 @@ NFA* LanguageSpecParser::rangeOperation(LanguageToken* t1, LanguageToken* t2) {
         char range_end = t2->getValue()[0];
         if(!isValidRegexRange(range_end, range_start)) {
                 LexicalErrorReporter* reporter = LexicalErrorReporter::getInstance();
-                std::string range_str = range_start + "-" + range_end;
+                std::string range_str = "";
+                range_str += range_start;
+                range_str += "-";
+                range_str += range_end;
                 reporter->report(ReportMechanism::REPORT_AND_EXIT, ErrorType::INVALID_REGEX_RANGE, {range_str});
         }
         vector<NFA*> nfa_vec;

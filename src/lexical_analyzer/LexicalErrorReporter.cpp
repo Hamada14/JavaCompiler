@@ -51,7 +51,7 @@ std::string LexicalErrorReporter::buildErrorMessage(ErrorType error_type, std::v
                 ss << "Unknown regular expression used {" << params[0] << "} in line no " << current_line << ".\nPlease make sure it's defined.";
                 break;
         case ErrorType::INVALID_REGEX_RANGE:
-                ss << "Invalid Range {" << params[0] << " in line no " << current_line << ".\nPlease only use a-z, A-Z or 0-9.";
+                ss << "Invalid Range {" << params[0] << "} in line no " << current_line << ".\nPlease only use a-z, A-Z or 0-9.";
                 break;
         default:
                 exit(-1);

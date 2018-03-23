@@ -60,11 +60,11 @@ struct node {
     }
 
     int makeTransition(string s){
-        for(transition t : transitions)
-            if(t.input == s) return t.next;
+        if((int)input_to_node_map[s].size() == 1) {
+          return input_to_node_map[s][0];
+        }
         return -1;
     }
-
 };
 
 class Graph {
