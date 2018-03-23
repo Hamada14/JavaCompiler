@@ -5,6 +5,9 @@ NFA::NFA(char ch) {
     end_node = g.add_node(false, "");
     string edge_input = "";
     edge_input += ch;
+    if(ch == '\0') {
+        edge_input = "/L";
+    }
     g.add_edge(start_node, end_node, edge_input);
 }
 
