@@ -1,0 +1,24 @@
+letter = a - z | A - Z
+digit = 0 - 9
+id: letter (letter|digit)*
+digits = digit+
+{boolean int float}
+num: digit+ | digit+ . digits ( \L | E digits)
+relop: \=\= | !\= | > | >\= | < | <\=
+assign: \=
+{ if else while }
+[; , \( \) { }]
+addop: \+ | \-
+mulop: \* | /
+
+
+
+int sum , count_it , pass ,
+mnt; while (pass != 10)
+{
+	sum = 1E5;
+	pass = pass - 0.2 * pass;
+}
+if(x > y){
+	x = y;
+}

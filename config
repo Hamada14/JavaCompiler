@@ -1,0 +1,5 @@
+input = misc/tokens.txt
+langSpec = misc/input.txt
+tokenOutput = misc/out.txt
+transitionTable = misc/transition_table.txt
+minTransitionTable = misc/minimal_transition_table.txt

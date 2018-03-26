@@ -1,5 +1,5 @@
-#ifndef ConfigParser_hpp
-#define ConfigParser_hpp
+#ifndef LexicalRulesParser_hpp
+#define LexicalRulesParser_hpp
 
 #include <fstream>
 #include <iostream>
@@ -7,16 +7,16 @@
 #include <string>
 
 #include "LanguageSpecParser.hpp"
+#include "lexical_analyzer/Tokenizer.hpp"
 #include "RegularExpressionTable.hpp"
 #include "Util.hpp"
 
-class ConfigParser {
+class LexicalRulesParser {
 public:
-    ConfigParser(LanguageSpecParser*);
-    ~ConfigParser();
+    LexicalRulesParser(LanguageSpecParser*);
+    ~LexicalRulesParser();
 
-    std::string getConfigFilePath();
-    NFA* readLanguageSpec(std::ifstream*);
+    Tokenizer* getLanguageTokenizer(std::ifstream*);
 
 private:
     static const int MAX_PRIORITY;
@@ -29,6 +29,11 @@ private:
     static const std::regex REGULAR_DEFINITION_REGEX;
     static const std::regex PUNCTUATION_REGEX;
     static const std::regex KEYWORDS_REGEX;
+
+    LanguageSpecParser* lang_sp;
+    RegularExpressionTable* regex_table;
+    RegularExpressionTable* definition_table;
+    std::vector<NFA*> keywords, punctuations;
 
     void validateInputFile(std::ifstream*);
     NFA* readLanguage(std::ifstream*);
@@ -49,9 +54,6 @@ private:
 
     NFA* getResultNFA();
 
-    LanguageSpecParser* lang_sp;
-    RegularExpressionTable* regex_table;
-    RegularExpressionTable* definition_table;
-    std::vector<NFA*> keywords, punctuations;
+    Tokenizer* NFAToTokenizer(NFA*);
 };
 #endif

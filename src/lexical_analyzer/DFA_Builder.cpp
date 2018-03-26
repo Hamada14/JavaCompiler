@@ -1,5 +1,7 @@
 #include "lexical_analyzer/DFA_Builder.hpp"
 
+#include "Config.hpp"
+
 DFA* DFA_Builder::get_DFA()
 {
     DFA* ret = new DFA;
@@ -41,7 +43,7 @@ void DFA_Builder::get_epsillon_closure(int v, unordered_set<int>* result)
 
 void DFA_Builder::subset_construction(DFA& ret)
 {
-    Print* transition_table = new Print(ret.get_start_node(), "transition_table.txt");
+    Print* transition_table = new Print(ret.get_start_node(), Config::getInstance()->getTransitionTablePath());
     transition_table->printHeader();
     vector<string> possible_transitions = get_possible_transitions();
     vector<int> data;

@@ -1,7 +1,42 @@
 #include "lexical_analyzer/Tokenizer.hpp"
-#include <fstream>
 
-void Tokenizer::tokenize(string inputFile, string outputFile, DFA *dfa){
+
+#include "lexical_analyzer/DFA_Builder.hpp"
+#include "lexical_analyzer/DFA_Minimizer.hpp"
+
+#include <chrono>
+#include <fstream>
+#include <ratio>
+
+Tokenizer::Tokenizer(NFA* nfa) {
+  std::chrono::high_resolution_clock::time_point t1, t2;
+  std::chrono::duration<double> time_span;
+
+  t1 = std::chrono::high_resolution_clock::now();
+
+  DFA_Builder builder(nfa);
+  DFA* built_dfa = builder.get_DFA();
+
+  t2 = std::chrono::high_resolution_clock::now();
+  time_span = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
+  printf("Converted NFA successfully in %.3f sec\nMinimizing DFA...\n", time_span.count());
+  t1 = std::chrono::high_resolution_clock::now();
+
+  DFA_Minimizer* minimizer = new DFA_Minimizer(built_dfa);
+  DFA* minimized_dfa = (*minimizer).get_minimal_DFA();
+  delete minimizer;
+
+  t2 = std::chrono::high_resolution_clock::now();
+  time_span = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
+  printf("Minimization done successfully in %.3f sec\n", time_span.count());
+
+  this->dfa = minimized_dfa;
+}
+
+Tokenizer::~Tokenizer() {
+  delete dfa;
+}
+void Tokenizer::tokenize(string inputFile, string outputFile){
     ifstream in(inputFile);
     ofstream out(outputFile);
 
@@ -53,7 +88,7 @@ void Tokenizer::tokenize(string inputFile, string outputFile, DFA *dfa){
     out.close();
 }
 
-void Tokenizer::tokenize(string inputFile, DFA *dfa){
+void Tokenizer::tokenize(string inputFile){
     ifstream in(inputFile);
 
     tokens.clear();

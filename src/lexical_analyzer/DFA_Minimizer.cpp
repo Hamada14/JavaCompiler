@@ -1,5 +1,7 @@
 #include "lexical_analyzer/DFA_Minimizer.hpp"
 
+#include "Config.hpp"
+
 DFA* DFA_Minimizer::get_minimal_DFA()
 {
     DFA* ret = new DFA;
@@ -116,7 +118,7 @@ void DFA_Minimizer::build_graph(DFA& dfa)
     }
     dfa.set_start_node(component_of[start_node]);
     dfa.set_end_node(component_of[end_node]);
-    Print* minimal_transition_table = new Print(dfa.get_start_node(), "minimal_transition_table.txt");
+    Print* minimal_transition_table = new Print(dfa.get_start_node(), Config::getInstance()->getMinTransitionTablePath());
     minimal_transition_table->printHeader();
     map<pair<pair<int, int>, string>, bool> is_edge;
     for (State* cur_state : (*partitions))

@@ -3,20 +3,26 @@
 
 using namespace std;
 
-#include "DFA.hpp"
 #include <iostream>
 #include <stdio.h>
 #include <string>
+
+
+#include "DFA.hpp"
+#include "NFA.hpp"
 
 class Tokenizer
 {
     private:
         int indexOfNextToken;
         vector<string> tokens;
+        DFA* dfa;
 
     public:
-        void tokenize(string inputFile, string outputFile, DFA *dfa);
-        void tokenize(string inputFile, DFA *dfa);
+        Tokenizer(NFA*);
+        ~Tokenizer();
+        void tokenize(string inputFile, string outputFile);
+        void tokenize(string inputFile);
         string nextToken();
 };
 

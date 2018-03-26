@@ -1,24 +1,27 @@
-#include "lexical_analyzer/ConfigParser.hpp"
+#include "lexical_analyzer/LexicalRulesParser.hpp"
 
 #include "lexical_analyzer/LexicalErrorReporter.hpp"
 
-const int ConfigParser::MAX_PRIORITY = 0;
-const std::string ConfigParser::CONFIG_FILE_PATH = "input";
+#include <ctime>
+#include <ratio>
+#include <chrono>
 
-const char ConfigParser::DEFINITION_OPERATOR = ':';
-const char ConfigParser::EXPRESSION_OPERATOR = '=';
+const int LexicalRulesParser::MAX_PRIORITY = 0;
 
-const std::regex ConfigParser::REGULAR_EXPRESSION_REGEX("[a-zA-Z][a-zA-Z0-9\\-_]+\\s*\\=.+");
-const std::regex ConfigParser::REGULAR_DEFINITION_REGEX("[a-zA-Z][a-zA-Z0-9\\-_]+\\s*\\:.+");
-const std::regex ConfigParser::PUNCTUATION_REGEX("\\[.*\\]");
-const std::regex ConfigParser::KEYWORDS_REGEX("\\{.*\\}");
+const char LexicalRulesParser::DEFINITION_OPERATOR = ':';
+const char LexicalRulesParser::EXPRESSION_OPERATOR = '=';
 
-ConfigParser::ConfigParser(LanguageSpecParser* lang_sp) : lang_sp(lang_sp) {
+const std::regex LexicalRulesParser::REGULAR_EXPRESSION_REGEX("[a-zA-Z][a-zA-Z0-9\\-_]+\\s*\\=.+");
+const std::regex LexicalRulesParser::REGULAR_DEFINITION_REGEX("[a-zA-Z][a-zA-Z0-9\\-_]+\\s*\\:.+");
+const std::regex LexicalRulesParser::PUNCTUATION_REGEX("\\[.*\\]");
+const std::regex LexicalRulesParser::KEYWORDS_REGEX("\\{.*\\}");
+
+LexicalRulesParser::LexicalRulesParser(LanguageSpecParser* lang_sp) : lang_sp(lang_sp) {
         this->regex_table = new RegularExpressionTable();
         this->definition_table = new RegularExpressionTable();
 }
 
-ConfigParser::~ConfigParser() {
+LexicalRulesParser::~LexicalRulesParser() {
         for(NFA* keyword : keywords) {
                 delete keyword;
         }
@@ -30,16 +33,25 @@ ConfigParser::~ConfigParser() {
         delete definition_table;
 }
 
-std::string ConfigParser::getConfigFilePath() {
-        return CONFIG_FILE_PATH;
-}
-
-NFA* ConfigParser::readLanguageSpec(std::ifstream* input_file) {
+Tokenizer* LexicalRulesParser::getLanguageTokenizer(std::ifstream* input_file) {
         validateInputFile(input_file);
-        return readLanguage(input_file);
+
+        std::chrono::high_resolution_clock::time_point t1, t2;
+        std::chrono::duration<double> time_span;
+
+        std::cout << "Building NFA..." << std::endl;
+        t1 = std::chrono::high_resolution_clock::now();
+
+        NFA* nfa = readLanguage(input_file);
+
+        t2 = std::chrono::high_resolution_clock::now();
+        time_span = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
+        printf("Built NFA successfully in %.3f sec\nConverting NFA to DFA...\n", time_span.count());
+
+        return new Tokenizer(nfa);
 }
 
-NFA* ConfigParser::readLanguage(std::ifstream* input_file) {
+NFA* LexicalRulesParser::readLanguage(std::ifstream* input_file) {
         std::string current_line;
         int priority = MAX_PRIORITY - 1;
         while(getline(*input_file, current_line)) {
@@ -51,14 +63,14 @@ NFA* ConfigParser::readLanguage(std::ifstream* input_file) {
         return getResultNFA();
 }
 
-NFA* ConfigParser::getResultNFA() {
+NFA* LexicalRulesParser::getResultNFA() {
         std::vector<NFA*> result_items = definition_table->getValues();
         result_items.insert(std::begin(result_items), std::begin(punctuations), std::end(punctuations));
         result_items.insert(std::begin(result_items), std::begin(keywords), std::end(keywords));
         return NFA::combine(result_items);
 }
 
-void ConfigParser::parseLine(std::string current_line, int priority) {
+void LexicalRulesParser::parseLine(std::string current_line, int priority) {
         if(regex_match(current_line, REGULAR_EXPRESSION_REGEX)) {
                 parseRegularExpression(current_line);
         } else if(regex_match(current_line, REGULAR_DEFINITION_REGEX)) {
@@ -73,14 +85,14 @@ void ConfigParser::parseLine(std::string current_line, int priority) {
         }
 }
 
-void ConfigParser::parseRegularExpression(std::string current_line) {
+void LexicalRulesParser::parseRegularExpression(std::string current_line) {
         std::string operand_1, operand_2;
         disassembleExpression(current_line, EXPRESSION_OPERATOR, operand_1, operand_2);
         NFA* result = lang_sp->parseRegularExpression(operand_2, regex_table);
         regex_table->addExpressionNFA(operand_1, result);
 }
 
-void ConfigParser::parseRegularDefinition(std::string current_line, int priority) {
+void LexicalRulesParser::parseRegularDefinition(std::string current_line, int priority) {
         std::string operand_1, operand_2;
         disassembleExpression(current_line, DEFINITION_OPERATOR, operand_1, operand_2);
         NFA* result = lang_sp->parseRegularExpression(operand_2, regex_table);
@@ -88,7 +100,7 @@ void ConfigParser::parseRegularDefinition(std::string current_line, int priority
         definition_table->addExpressionNFA(operand_1, result);
 }
 
-void ConfigParser::parsePunctuation(std::string current_line) {
+void LexicalRulesParser::parsePunctuation(std::string current_line) {
         std::vector<std::string> splitted_punctuations = Util::split(current_line.substr(1, current_line.length() - 2));
         for(std::string punc : splitted_punctuations) {
                 if(!isValidPunctuation(punc)) {
@@ -99,7 +111,7 @@ void ConfigParser::parsePunctuation(std::string current_line) {
         }
 }
 
-void ConfigParser::parseKeywords(std::string current_line) {
+void LexicalRulesParser::parseKeywords(std::string current_line) {
         std::vector<std::string> splitted_keywords = Util::split(current_line.substr(1, current_line.length() - 2));
         for(std::string keyword : splitted_keywords) {
                 if(!isValidKeywords(keyword)) {
@@ -110,7 +122,7 @@ void ConfigParser::parseKeywords(std::string current_line) {
         }
 }
 
-bool ConfigParser::isValidKeywords(std::string keyword) {
+bool LexicalRulesParser::isValidKeywords(std::string keyword) {
         for(int i = 0; i < (int)keyword.length(); i++) {
                 if(lang_sp->isReservedSymbol(keyword[i]) || (keyword[i] == '\\' && i != (int)keyword.length() - 1
                                                              && !lang_sp->isReservedSymbol(keyword[i + 1])))
@@ -120,7 +132,7 @@ bool ConfigParser::isValidKeywords(std::string keyword) {
         return true;
 }
 
-bool ConfigParser::isValidPunctuation(std::string punc) {
+bool LexicalRulesParser::isValidPunctuation(std::string punc) {
         if((punc.length() == 1 && !lang_sp->isReservedSymbol(punc[0])) ||
            (punc.length() == 2 && punc[0] == '\\' && lang_sp->isReservedSymbol(punc[1]))) {
                 return true;
@@ -128,25 +140,25 @@ bool ConfigParser::isValidPunctuation(std::string punc) {
         return false;
 }
 
-NFA* ConfigParser::keywordToNFA(std::string keyword, int priority) {
+NFA* LexicalRulesParser::keywordToNFA(std::string keyword, int priority) {
         NFA* result = new NFA(keyword);
         result->set_acceptance(keyword, priority);
         return result;
 }
 
-NFA* ConfigParser::punctuationToNFA(char ch, int priority) {
+NFA* LexicalRulesParser::punctuationToNFA(char ch, int priority) {
         NFA* result = new NFA(ch);
         result->set_acceptance(string(1, ch), priority);
         return result;
 }
 
-void ConfigParser::disassembleExpression(std::string expression, char operator_, std::string& operand_1, std::string& operand_2) {
+void LexicalRulesParser::disassembleExpression(std::string expression, char operator_, std::string& operand_1, std::string& operand_2) {
         int operator_index = (int)expression.find(operator_);
         operand_1 = Util::trim(expression.substr(0, operator_index));
         operand_2 = Util::trim(expression.substr(operator_index + 1));
 }
 
-void ConfigParser::validateInputFile(std::ifstream* input_file) {
+void LexicalRulesParser::validateInputFile(std::ifstream* input_file) {
         if(!*input_file) {
                 LexicalErrorReporter* reporter = LexicalErrorReporter::getInstance();
                 reporter->report(ReportMechanism::REPORT_AND_EXIT, ErrorType::MISSING_INPUT_FILE, {});
