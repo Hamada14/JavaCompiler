@@ -37,6 +37,10 @@ void Graph::dfs(unordered_set<int>& vis, int cur_node) {
     }
 }
 
+int Graph::get_size() {
+    return adjList.size();
+}
+
 unordered_map<int, node>* Graph:: get_nodes() {
     return &adjList;
 }

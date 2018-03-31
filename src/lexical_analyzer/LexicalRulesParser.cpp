@@ -46,7 +46,8 @@ Tokenizer* LexicalRulesParser::getLanguageTokenizer(std::ifstream* input_file) {
 
         t2 = std::chrono::high_resolution_clock::now();
         time_span = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
-        printf("Built NFA successfully in %.3f sec\nConverting NFA to DFA...\n", time_span.count());
+        printf("Built NFA successfully in %.3f sec\n", time_span.count());
+        printf("Final NFA Size is %d\n", nfa->get_graph()->get_size());
 
         return new Tokenizer(nfa);
 }

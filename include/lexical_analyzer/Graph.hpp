@@ -77,6 +77,7 @@ class Graph {
         int add_node(bool acceptance, string type);  // returns node id
         int add_node(bool acceptance, string type, int priority);  // returns node id
         void add_edge(int from, int to, string input); //function parameters(from, to) are node ids
+        int get_size();
         vector<int> get_nodes_of_transitions(int, string);
         unordered_map<int, node>* get_nodes();
 

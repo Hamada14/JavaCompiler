@@ -12,8 +12,9 @@ Tokenizer::Tokenizer(NFA* nfa) {
   std::chrono::high_resolution_clock::time_point t1, t2;
   std::chrono::duration<double> time_span;
 
-  t1 = std::chrono::high_resolution_clock::now();
+  printf("Converting NFA to DFA...\n");
 
+  t1 = std::chrono::high_resolution_clock::now();
   DFA_Builder builder(nfa);
   DFA* built_dfa = builder.get_DFA();
 
