@@ -3,3 +3,7 @@ langSpec = misc/input.txt
 tokenOutput = misc/out.txt
 transitionTable = misc/transition_table.txt
 minTransitionTable = misc/minimal_transition_table.txt
+parsingRules = misc/parsing_rules.txt
+ll1GrammarRules = misc/ll1_grammar.txt
+predictiveParsingTable = misc/predictive_parsing_table.txt
+parseTree = misc/parse_tree.txt

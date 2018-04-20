@@ -42,7 +42,7 @@
 *.xcsettings
 
 # build file
-**/build/*
+**/bin
 **/compiler
 *.depend
 *.layout

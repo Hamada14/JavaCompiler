@@ -43,7 +43,7 @@ void DFA_Builder::get_epsillon_closure(int v, unordered_set<int>* result)
 
 void DFA_Builder::subset_construction(DFA& ret)
 {
-    Print* transition_table = new Print(ret.get_start_node(), Config::getInstance()->getTransitionTablePath());
+    Print* transition_table = new Print(ret.get_start_node(), Config::getInstance()->get(Config::TRANSITION_TABLE_PATH_KEY));
     transition_table->printHeader();
     vector<string> possible_transitions = get_possible_transitions();
     vector<int> data;

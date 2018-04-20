@@ -118,7 +118,7 @@ void DFA_Minimizer::build_graph(DFA& dfa)
     }
     dfa.set_start_node(component_of[start_node]);
     dfa.set_end_node(component_of[end_node]);
-    Print* minimal_transition_table = new Print(dfa.get_start_node(), Config::getInstance()->getMinTransitionTablePath());
+    Print* minimal_transition_table = new Print(dfa.get_start_node(), Config::getInstance()->get(Config::MIN_TRANSITION_TABLE_PATH_KEY));
     minimal_transition_table->printHeader();
     map<pair<pair<int, int>, string>, bool> is_edge;
     for (State* cur_state : (*partitions))
