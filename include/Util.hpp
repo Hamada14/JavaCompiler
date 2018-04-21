@@ -5,14 +5,20 @@
 #include <vector>
 
 namespace Util {
+  const char WHITE_SPACE = ' ';
+  const std::string EMPTY_STRING = "";
+  const char SINGLE_QUOTE = '\'';
 
-    bool isWhiteSpace(const char);
-    bool isASCIIChar(const char);
-    bool isASCIIDigit(const char);
+  bool isWhiteSpace(const char);
+  bool isEmptyString(std::string);
 
-    std::string trim(const std::string);
-    std::vector<std::string> split(std::string, char = ' ');
+  bool isASCIIChar(const char);
+  bool isASCIIDigit(const char);
 
-    std::string int_to_string(int);
+  std::string trim(const std::string);
+  std::vector<std::string> split(std::string, char = ' ');
+  std::vector<std::string> splitQuoteSensitive(std::string str, char delimiter);
+
+  std::string int_to_string(int);
 }
-#endif
+#endif // ifndef Util_hpp

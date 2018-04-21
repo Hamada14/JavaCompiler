@@ -4,10 +4,12 @@
 #include <sstream>
 
 namespace Util {
-  const std::string EMPTY_STRING = "";
-
   bool isWhiteSpace(const char c) {
           return c == ' ' || c == '\t';
+  }
+
+  bool isEmptyString(std::string str) {
+    return str == EMPTY_STRING;
   }
 
   bool isASCIIChar(const char c) {
@@ -28,7 +30,7 @@ namespace Util {
 
   std::vector<std::string> split(std::string str, char delimiter) {
           std::vector<std::string> result;
-          for(int i = 0; i < (int)str.length(); i++) {
+          for(size_t i = 0; i < str.length(); i++) {
                   if(str[i] == delimiter)
                           continue;
                   int j = i;
@@ -37,6 +39,25 @@ namespace Util {
                   i = j - 1;
           }
           return result;
+  }
+
+  std::vector<std::string> splitQuoteSensitive(std::string str, char delimiter) {
+      std::vector<std::string> result;
+      bool inside_quotes = false;
+      std::string partition = "";
+      for(size_t i = 0; i < str.length(); i++) {
+        if(!inside_quotes && str[i] == delimiter) {
+          result.push_back(partition);
+          partition = "";
+        } else {
+          partition += str[i];
+          if(str[i] == SINGLE_QUOTE) {
+            inside_quotes = !inside_quotes;
+          }
+        }
+      }
+      result.push_back(partition);
+      return result;
   }
 
   std::string int_to_string(int num)
