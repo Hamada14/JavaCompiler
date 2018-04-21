@@ -1,13 +1,4 @@
-#ASSIGNMENT =  'id' '=' EXPRESSION ';'
-#DECLARATION =  PRIMITIVE_TYPE 'id' ';'
-#EXPRESSION =  SIMPLE_EXPRESSION | SIMPLE_EXPRESSION 'relop' SIMPLE_EXPRESSION
-#FACTOR =  'id' | 'num' | '(' EXPRESSION ')'
-#IF =  'if' '(' EXPRESSION ')' '{' STATEMENT '}' 'else' '{' STATEMENT '}'
-#METHOD_BODY =  STATEMENT_LIST
-#PRIMITIVE_TYPE =  'int' | 'float'
-#SIGN =  '+' | '-'
-#SIMPLE_EXPRESSION =  TERM | SIGN TERM | SIMPLE_EXPRESSION 'addop' TERM
-#STATEMENT =  DECLARATION | IF | WHILE | ASSIGNMENT
-#STATEMENT_LIST =  STATEMENT | STATEMENT_LIST STATEMENT
-#TERM =  FACTOR | TERM 'mulop' FACTOR
-#WHILE =  'while' '(' EXPRESSION ')' '{' STATEMENT '}'
+#A =  S 'd' State_0 | 'f' State_0
+#S =  'f' State_0 'a' State_1 | 'b' State_1
+#State_0 =  'c' State_0 | \L
+#State_1 =  'd' State_0 'a' State_1 | \L

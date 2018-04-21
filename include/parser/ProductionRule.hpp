@@ -9,25 +9,29 @@
 
 class ProductionRule {
 public:
-  const static char RULE_DEFINITION_START_MARKER;
-  const static char RULE_DEFINITION_OPERATOR;
-  const static char RULES_SEPARATOR;
-  const static std::regex RULE_DEFINITION_REGEX;
+    const static char RULE_DEFINITION_START_MARKER;
+    const static char RULE_DEFINITION_OPERATOR;
+    const static char RULES_SEPARATOR;
+    const static std::regex RULE_DEFINITION_REGEX;
 
 
-  ProductionRule(std::string raw_rule, std::set<std::string> valid_ids);
-  ~ProductionRule();
+    ProductionRule(std::vector<RuleToken> tokens);
+    ProductionRule(std::string raw_rule, std::set<std::string> valid_ids);
+    ~ProductionRule();
 
-  static bool isRuleDefinition(std::string& line);
-  static std::string getIdentifier(std::string& line);
+    static bool isRuleDefinition(std::string& line);
+    static std::string getIdentifier(std::string& line);
 
-  std::vector<RuleToken> getTokens();
-  bool isInvalid();
+    std::vector<RuleToken> getTokens();
+    bool isInvalid();
+
+    bool canLeftImmedSubstitute(std::string non_terminal_state);
+    std::vector<ProductionRule> leftImmedSubstitute(std::vector<ProductionRule> rules);
 
 private:
-  std::vector<RuleToken> tokens;
-  bool is_invalid;
+    std::vector<RuleToken> tokens;
+    bool is_invalid;
 
-  std::vector<std::string> tokenize(std::string raw_rule);
+    std::vector<std::string> tokenize(std::string raw_rule);
 };
 #endif // ifndef PRODUCTIONRULE_HPP

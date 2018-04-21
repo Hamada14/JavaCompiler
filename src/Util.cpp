@@ -24,7 +24,7 @@ namespace Util {
           int start, end;
           for(start = 0; start < (int)str.length() && isWhiteSpace(str[start]); start++) ;
           for(end = (int)str.length() - 1; end >= 0 && isWhiteSpace(str[end]); end--) ;
-          if(end <= start) return EMPTY_STRING;
+          if(end < start) return EMPTY_STRING;
           return str.substr(start, end - start + 1);
   }
 

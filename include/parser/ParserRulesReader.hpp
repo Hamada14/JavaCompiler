@@ -22,9 +22,15 @@ private:
   std::map<std::string, std::vector<ProductionRule> > parseRules(std::set<std::string> rule_ids,
                                                                  std::vector<std::string> input);
 
+  void eliminateLeftRecursion(std::map<std::string, std::vector<ProductionRule> >& rule_table);
+  std::vector<ProductionRule> leftImmedEliminate(std::vector<ProductionRule>& productions,
+                                                 std::string state_name, int new_state);
+
   std::set<std::string> extractRuleIdentifiers(std::vector<std::string> &input);
   bool isRuleDefinitionLine(std::string &line);
 
   void printRulesTable(std::map<std::string,std::vector<ProductionRule> > rule_table, std::ostream& o_stream);
+
+  std::string createStateName(int id);
 };
 #endif
