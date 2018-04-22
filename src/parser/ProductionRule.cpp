@@ -37,8 +37,17 @@ std::vector<std::string> ProductionRule::tokenize(std::string raw_rule) {
     for(std::size_t pos = 0; pos < raw_rule.length(); pos++) {
         if(Util::isWhiteSpace(raw_rule[pos])) {
             continue;
-        } else if(raw_rule[pos] == '\'') {
-            size_t end_pos = raw_rule.find('\'', pos + 1);
+        } else if(raw_rule[pos] == Util::SINGLE_QUOTE) {
+            size_t end_pos;
+            for(end_pos = pos + 1; end_pos < raw_rule.length(); end_pos++) {
+                if(raw_rule[end_pos] == RuleToken::BACK_SLASH) {
+                    end_pos++;
+                } else if(raw_rule[end_pos] == Util::SINGLE_QUOTE) {
+                    break;
+                } else if(end_pos == raw_rule.length() - 1) {
+                    end_pos = std::string::npos;
+                }
+            }
             if(end_pos == std::string::npos) {
                 this->is_invalid = true;
                 end_pos = raw_rule.length() - 1;
