@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <limits>
 
 #include "Util.hpp"
 
@@ -93,6 +94,22 @@ std::vector<RuleToken> ProductionRule::getTokens() {
     return tokens;
 }
 
+std::vector<RuleToken> ProductionRule::getPrefixTokens(size_t token_count) {
+    return std::vector<RuleToken>(tokens.begin(), tokens.begin() + token_count);
+}
+
+void ProductionRule::popTokens(size_t token_count) {
+    tokens.erase(tokens.begin(), tokens.begin() + token_count);
+}
+
+RuleToken ProductionRule::getToken(size_t index) {
+    return tokens[index];
+}
+
+size_t ProductionRule::getTokenCount() {
+    return tokens.size();
+}
+
 bool ProductionRule::isInvalid() {
     return this->is_invalid;
 }
@@ -108,4 +125,20 @@ std::string ProductionRule::getIdentifier(std::string& line) {
     assert(definition_end_pos != std::string::npos);
     std::string id = line.substr(definition_start_pos + 1, definition_end_pos - definition_start_pos - 1);
     return Util::trim(id);
+}
+
+size_t ProductionRule::getCommonPrefixTokenCount(std::vector<ProductionRule> rules) {
+    size_t max_len = std::numeric_limits<size_t>::max();
+    for(ProductionRule rule : rules) {
+        max_len = std::min(max_len, rule.getTokenCount());
+    }
+    for(size_t prefix_index = 0; prefix_index < max_len; prefix_index++) {
+        RuleToken current_token = rules[0].getToken(prefix_index);
+        for(ProductionRule rule : rules) {
+            if(rule.getToken(prefix_index) != current_token) {
+                return prefix_index;
+            }
+        }
+    }
+    return max_len;
 }

@@ -21,8 +21,16 @@ public:
 
     static bool isRuleDefinition(std::string& line);
     static std::string getIdentifier(std::string& line);
+    static size_t getCommonPrefixTokenCount(std::vector<ProductionRule> rules);
 
     std::vector<RuleToken> getTokens();
+    std::vector<RuleToken> getPrefixTokens(size_t token_count);
+
+    size_t getTokenCount();
+
+    RuleToken getToken(size_t index);
+    void popTokens(size_t token_count);
+
     bool isInvalid();
 
     bool canLeftImmedSubstitute(std::string non_terminal_state);

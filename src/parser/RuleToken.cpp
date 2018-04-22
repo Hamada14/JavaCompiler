@@ -34,11 +34,26 @@ RuleToken::RuleToken(std::string value) {
 RuleToken::~RuleToken() {
 }
 
-RuleTokenType RuleToken::getType() {
+bool RuleToken::operator== (const RuleToken& token) const {
+    return this->getType() == token.getType() && this->getValue() == token.getValue();
+}
+
+bool RuleToken::operator!= (const RuleToken& token) const {
+    return this->getType() != token.getType() || this->getValue() != token.getValue();
+}
+
+bool RuleToken::operator< (const RuleToken& token) const {
+    if(this->getType() != token.getType()) {
+        return this->getType() < token.getType();
+    }
+    return this->getValue() < token.getValue();
+}
+
+RuleTokenType RuleToken::getType() const {
     return this->type;
 }
 
-std::string RuleToken::getValue() {
+std::string RuleToken::getValue() const {
     return this->value;
 }
 

@@ -15,8 +15,12 @@ public:
     RuleToken(std::string value);
     ~RuleToken();
 
-    RuleTokenType getType();
-    std::string getValue();
+    bool operator == (const RuleToken& token) const;
+    bool operator!= (const RuleToken& token) const;
+    bool operator< (const RuleToken& token) const;
+
+    RuleTokenType getType() const;
+    std::string getValue() const;
 
     bool isInvalid();
 

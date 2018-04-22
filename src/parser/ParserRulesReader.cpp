@@ -7,6 +7,8 @@
 
 const std::string ParserRulesReader::INVALID_INPUT_FILE_MESSAGE = "Parsing Rules input file is invalid.";
 
+int ParserRulesReader::generated_state_id = 0;
+
 ParserRulesReader::ParserRulesReader() {
 }
 
@@ -22,6 +24,7 @@ std::map<std::string, std::vector<ProductionRule> > ParserRulesReader::getLL1Gra
     }
     auto rule_table = readRules(input_file);
     eliminateLeftRecursion(rule_table);
+    leftFactorGrammar(rule_table);
     printRulesTable(rule_table, *modified_rules);
     return rule_table;
 }
@@ -56,7 +59,7 @@ void ParserRulesReader::eliminateLeftRecursion(std::map<std::string, std::vector
         }
     }
     for(size_t i = 0; i < newly_added_states.size(); i++) {
-        rule_table[createStateName(i)] = newly_added_states[i];
+        rule_table[ParserRulesReader::createStateName(i)] = newly_added_states[i];
     }
 }
 
@@ -81,17 +84,57 @@ std::vector<ProductionRule> ParserRulesReader::leftImmedEliminate(std::vector<Pr
     for(ProductionRule rule : immediate_recursion) {
         std::vector<RuleToken> tokens = rule.getTokens();
         tokens.erase(tokens.begin());
-        tokens.push_back(RuleToken(createStateName(new_state)));
+        tokens.push_back(RuleToken(ParserRulesReader::createStateName(new_state)));
         new_rules.push_back(ProductionRule(tokens));
     }
     new_rules.push_back(ProductionRule({RuleToken(RuleToken::LAMBDA_VALUE)}));
     productions.clear();
     for(ProductionRule rule : no_immediate_recursion) {
         std::vector<RuleToken> tokens = rule.getTokens();
-        tokens.push_back(RuleToken(createStateName(new_state)));
+        tokens.push_back(RuleToken(ParserRulesReader::createStateName(new_state)));
         productions.push_back(ProductionRule(tokens));
     }
     return new_rules;
+}
+
+void ParserRulesReader::leftFactorGrammar(std::map<std::string, std::vector<ProductionRule> >& rule_table) {
+    std::vector<std::string> to_be_factored_rules;
+    for(auto rule_it : rule_table) {
+        to_be_factored_rules.push_back(rule_it.first);
+    }
+    for(std::string rule : to_be_factored_rules) {
+        leftFactorProduction(rule, rule_table);
+    }
+}
+
+void ParserRulesReader::leftFactorProduction(std::string rule_name, std::map<std::string, std::vector<ProductionRule> >& rule_table) {
+    std::vector<ProductionRule> to_be_factored_rules = rule_table[rule_name];
+    std::map<RuleToken, std::vector<ProductionRule> > production_rule_prefix_map;
+    std::vector<ProductionRule> new_rules;
+    for(ProductionRule prod_rule : to_be_factored_rules) {
+        if(prod_rule.getTokenCount() != 0) {
+            production_rule_prefix_map[prod_rule.getToken(0)].push_back(prod_rule);
+        } else {
+            new_rules.push_back(ProductionRule({RuleToken(RuleToken::LAMBDA_VALUE)}));
+        }
+    }
+    for(auto production_rule_prefix_it : production_rule_prefix_map) {
+        if(production_rule_prefix_it.second.size() == 1) {
+            new_rules.push_back(production_rule_prefix_it.second[0]);
+            continue;
+        }
+        size_t prefix_length = ProductionRule::getCommonPrefixTokenCount(production_rule_prefix_it.second);
+        std::vector<RuleToken> prefix_tokens = production_rule_prefix_it.second[0].getPrefixTokens(prefix_length);
+        std::string new_state_name = ParserRulesReader::generateState();
+        prefix_tokens.push_back(RuleToken(new_state_name));
+        new_rules.push_back(ProductionRule(prefix_tokens));
+        for(ProductionRule& prod_rule : production_rule_prefix_it.second) {
+            prod_rule.popTokens(prefix_length);
+        }
+        rule_table[new_state_name] = production_rule_prefix_it.second;
+        leftFactorProduction(new_state_name, rule_table);
+    }
+    rule_table[rule_name] = new_rules;
 }
 
 std::map<std::string, std::vector<ProductionRule> > ParserRulesReader::parseRules(std::set<std::string> rule_ids,
@@ -147,7 +190,7 @@ std::set<std::string> ParserRulesReader::extractRuleIdentifiers(std::vector<std:
 void ParserRulesReader::printRulesTable(std::map<std::string, std::vector<ProductionRule> > rule_table,
                                         std::ostream& o_stream) {
     for(auto it = rule_table.begin(); it != rule_table.end(); it++) {
-        o_stream << ProductionRule::RULE_DEFINITION_START_MARKER << it->first << Util::WHITE_SPACE;
+        o_stream << ProductionRule::RULE_DEFINITION_START_MARKER << Util::WHITE_SPACE << it->first << Util::WHITE_SPACE;
         o_stream << ProductionRule::RULE_DEFINITION_OPERATOR << Util::WHITE_SPACE;
         std::vector<ProductionRule> rules = it->second;
         for(size_t i = 0; i < rules.size(); i++) {
@@ -169,6 +212,12 @@ void ParserRulesReader::printRulesTable(std::map<std::string, std::vector<Produc
 }
 
 std::string ParserRulesReader::createStateName(int id) {
-  std::string str_id = Util::int_to_string(id);
-  return "State_" + str_id;
+    std::string str_id = Util::int_to_string(id);
+    return "State_" + str_id;
+}
+
+std::string ParserRulesReader::generateState() {
+    int id = generated_state_id++;
+    std::string str_id = Util::int_to_string(id);
+    return "Generated_State_" + str_id;
 }

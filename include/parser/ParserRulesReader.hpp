@@ -17,12 +17,20 @@ public:
 private:
   const static std::string INVALID_INPUT_FILE_MESSAGE;
 
+  int static generated_state_id;
+
+  static std::string createStateName(int id);
+  static std::string generateState();
+
   std::map<std::string, std::vector<ProductionRule> > readRules(std::ifstream *input);
   std::vector<std::string> readFile(std::ifstream *input_file);
   std::map<std::string, std::vector<ProductionRule> > parseRules(std::set<std::string> rule_ids,
                                                                  std::vector<std::string> input);
 
   void eliminateLeftRecursion(std::map<std::string, std::vector<ProductionRule> >& rule_table);
+  void leftFactorGrammar(std::map<std::string, std::vector<ProductionRule> >& rule_table);
+  void leftFactorProduction(std::string rule_name, std::map<std::string, std::vector<ProductionRule> >& rule_table);
+
   std::vector<ProductionRule> leftImmedEliminate(std::vector<ProductionRule>& productions,
                                                  std::string state_name, int new_state);
 
@@ -30,7 +38,5 @@ private:
   bool isRuleDefinitionLine(std::string &line);
 
   void printRulesTable(std::map<std::string,std::vector<ProductionRule> > rule_table, std::ostream& o_stream);
-
-  std::string createStateName(int id);
 };
 #endif
