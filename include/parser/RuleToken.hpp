@@ -5,11 +5,12 @@
 #include <regex>
 #include <set>
 
-enum class RuleTokenType { TERMINAL, NON_TERMINAL, LAMBDA_TERMINAL};
+enum class RuleTokenType { TERMINAL, NON_TERMINAL, LAMBDA_TERMINAL, DOLLAR_TERMINAL};
 
 class RuleToken {
 public:
     const static std::string LAMBDA_VALUE;
+    const static std::string DOLLAR_SIGN;
     const static char BACK_SLASH;
 
     RuleToken(std::string value);

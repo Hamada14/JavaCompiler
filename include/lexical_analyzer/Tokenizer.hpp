@@ -24,6 +24,7 @@ class Tokenizer
         void tokenize(string inputFile, string outputFile);
         void tokenize(string inputFile);
         string nextToken();
+        string getNextToken();
 };
 
 #endif // TOKENIZER_H
