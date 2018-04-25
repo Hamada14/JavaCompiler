@@ -3,6 +3,7 @@
 #include <iostream>
 
 const std::string RuleToken::LAMBDA_VALUE = "\\L";
+const std::string RuleToken::DOLLAR_SIGN = "$";
 
 const std::regex RuleToken::TERMINAL_TOKEN_REGEX("\\\'.+\\\'");
 const std::regex RuleToken::NON_TERMINAL_TOKEN_REGEX("[a-zA-Z][a-zA-Z0-9_]*");
@@ -14,6 +15,9 @@ const char RuleToken::BACK_SLASH = '\\';
 RuleToken::RuleToken(std::string value) {
     this->is_invalid = false;
     if (value == LAMBDA_VALUE) {
+        this->type = RuleTokenType::LAMBDA_TERMINAL;
+        this->value = value;
+    } else if (value == "$") {
         this->type = RuleTokenType::LAMBDA_TERMINAL;
         this->value = value;
     } else if (regex_match(value, TERMINAL_TOKEN_REGEX)) {

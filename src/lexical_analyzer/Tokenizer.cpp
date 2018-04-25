@@ -145,5 +145,11 @@ void Tokenizer::tokenize(string inputFile){
 string Tokenizer::nextToken(){
     if(indexOfNextToken == (int)tokens.size())
         return nullptr;
-    return tokens[indexOfNextToken++];
+    return tokens[indexOfNextToken];
+}
+
+string Tokenizer::getNextToken() {
+    if(indexOfNextToken == (int)tokens.size())
+        return nullptr;
+    return tokens[indexOfNextToken++];    
 }
