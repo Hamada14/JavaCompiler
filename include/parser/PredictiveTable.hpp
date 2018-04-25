@@ -21,6 +21,7 @@ private:
     enum class TYPE {FIRST, FOLLOW};
     const std::map<std::string, std::vector<ProductionRule> > &ll1_grammar;
     std::map<std::string, std::unordered_set<std::string> > first, follow;
+    std::map<std::string, std::map<std:: string, ProductionRule> table;
     
     std::unordered_set<std::string> getFirst(std::string &state);
     std::unordered_set<std::string> getFollow(std::string &state);
