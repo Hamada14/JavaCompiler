@@ -1,12 +1,11 @@
 #ifndef PRODUCTIONRULE_HPP
 #define PRODUCTIONRULE_HPP
 
-#include <vector>
 #include <set>
 #include <string>
+#include <vector>
 
 #include "parser/RuleToken.hpp"
-
 
 
 class ProductionRule {

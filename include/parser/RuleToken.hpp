@@ -1,9 +1,9 @@
 #ifndef RULETOKEN_HPP
 #define RULETOKEN_HPP
 
-#include <string>
 #include <regex>
 #include <set>
+#include <string>
 
 #include "Constants.hpp"
 
@@ -19,7 +19,7 @@ public:
     bool operator!= (const RuleToken& token) const;
     bool operator< (const RuleToken& token) const;
 
-    Constants::RuleTokenType getType() const;
+    RuleTokenType getType() const;
     std::string getValue() const;
 
     bool isInvalid();
@@ -31,7 +31,7 @@ private:
     const static std::set<char> RESERVED_SYMBOLS;
 
     std::string value;
-    Constants::RuleTokenType type;
+    RuleTokenType type;
 
     bool is_invalid;
 
