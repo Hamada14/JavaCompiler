@@ -1,17 +1,4 @@
-# ASSIGNMENT =  'id' '\=' EXPRESSION ';'
-# DECLARATION =  PRIMITIVE_TYPE 'id' ';'
-# EXPRESSION =  SIMPLE_EXPRESSION Generated_State_0
-# FACTOR =  '(' EXPRESSION ')' | 'id' | 'num'
-# Generated_State_0 =  \L | 'relop' SIMPLE_EXPRESSION
-# IF =  'if' '(' EXPRESSION ')' '{' STATEMENT '}' 'else' '{' STATEMENT '}'
-# METHOD_BODY =  STATEMENT_LIST
-# PRIMITIVE_TYPE =  'float' | 'int'
-# SIGN =  '+' | '-'
-# SIMPLE_EXPRESSION =  '+' TERM State_0 | '-' TERM State_0 | TERM State_0
-# STATEMENT =  'float' 'id' ';' | 'id' '\=' EXPRESSION ';' | 'if' '(' EXPRESSION ')' '{' STATEMENT '}' 'else' '{' STATEMENT '}' | 'int' 'id' ';' | WHILE
-# STATEMENT_LIST =  'float' 'id' ';' State_1 | 'id' '\=' EXPRESSION ';' State_1 | 'if' '(' EXPRESSION ')' '{' STATEMENT '}' 'else' '{' STATEMENT '}' State_1 | 'int' 'id' ';' State_1 | WHILE State_1
-# State_0 =  'addop' TERM State_0 | \L
-# State_1 =  STATEMENT State_1 | \L
-# State_2 =  'mulop' FACTOR State_2 | \L
-# TERM =  '(' EXPRESSION ')' State_2 | 'id' State_2 | 'num' State_2
-# WHILE =  'while' '(' EXPRESSION ')' '{' STATEMENT '}'
+#A =  S 'd' State_0 | 'f' State_0
+#S =  'f' State_0 'a' State_1 | 'b' State_1
+#State_0 =  'c' State_0 | \L
+#State_1 =  'd' State_0 'a' State_1 | \L
