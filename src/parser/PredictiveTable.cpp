@@ -95,7 +95,7 @@ void PredictiveTable:: calcRHSFollow(std::unordered_set<std::string> &cur_follow
     }
 }
 
-// how to know start variable to add $ in its follow ???
+
 std::unordered_set<std::string> PredictiveTable:: getFollow(std:: string &state) {
     if(!ll1_grammar.count(state))
         cerr<< "Undefined token\n", exit(0);
@@ -104,6 +104,8 @@ std::unordered_set<std::string> PredictiveTable:: getFollow(std:: string &state)
 
     std::unordered_set<std::string> &cur_follow = follow[state];
     calcRHSFollow(cur_follow, state);
+    if(state == start_state)
+        cur_follow.insert(Constants::END_OF_INPUT);
 
     for(ProductionRule &pr: ll1_grammar[state]) {
         vector<RuleToken> &tokens = pr.getTokens();
