@@ -5,7 +5,7 @@
 #include <regex>
 #include <set>
 
-
+#include "Constants.hpp"
 
 class RuleToken {
 public:
