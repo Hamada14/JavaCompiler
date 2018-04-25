@@ -5,9 +5,7 @@
 #include <set>
 #include <string>
 
-#include "Config.hpp"
-
-enum class RuleTokenType {START, TERMINAL, NON_TERMINAL, LAMBDA_TERMINAL, END_OF_INPUT};
+enum class RuleTokenType {TERMINAL, NON_TERMINAL, LAMBDA_TERMINAL, END_OF_INPUT};
 
 class RuleToken {
 public:
