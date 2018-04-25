@@ -1,5 +1,6 @@
 #include "parser/ParserRulesReader.hpp"
 
+#include <cstdlib>
 #include <iostream>
 #include <utility>
 
