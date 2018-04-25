@@ -14,14 +14,16 @@
 #include <map>
 #include <unordered_set>
 
-//#include "parser/RuleToken.hpp"
+#include "parser/RuleToken.hpp"
+#include "parser/ProductionRule.hpp"
+#include "Constants.hpp"
 
 class PredictiveTable {
 private:
     enum class TYPE {FIRST, FOLLOW};
-    const std::map<std::string, std::vector<ProductionRule> > &ll1_grammar;
+    std::map<std::string, std::vector<ProductionRule> > &ll1_grammar;
     std::map<std::string, std::unordered_set<std::string> > first, follow;
-    std::map<std::string, std::map<std:: string, ProductionRule> table;
+    std::map<std::string, std::map<std:: string, ProductionRule> > table;
     
     std::unordered_set<std::string> getFirst(std::string &state);
     std::unordered_set<std::string> getFollow(std::string &state);
@@ -29,6 +31,7 @@ private:
     bool checkTerminals(RuleToken &r, std::unordered_set<std::string> &cur, std::string &state, TYPE type);
     
 public:
+    PredictiveTable(std::map<std::string, std::vector<ProductionRule> > &ll1_grammar);
     std::vector<RuleToken> getTransition(std::string, std::string);
 };
 

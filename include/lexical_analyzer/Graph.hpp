@@ -6,10 +6,12 @@
 #include <vector>
 #include <stdio.h>
 
+#include "Constants.hpp"
+
 #define infi 1<<20
-#define LAMBDA "/L"
 
 using namespace std;
+using namespace Constants;
 
 struct transition {
     int next; // node id;
