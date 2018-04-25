@@ -15,7 +15,7 @@
 
 PredictiveTable( std::map<std::string, std::vector<ProductionRule> > & ll1_grammar): ll1_grammar (ll1_grammar) {
     for(auto &it: ll1_grammar)
-        calcFirst(it.f), calcFollow(it.f);
+        getFirst(it.f), getFollow(it.f);
     
 }
 
