@@ -8,13 +8,21 @@
 
 #include "parser/ProductionRule.hpp"
 
+struct LL1Grammar {
+    std::map<std::string, std::vector<ProductionRule> > rule_table;
+    std::string start_state;
+
+    LL1Grammar(std::map<std::string, std::vector<ProductionRule> > rule_table,
+               std::string start_state) : rule_table(rule_table), start_state(start_state) {};
+};
+
 class ParserRulesReader {
 public:
   ParserRulesReader();
   ~ParserRulesReader();
 
-  std::map<std::string, std::vector<ProductionRule> > getLL1Grammar(std::ifstream* input_file,
-                                                                    std::ofstream* modified_rules);
+  LL1Grammar getLL1Grammar(std::ifstream* input_file, std::ofstream* modified_rules);
+
 private:
   const static std::string INVALID_INPUT_FILE_MESSAGE;
 
@@ -23,10 +31,9 @@ private:
   static std::string createStateName(int id);
   static std::string generateState();
 
-  std::map<std::string, std::vector<ProductionRule> > readRules(std::ifstream *input);
+  LL1Grammar readRules(std::ifstream *input);
   std::vector<std::string> readFile(std::ifstream *input_file);
-  std::map<std::string, std::vector<ProductionRule> > parseRules(std::set<std::string> rule_ids,
-                                                                 std::vector<std::string> input);
+  LL1Grammar parseRules(std::set<std::string> rule_ids, std::vector<std::string> input);
 
   void eliminateLeftRecursion(std::map<std::string, std::vector<ProductionRule> >& rule_table);
   void leftFactorGrammar(std::map<std::string, std::vector<ProductionRule> >& rule_table);

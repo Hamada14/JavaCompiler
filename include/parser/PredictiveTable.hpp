@@ -24,12 +24,13 @@ private:
     std::map<std::string, std::vector<ProductionRule> > &ll1_grammar;
     std::map<std::string, std::unordered_set<std::string> > first, follow;
     std::map<std::string, std::map<std:: string, ProductionRule> > table;
-    
+    std::string start_state;
+
     std::unordered_set<std::string> getFirst(std::string &state);
     std::unordered_set<std::string> getFollow(std::string &state);
     void calcRHSFollow(std::unordered_set<std::string> &cur, std::string &state);
     bool checkTerminals(RuleToken &r, std::unordered_set<std::string> &cur, std::string &state, TYPE type);
-    
+
 public:
     PredictiveTable(std::map<std::string, std::vector<ProductionRule> > &ll1_grammar);
     std::vector<RuleToken> getTransition(std::string, std::string);

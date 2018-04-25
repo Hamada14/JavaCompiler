@@ -5,7 +5,7 @@
 #include <set>
 #include <string>
 
-#include "Constants.hpp"
+enum class RuleTokenType {TERMINAL, NON_TERMINAL, LAMBDA_TERMINAL, END_OF_INPUT};
 
 class RuleToken {
 public:
