@@ -1,5 +1,7 @@
 #include "parser/PredictiveTableFactory.hpp"
 
+#include "parser/ParserRulesReader.hpp"
+
 PredictiveTableFactory* PredictiveTableFactory::instance = NULL;
 
 PredictiveTableFactory::PredictiveTableFactory(ParserRulesReader* reader) : reader(reader) {
@@ -17,9 +19,9 @@ PredictiveTableFactory* PredictiveTableFactory::getInstance() {
 }
 
 PredictiveTable PredictiveTableFactory::getTable(std::ifstream *input_file, std::ofstream *fixed_rules_output) {
-    std::map<std::string, std::vector<ProductionRule> > ll1_grammar = reader->getLL1Grammar(input_file,
+    LL1Grammar ll1_grammar = reader->getLL1Grammar(input_file,
                                                                                             fixed_rules_output);
 
-    PredictiveTable table(&ll1_grammar);
+    PredictiveTable table(&ll1_grammar.rule_table, ll1_grammar.start_state);
     return table;
 }

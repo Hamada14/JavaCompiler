@@ -17,20 +17,19 @@ ParserRulesReader::~ParserRulesReader() {
 }
 
 
-std::map<std::string, std::vector<ProductionRule> > ParserRulesReader::getLL1Grammar(std::ifstream* input_file,
-                                                                                     std::ofstream* modified_rules) {
+LL1Grammar ParserRulesReader::getLL1Grammar(std::ifstream* input_file, std::ofstream* modified_rules) {
     if (!input_file->is_open()) {
         std::cerr << INVALID_INPUT_FILE_MESSAGE << std::endl;
         exit(0);
     }
-    auto rule_table = readRules(input_file);
-    eliminateLeftRecursion(rule_table);
-    leftFactorGrammar(rule_table);
-    printRulesTable(rule_table, *modified_rules);
-    return rule_table;
+    auto rules = readRules(input_file);
+    eliminateLeftRecursion(rules.rule_table);
+    leftFactorGrammar(rules.rule_table);
+    printRulesTable(rules.rule_table, *modified_rules);
+    return rules;
 }
 
-std::map<std::string, std::vector<ProductionRule> > ParserRulesReader::readRules(std::ifstream* input) {
+LL1Grammar ParserRulesReader::readRules(std::ifstream* input) {
     std::vector<std::string> file_lines = readFile(input);
     std::set<std::string> rules_identifier = extractRuleIdentifiers(file_lines);
     return parseRules(rules_identifier, file_lines);
@@ -138,9 +137,9 @@ void ParserRulesReader::leftFactorProduction(std::string rule_name, std::map<std
     rule_table[rule_name] = new_rules;
 }
 
-std::map<std::string, std::vector<ProductionRule> > ParserRulesReader::parseRules(std::set<std::string> rule_ids,
-                                                                                  std::vector<std::string> input) {
-    std::map<std::string, std::vector<ProductionRule> > rules;
+LL1Grammar ParserRulesReader::parseRules(std::set<std::string> rule_ids, std::vector<std::string> input) {
+    std::string start_state;
+    std::map<std::string, std::vector<ProductionRule> > rule_table;
     std::string current_id;
     for(size_t cur_line = 0; cur_line < input.size();) {
         current_id = ProductionRule::getIdentifier(input[cur_line]);
@@ -162,11 +161,11 @@ std::map<std::string, std::vector<ProductionRule> > ParserRulesReader::parseRule
                     "}" << std::endl;
                 exit(-1);
             }
-            rules[current_id].push_back(rule);
+            rule_table[current_id].push_back(rule);
         }
         cur_line = next_line;
     }
-    return rules;
+    return LL1Grammar(rule_table, ProductionRule::getIdentifier(input[0]));
 }
 
 std::vector<std::string> ParserRulesReader::readFile(std::ifstream* input_file) {
