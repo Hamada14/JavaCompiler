@@ -20,6 +20,6 @@ PredictiveTable PredictiveTableFactory::getTable(std::ifstream *input_file, std:
     std::map<std::string, std::vector<ProductionRule> > ll1_grammar = reader->getLL1Grammar(input_file,
                                                                                             fixed_rules_output);
 
-    PredictiveTable table;
+    PredictiveTable table(&ll1_grammar);
     return table;
 }

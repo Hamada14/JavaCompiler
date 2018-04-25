@@ -14,7 +14,8 @@
 
 namespace Constants {
     std::string const LAMBDA = "\\L";
-    enum class RuleTokenType { TERMINAL, NON_TERMINAL, LAMBDA_TERMINAL};
+    std::string const DOLLAR_SIGN = "$";
+    enum class RuleTokenType {START, TERMINAL, NON_TERMINAL, LAMBDA_TERMINAL};
 
 }
 

@@ -3,7 +3,6 @@
 #include <iostream>
 
 const std::string RuleToken::LAMBDA_VALUE = "\\L";
-const std::string RuleToken::DOLLAR_SIGN = "$";
 
 const std::regex RuleToken::TERMINAL_TOKEN_REGEX("\\\'.+\\\'");
 const std::regex RuleToken::NON_TERMINAL_TOKEN_REGEX("[a-zA-Z][a-zA-Z0-9_]*");
@@ -15,20 +14,17 @@ const char RuleToken::BACK_SLASH = '\\';
 RuleToken::RuleToken(std::string value) {
     this->is_invalid = false;
     if (value == LAMBDA_VALUE) {
-        this->type = RuleTokenType::LAMBDA_TERMINAL;
-        this->value = value;
-    } else if (value == "$") {
-        this->type = RuleTokenType::LAMBDA_TERMINAL;
+        this->type = Constants::RuleTokenType::LAMBDA_TERMINAL;
         this->value = value;
     } else if (regex_match(value, TERMINAL_TOKEN_REGEX)) {
-        this->type = RuleTokenType::TERMINAL;
+        this->type = Constants::RuleTokenType::TERMINAL;
         this->value = value.substr(1, value.length() - 2);
         if(!checkEscapeCharacters()) {
             this->is_invalid = true;
             std::cerr << "Invalid usage of reserved symbols." << std::endl;
         }
     } else if (regex_match(value, NON_TERMINAL_TOKEN_REGEX)) {
-        this->type = RuleTokenType::NON_TERMINAL;
+        this->type = Constants::RuleTokenType::NON_TERMINAL;
         this->value = value;
     } else {
         this->is_invalid = true;
@@ -42,7 +38,7 @@ bool RuleToken::operator== (const RuleToken& token) const {
     return this->getType() == token.getType() && this->getValue() == token.getValue();
 }
 
-bool RuleToken::operator!= (const RuleToken& token) const {
+bool RuleToken::operator != (const RuleToken& token) const {
     return this->getType() != token.getType() || this->getValue() != token.getValue();
 }
 
@@ -53,7 +49,7 @@ bool RuleToken::operator< (const RuleToken& token) const {
     return this->getValue() < token.getValue();
 }
 
-RuleTokenType RuleToken::getType() const {
+Constants::RuleTokenType RuleToken::getType() const {
     return this->type;
 }
 

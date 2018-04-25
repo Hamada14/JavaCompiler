@@ -7,6 +7,8 @@
 
 #include "parser/RuleToken.hpp"
 
+
+
 class ProductionRule {
 public:
     const static char RULE_DEFINITION_START_MARKER;
