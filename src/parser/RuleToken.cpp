@@ -65,16 +65,21 @@ bool RuleToken::isInvalid() {
 }
 
 bool RuleToken::checkEscapeCharacters() {
+    std::string no_escape_str;
     for(size_t index = 0; index < this->value.length(); index++) {
         char current_char = this->value[index];
         bool has_next_char = index != this->value.length() - 1;
         char next_char = has_next_char ? this->value[index + 1] : '\0';
         if(has_next_char && current_char == BACK_SLASH && isReservedSymbol(next_char)) {
             index++;
+            no_escape_str += next_char;
         } else if(isReservedSymbol(current_char) || current_char == BACK_SLASH) {
             return false;
+        } else {
+            no_escape_str += current_char;
         }
     }
+    this->value = no_escape_str;
     return true;
 }
 
