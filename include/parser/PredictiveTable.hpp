@@ -32,6 +32,7 @@ private:
 
 public:
     PredictiveTable(std::map<std::string, std::vector<ProductionRule> > &ll1_grammar, std::string start_state);
+    std::string getStartState();
     std::vector<RuleToken> getTransition(std::string state, std::string input);
     TransitionType getTransitionType(std::string state, std::string input);
 };

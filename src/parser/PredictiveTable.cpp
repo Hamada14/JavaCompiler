@@ -7,8 +7,23 @@
 
 PredictiveTable:: PredictiveTable( std::map<std::string, std::vector<ProductionRule> > & ll1_grammar, std::string start_state)
 : ll1_grammar (ll1_grammar), start_state(start_state) {
-    for(auto& it: ll1_grammar)
+    for(auto& it: ll1_grammar) {
+        std::cout << "Entered -> " << it.first << std::endl;
+        std::cout << "Printing production rule -> ";
+        for(ProductionRule pr : it.second) {
+            std::vector<RuleToken> tokens = pr.getTokens();
+            for(RuleToken rt : tokens) {
+                std::cout << rt.getValue() << " ";
+            }
+            std::cout << "\n"; 
+        }
         getFirst(it.first), getFollow(it.first);
+    }
+
+}
+
+std::string PredictiveTable::getStartState() {
+    return start_state;
 }
 
 bool PredictiveTable:: checkTerminals(RuleToken &r, std::unordered_set<std::string> &cur, std::string &state, ProductionRule &pr, TYPE type) {
@@ -29,7 +44,7 @@ bool PredictiveTable:: checkTerminals(RuleToken &r, std::unordered_set<std::stri
 
 std::unordered_set<std::string> PredictiveTable:: getFirst(std::string state) {
     if(!ll1_grammar.count(state))
-        std::cerr<< "Undefined token\n", exit(0);
+        std::cerr<< "Undefined token in getFirst {" << state << "}", exit(-1);
 
     if(first.count(state))
         return first[state];
@@ -94,7 +109,7 @@ void PredictiveTable:: calcRHSFollow(std::unordered_set<std::string> &cur_follow
 
 std::unordered_set<std::string> PredictiveTable:: getFollow(std:: string state) {
     if(!ll1_grammar.count(state))
-        std::cerr << "Undefined token\n", exit(0);
+        std::cerr << "Undefined token in getFollow {" << state << "}", exit(-1);
 
     if(follow.count(state)) return follow[state];
 

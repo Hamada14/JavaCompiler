@@ -6,6 +6,7 @@
 #include "lexical_analyzer/Tokenizer.hpp"
 
 #include "parser/PredictiveTableFactory.hpp"
+#include "parser/ParseTreeCreator.hpp"
 
 using namespace std;
 
@@ -19,16 +20,18 @@ Tokenizer* getLanguageTokenizer()
         return tokenizer;
 }
 
-PredictiveTable getTable() {
+ParseTreeCreator getParseTreeCreator(Tokenizer tokenizer) {
     std::ifstream parse_rules_file;
     parse_rules_file.open(Config::getInstance()->get(Config::PARSING_RULES_PATH_KEY));
     std::ofstream ll1_grammar_file;
     ll1_grammar_file.open(Config::getInstance()->get(Config::LL1_GRAMMAR_PATH_KEY));
+    std::cout << "Creating Predictive Table " << std::endl;
     PredictiveTable predictive_table = PredictiveTableFactory::getInstance()->getTable(&parse_rules_file,
                                                                                        &ll1_grammar_file
                                                                                       );
-
-    return predictive_table;
+    std::cout << "Created Predictive Table successfully" << std::endl;
+    std::string start_state = predictive_table.getStartState();
+    return ParseTreeCreator(start_state, tokenizer, predictive_table);
 }
 
 int main(int argc, const char* argv[])
@@ -41,5 +44,5 @@ int main(int argc, const char* argv[])
                             program_config->get(Config::TOKEN_OUTPUT_PATH_KEY)
                           );
 
-        PredictiveTable table = getTable();
+        ParseTreeCreator parse_tree_creator = getParseTreeCreator(*tokenizer);
 }
