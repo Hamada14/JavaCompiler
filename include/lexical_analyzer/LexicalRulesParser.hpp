@@ -7,9 +7,9 @@
 #include <string>
 
 #include "LanguageSpecParser.hpp"
-#include "lexical_analyzer/Tokenizer.hpp"
+#include "..\..\include\lexical_analyzer/Tokenizer.hpp"
 #include "RegularExpressionTable.hpp"
-#include "Util.hpp"
+#include "..\..\include\Util.hpp"
 
 class LexicalRulesParser {
 public:

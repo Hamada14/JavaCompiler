@@ -1,4 +1,4 @@
-#include "lexical_analyzer/Graph.hpp"
+#include "..\..\include\lexical_analyzer/Graph.hpp"
 #include <stdio.h>
 
 int Graph:: numberOfNodes = 0;

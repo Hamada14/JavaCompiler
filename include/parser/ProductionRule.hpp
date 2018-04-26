@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "parser/RuleToken.hpp"
+#include "..\..\include\parser/RuleToken.hpp"
 
 
 class ProductionRule {

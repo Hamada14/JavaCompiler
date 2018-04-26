@@ -1,8 +1,9 @@
-#include "lexical_analyzer/Tokenizer.hpp"
+#include "..\..\include\lexical_analyzer/Tokenizer.hpp"
 
 
-#include "lexical_analyzer/DFA_Builder.hpp"
-#include "lexical_analyzer/DFA_Minimizer.hpp"
+#include "..\..\include\lexical_analyzer/DFA_Builder.hpp"
+#include "..\..\include\lexical_analyzer/DFA_Minimizer.hpp"
+#include "..\..\include\Constants.hpp"
 
 #include <chrono>
 #include <fstream>
@@ -138,18 +139,17 @@ void Tokenizer::tokenize(string inputFile){
             }
         }
     }
-
     in.close();
 }
 
 string Tokenizer::nextToken(){
     if(indexOfNextToken == (int)tokens.size())
-        return nullptr;
+        return Constants::END_OF_INPUT;
     return tokens[indexOfNextToken];
 }
 
 string Tokenizer::getNextToken() {
     if(indexOfNextToken == (int)tokens.size())
-        return nullptr;
-    return tokens[indexOfNextToken++];    
+        return Constants::END_OF_INPUT;
+    return tokens[indexOfNextToken++];
 }

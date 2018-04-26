@@ -1,4 +1,4 @@
-#include "lexical_analyzer/State.hpp"
+#include "..\..\include\lexical_analyzer/State.hpp"
 
 set<int>* State::get_nodes()
 {

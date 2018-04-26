@@ -3,8 +3,8 @@
 
 #include <fstream>
 
-#include "parser/PredictiveTable.hpp"
-#include "parser/ParserRulesReader.hpp"
+#include "..\..\include\parser/PredictiveTable.hpp"
+#include "..\..\include\parser/ParserRulesReader.hpp"
 
 class PredictiveTableFactory {
 public:

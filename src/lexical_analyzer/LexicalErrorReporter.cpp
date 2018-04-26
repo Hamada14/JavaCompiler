@@ -1,4 +1,4 @@
-#include "lexical_analyzer/LexicalErrorReporter.hpp"
+#include "..\..\include\lexical_analyzer/LexicalErrorReporter.hpp"
 #include <cstdlib>
 
 LexicalErrorReporter* LexicalErrorReporter::instance = NULL;

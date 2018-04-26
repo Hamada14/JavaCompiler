@@ -11,20 +11,25 @@
 #include <stdio.h>
 #include <vector>
 
-#include "lexical_analyzer/Tokenizer.hpp"
-#include "parser/PredictiveTable.hpp"
-#include "parser/RuleToken.hpp"
+#include "..\..\include\lexical_analyzer/Tokenizer.hpp"
+#include "..\..\include\parser/PredictiveTable.hpp"
+#include "..\..\include\parser/RuleToken.hpp"
 
 class ParseTreeCreator {
 public:
  	ParseTreeCreator(std::string& start_state, Tokenizer tokens, PredictiveTable predictive_table);
- 	void createTable(std::ifstream*, std::ofstream*);
+ 	void createTable(std::ofstream* output_file);
 private:
 	stack<RuleToken> parse_tree_stack;
+	vector<RuleToken> print_terminal;
+	deque<RuleToken> print_non_terminal;
+	bool error;
 	string start_state;
 	Tokenizer tokens;
 	PredictiveTable predictive_table;
-	bool error;
+	void substituteNonTerminal(vector<RuleToken> &new_rules);
+	void print(std::ofstream* output_file);
+	void handleNonTerminal(RuleToken top_of_stack, std::ofstream* output_file);
 };
 
 #endif

@@ -1,6 +1,6 @@
-#include "lexical_analyzer/Print.hpp"
+#include "..\..\include\lexical_analyzer/Print.hpp"
 
-#include "Util.hpp"
+#include "..\..\include\Util.hpp"
 
 #define INFI (1<<20)
 

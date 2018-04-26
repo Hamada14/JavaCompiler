@@ -1,4 +1,4 @@
-#include "lexical_analyzer/DFA.hpp"
+#include "..\..\include\lexical_analyzer\DFA.hpp"
 
 DFA::DFA()
 {
