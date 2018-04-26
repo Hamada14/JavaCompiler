@@ -35,13 +35,13 @@ void ParseTreeCreator::createTable(std::ofstream* output_file) {
 }
 
 void ParseTreeCreator::handleNonTerminal(RuleToken top_of_stack, std::ofstream* output_file) {
-    if (predictive_table.getTransitionType(top_of_stack.getValue(), tokens.nextToken()) == TRANSITIONSTATE::LEGAL) {
+    if (predictive_table.getTransitionType(top_of_stack.getValue(), tokens.nextToken()) == TransitionType::LEGAL) {
         vector<RuleToken> transitions = predictive_table.getTransition(top_of_stack.getValue(), tokens.nextToken());
         for (int i = transitions.size() - 1; i >= 0; --i)
             parse_tree_stack.push(transitions[i]);
         substituteNonTerminal(transitions);
         print(output_file);
-    } else if (predictive_table.getTransitionType(top_of_stack.getValue(), tokens.nextToken()) == TRANSITIONSTATE::SYNCH) {
+    } else if (predictive_table.getTransitionType(top_of_stack.getValue(), tokens.nextToken()) == TransitionType::SYNC) {
         error = true;
     } else {
         error = true;

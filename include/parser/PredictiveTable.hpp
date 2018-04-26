@@ -19,7 +19,8 @@
 #include "..\..\include\Constants.hpp"
 #include "..\..\include\parser/RuleToken.hpp"
 
-enum class TRANSITIONSTATE {SYNCH, ERROR, LEGAL};
+enum class TransitionType {SYNC, ERROR, LEGAL};
+
 
 class PredictiveTable {
 private:
@@ -27,17 +28,18 @@ private:
     std::map<std::string, std::vector<ProductionRule> > &ll1_grammar;
     std::map<std::string, std::unordered_set<std::string> > first, follow;
     std::map<std::string, std::map<std:: string, ProductionRule> > table;
+
     std::string start_state;
 
     std::unordered_set<std::string> getFirst(std::string state);
     std::unordered_set<std::string> getFollow(std::string state);
     void calcRHSFollow(std::unordered_set<std::string> &cur, std::string &state);
-    bool checkTerminals(RuleToken &r, std::unordered_set<std::string> &cur, std::string &state, TYPE type);
+    bool checkTerminals(RuleToken &r, std::unordered_set<std::string> &cur, std::string &state, ProductionRule &pr, TYPE type);
 
 public:
     PredictiveTable(std::map<std::string, std::vector<ProductionRule> > &ll1_grammar, std::string start_state);
-    std::vector<RuleToken> getTransition(std::string, std::string);
-    TRANSITIONSTATE getTransitionType(std::string, std::string);
+    std::vector<RuleToken> getTransition(std::string &state, std::string &input);
+    TransitionType getTransitionType(std::string &state, std::string &input);
 };
 
 
