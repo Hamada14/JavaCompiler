@@ -1,4 +1,4 @@
-#include "..\..\include\parser/PredictiveTable.hpp"
+#include "parser/PredictiveTable.hpp"
 
 #include <algorithm>
 #include <cassert>

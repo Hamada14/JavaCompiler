@@ -11,9 +11,9 @@
 #include <stdio.h>
 #include <vector>
 
-#include "..\..\include\lexical_analyzer/Tokenizer.hpp"
-#include "..\..\include\parser/PredictiveTable.hpp"
-#include "..\..\include\parser/RuleToken.hpp"
+#include "lexical_analyzer/Tokenizer.hpp"
+#include "parser/PredictiveTable.hpp"
+#include "parser/RuleToken.hpp"
 
 class ParseTreeCreator {
 public:

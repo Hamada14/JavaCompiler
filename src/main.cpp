@@ -1,11 +1,11 @@
 #include <fstream>
 #include <iostream>
 
-#include "..\include\Config.hpp"
-#include "..\include\lexical_analyzer/LexicalRulesParser.hpp"
-#include "..\include\lexical_analyzer/Tokenizer.hpp"
+#include "Config.hpp"
+#include "lexical_analyzer/LexicalRulesParser.hpp"
+#include "lexical_analyzer/Tokenizer.hpp"
 
-#include "..\include\parser/PredictiveTableFactory.hpp"
+#include "parser/PredictiveTableFactory.hpp"
 
 using namespace std;
 

@@ -1,6 +1,6 @@
-#include "..\..\include\lexical_analyzer/DFA_Minimizer.hpp"
+#include "lexical_analyzer/DFA_Minimizer.hpp"
 
-#include "..\..\include\Config.hpp"
+#include "Config.hpp"
 
 DFA* DFA_Minimizer::get_minimal_DFA()
 {

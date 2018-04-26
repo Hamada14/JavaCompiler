@@ -11,7 +11,7 @@
 #include "LanguageToken.hpp"
 #include "NFA.hpp"
 #include "RegularExpressionTable.hpp"
-#include "..\..\include\Util.hpp"
+#include "Util.hpp"
 
 class LanguageSpecParser {
 public:

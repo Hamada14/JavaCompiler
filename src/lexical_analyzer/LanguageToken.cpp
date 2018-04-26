@@ -1,4 +1,4 @@
-#include "..\..\include\lexical_analyzer/LanguageToken.hpp"
+#include "lexical_analyzer/LanguageToken.hpp"
 
 LanguageToken::LanguageToken(LanguageTokenType token_type) : token_type(token_type){
         this->nfa = NULL;

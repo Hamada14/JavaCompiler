@@ -6,7 +6,7 @@
 #include <vector>
 #include <stdio.h>
 
-#include "..\..\include\Constants.hpp"
+#include "Constants.hpp"
 
 #define infi 1<<20
 

@@ -1,8 +1,8 @@
-#include "..\..\include\parser/RuleToken.hpp"
+#include "parser/RuleToken.hpp"
 
 #include <iostream>
 
-#include "..\..\include\Constants.hpp"
+#include "Constants.hpp"
 
 const std::regex RuleToken::TERMINAL_TOKEN_REGEX("\\\'.+\\\'");
 const std::regex RuleToken::NON_TERMINAL_TOKEN_REGEX("[a-zA-Z][a-zA-Z0-9_]*");

@@ -6,8 +6,8 @@
 #include <string>
 #include <vector>
 
-#include "..\..\include\parser/ProductionRule.hpp"
-#include "..\..\include\Constants.hpp"
+#include "parser/ProductionRule.hpp"
+#include "Constants.hpp"
 
 struct LL1Grammar {
     std::map<std::string, std::vector<ProductionRule> > rule_table;

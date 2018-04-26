@@ -1,6 +1,6 @@
-#include "..\include\Config.hpp"
+#include "Config.hpp"
 
-#include "..\include\Util.hpp"
+#include "Util.hpp"
 
 #include <fstream>
 #include <iostream>

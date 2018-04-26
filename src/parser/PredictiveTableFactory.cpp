@@ -1,6 +1,6 @@
-#include "..\..\include\parser/PredictiveTableFactory.hpp"
+#include "parser/PredictiveTableFactory.hpp"
 
-#include "..\..\include\parser/ParserRulesReader.hpp"
+#include "parser/ParserRulesReader.hpp"
 
 PredictiveTableFactory* PredictiveTableFactory::instance = NULL;
 

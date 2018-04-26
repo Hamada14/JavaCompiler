@@ -1,6 +1,6 @@
-#include "..\..\include\lexical_analyzer/DFA_Builder.hpp"
+#include "lexical_analyzer/DFA_Builder.hpp"
 
-#include "..\..\include\Config.hpp"
+#include "Config.hpp"
 
 DFA* DFA_Builder::get_DFA()
 {

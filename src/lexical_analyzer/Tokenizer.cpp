@@ -1,9 +1,9 @@
-#include "..\..\include\lexical_analyzer/Tokenizer.hpp"
+#include "lexical_analyzer/Tokenizer.hpp"
 
 
-#include "..\..\include\lexical_analyzer/DFA_Builder.hpp"
-#include "..\..\include\lexical_analyzer/DFA_Minimizer.hpp"
-#include "..\..\include\Constants.hpp"
+#include "lexical_analyzer/DFA_Builder.hpp"
+#include "lexical_analyzer/DFA_Minimizer.hpp"
+#include "Constants.hpp"
 
 #include <chrono>
 #include <fstream>

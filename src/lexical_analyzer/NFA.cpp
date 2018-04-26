@@ -1,4 +1,4 @@
-#include "..\..\include\lexical_analyzer/NFA.hpp"
+#include "lexical_analyzer/NFA.hpp"
 
 NFA::NFA(char ch) {
     start_node = g.add_node(false, "");

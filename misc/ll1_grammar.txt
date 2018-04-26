@@ -1,4 +1,0 @@
-#A =  S 'd' State_0 | 'f' State_0
-#S =  'f' State_0 'a' State_1 | 'b' State_1
-#State_0 =  'c' State_0 | \L
-#State_1 =  'd' State_0 'a' State_1 | \L

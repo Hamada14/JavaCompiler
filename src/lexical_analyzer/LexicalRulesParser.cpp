@@ -1,6 +1,6 @@
-#include "..\..\include\lexical_analyzer/LexicalRulesParser.hpp"
+#include "lexical_analyzer/LexicalRulesParser.hpp"
 
-#include "..\..\include\lexical_analyzer/LexicalErrorReporter.hpp"
+#include "lexical_analyzer/LexicalErrorReporter.hpp"
 
 #include <ctime>
 #include <ratio>

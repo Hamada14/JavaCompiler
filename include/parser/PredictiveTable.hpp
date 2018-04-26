@@ -8,10 +8,10 @@
 #include <map>
 #include <unordered_set>
 
-#include "..\..\include\parser/RuleToken.hpp"
-#include "..\..\include\parser/ProductionRule.hpp"
-#include "..\..\include\Constants.hpp"
-#include "..\..\include\parser/RuleToken.hpp"
+#include "parser/RuleToken.hpp"
+#include "parser/ProductionRule.hpp"
+#include "Constants.hpp"
+#include "parser/RuleToken.hpp"
 
 enum class TransitionType {SYNC, ERROR, LEGAL};
 

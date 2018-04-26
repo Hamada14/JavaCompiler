@@ -1,6 +1,6 @@
-#include "..\..\include\lexical_analyzer/LanguageSpecParser.hpp"
+#include "lexical_analyzer/LanguageSpecParser.hpp"
 
-#include "..\..\include\lexical_analyzer/LexicalErrorReporter.hpp"
+#include "lexical_analyzer/LexicalErrorReporter.hpp"
 
 std::map<char, int> LanguageSpecParser::OPERATOR_PRECEDENCE =
 { {'-', 5}, {'*', 4}, {'+', 3}, {'&', 2}, {'|', 1} };

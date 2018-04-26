@@ -1,10 +1,10 @@
-#include "..\..\include\parser/ParserRulesReader.hpp"
+#include "parser/ParserRulesReader.hpp"
 
 #include <cstdlib>
 #include <iostream>
 #include <utility>
 
-#include "..\..\include\Util.hpp"
+#include "Util.hpp"
 
 const std::string ParserRulesReader::INVALID_INPUT_FILE_MESSAGE = "Parsing Rules input file is invalid.";
 

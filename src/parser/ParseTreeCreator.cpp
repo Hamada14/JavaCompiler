@@ -1,6 +1,6 @@
-#include "..\..\include\parser/ParseTreeCreator.hpp"
+#include "parser/ParseTreeCreator.hpp"
 
-#include "..\..\include\Util.hpp"
+#include "Util.hpp"
 
 ParseTreeCreator::ParseTreeCreator(std::string& start_state, Tokenizer tokens, PredictiveTable predictive_table)
 : start_state(start_state), tokens(tokens), predictive_table(predictive_table) {
