@@ -87,7 +87,7 @@ std::vector<ProductionRule> ParserRulesReader::leftImmedEliminate(std::vector<Pr
         tokens.push_back(RuleToken(ParserRulesReader::createStateName(new_state)));
         new_rules.push_back(ProductionRule(tokens));
     }
-    new_rules.push_back(ProductionRule({RuleToken(RuleToken::LAMBDA_VALUE)}));
+    new_rules.push_back(ProductionRule({RuleToken(Constants::LAMBDA)}));
     productions.clear();
     for(ProductionRule rule : no_immediate_recursion) {
         std::vector<RuleToken> tokens = rule.getTokens();
@@ -115,7 +115,7 @@ void ParserRulesReader::leftFactorProduction(std::string rule_name, std::map<std
         if(prod_rule.getTokenCount() != 0) {
             production_rule_prefix_map[prod_rule.getToken(0)].push_back(prod_rule);
         } else {
-            new_rules.push_back(ProductionRule({RuleToken(RuleToken::LAMBDA_VALUE)}));
+            new_rules.push_back(ProductionRule({RuleToken(Constants::LAMBDA)}));
         }
     }
     for(auto production_rule_prefix_it : production_rule_prefix_map) {

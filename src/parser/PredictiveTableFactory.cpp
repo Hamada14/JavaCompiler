@@ -1,6 +1,6 @@
-#include "parser/PredictiveTableFactory.hpp"
+#include "..\..\include\parser/PredictiveTableFactory.hpp"
 
-#include "parser/ParserRulesReader.hpp"
+#include "..\..\include\parser/ParserRulesReader.hpp"
 
 PredictiveTableFactory* PredictiveTableFactory::instance = NULL;
 
@@ -22,6 +22,6 @@ PredictiveTable PredictiveTableFactory::getTable(std::ifstream *input_file, std:
     LL1Grammar ll1_grammar = reader->getLL1Grammar(input_file,
                                                                                             fixed_rules_output);
 
-    PredictiveTable table(&ll1_grammar.rule_table, ll1_grammar.start_state);
+    PredictiveTable table(ll1_grammar.rule_table, ll1_grammar.start_state);
     return table;
 }

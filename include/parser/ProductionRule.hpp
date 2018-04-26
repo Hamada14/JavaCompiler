@@ -16,6 +16,9 @@ public:
     const static std::regex RULE_DEFINITION_REGEX;
 
 
+    ProductionRule() {
+
+    }
     ProductionRule(std::vector<RuleToken> tokens);
     ProductionRule(std::string raw_rule, std::set<std::string> valid_ids);
     ~ProductionRule();

@@ -1,10 +1,10 @@
-#include "parser/ProductionRule.hpp"
+#include "..\..\include\parser/ProductionRule.hpp"
 
 #include <cassert>
 #include <iostream>
 #include <limits>
 
-#include "Util.hpp"
+#include "..\..\include\Util.hpp"
 
 const char ProductionRule::RULE_DEFINITION_START_MARKER = '#';
 const char ProductionRule::RULE_DEFINITION_OPERATOR = '=';

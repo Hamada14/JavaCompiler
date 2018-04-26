@@ -1,9 +1,3 @@
-//  PredictiveTable.hpp
-//
-//  Created by Ahmed on 4/25/18.
-//  Copyright © 2018 Abdellah. All rights reserved.
-//
-
 #ifndef PredictiveTable_hpp
 #define PredictiveTable_hpp
 
@@ -38,8 +32,8 @@ private:
 
 public:
     PredictiveTable(std::map<std::string, std::vector<ProductionRule> > &ll1_grammar, std::string start_state);
-    std::vector<RuleToken> getTransition(std::string &state, std::string &input);
-    TransitionType getTransitionType(std::string &state, std::string &input);
+    std::vector<RuleToken> getTransition(std::string state, std::string input);
+    TransitionType getTransitionType(std::string state, std::string input);
 };
 
 
