@@ -17,11 +17,6 @@ void ParseTreeCreator::createTable(std::ofstream* output_file, std::ofstream* pa
         parse_tree_stack.pop();
 		*parse_errors_file << "Current matching top of stack: {" << top_of_stack.getValue() << "},\tnext token {" <<
 			tokens->nextToken() << "}" << std::endl;
-		// std::cout << "Current size of st -> " << parse_tree_stack.size() << " , " << top_of_stack.getValue() << std::endl;
-		// std::cout << "Next token -> " << tokens->nextToken() << std::endl;
-		// if(parse_tree_stack.size() > 1) {
-		// 	std::cout << "Next stack top -> " << parse_tree_stack.top().getValue() << std::endl;
-		// }
 		if (top_of_stack.getType() == RuleTokenType::END_OF_INPUT) {
 			if (tokens->nextToken() != Constants::END_OF_INPUT) {
 				*parse_errors_file << "Error: Couldn't match, Current token is skipped" << std::endl;
@@ -62,6 +57,7 @@ void ParseTreeCreator::handleNonTerminal(RuleToken top_of_stack, std::ofstream* 
 		*parse_errors_file << std::endl;
         print(output_file);
     } else if (predictive_table->getTransitionType(top_of_stack.getValue(), tokens->nextToken()) == TransitionType::SYNC) {
+		print_non_terminal.pop_front();
 		*parse_errors_file << "Synchronizing token, Skipped => {" << top_of_stack.getValue() << "}" << std::endl;
         error = true;
     } else {
@@ -77,8 +73,12 @@ void ParseTreeCreator::substituteNonTerminal(vector<RuleToken> &new_rules) {
     print_non_terminal.pop_front();
     for (int i = new_rules.size() - 1; i >= 0; --i)
         print_non_terminal.push_front(new_rules[i]);
-    while (!print_non_terminal.empty() && print_non_terminal.front().getType() == RuleTokenType::TERMINAL)
-        print_terminal.push_back(print_non_terminal.front()), print_non_terminal.pop_front();
+    while (!print_non_terminal.empty() && print_non_terminal.front().getType() != RuleTokenType::NON_TERMINAL) {
+	    print_terminal.push_back(print_non_terminal.front()), print_non_terminal.pop_front();
+		if(print_terminal.back().getType() == RuleTokenType::LAMBDA_TERMINAL) {
+			print_terminal.pop_back();
+		}
+	}
 }
 
 void ParseTreeCreator::print(std::ofstream* output_file) {

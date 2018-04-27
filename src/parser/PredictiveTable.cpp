@@ -8,8 +8,8 @@
 PredictiveTable:: PredictiveTable( std::map<std::string, std::vector<ProductionRule> > ll1_grammar, std::string start_state)
 : ll1_grammar (ll1_grammar), start_state(start_state) {
     for(auto& it: ll1_grammar) {
-        getFollow(it.first);
         getFirst(it.first);
+        getFollow(it.first);
     }
 
 }
@@ -20,13 +20,33 @@ std::string PredictiveTable::getStartState() {
 
 bool PredictiveTable:: checkTerminals(RuleToken &r, std::unordered_set<std::string> &cur, std::string &state, ProductionRule &pr, TYPE type) {
     cur.insert(r.getValue());
-
     if(type == TYPE::FIRST)
         table[state][r.getValue()] = pr;
     if(r.getType() == RuleTokenType::TERMINAL)
         return false;
 
     return true;
+}
+
+void PredictiveTable::addFollowToTable(std::string state) {
+    for(ProductionRule &pr: ll1_grammar[state]) {
+        std::vector<RuleToken> tokens = pr.getTokens();
+        bool has_lambda = true;
+        for(RuleToken &r : tokens) {
+            if(r.getType() == RuleTokenType::NON_TERMINAL)
+                has_lambda &= getFirst(r.getValue()).count(Constants::LAMBDA);
+            else has_lambda &= r.getType() == RuleTokenType::LAMBDA_TERMINAL;
+            if(!has_lambda) break;
+        }
+        if(has_lambda) {
+            std::unordered_set<std::string> cur_follow = getFollow(state);
+            for(std::string s: cur_follow) {
+                if(table[state].count(s) && table[state][s].getTokens() != pr.getTokens() && s != Constants::LAMBDA)
+                    std::cerr << "Multiple rules on the same input\n", exit(0);
+                table[state][s] = pr;
+            }
+        }
+    }
 }
 
 std::unordered_set<std::string> PredictiveTable:: getFirst(std::string state) {
@@ -43,39 +63,22 @@ std::unordered_set<std::string> PredictiveTable:: getFirst(std::string state) {
         for(RuleToken &r : tokens) {
             if(r.getType() == RuleTokenType::NON_TERMINAL) {
                 std:: unordered_set<std::string> new_first = getFirst(r.getValue());
-
                 for(std::string s : new_first) {
-                    if(s == Constants::LAMBDA)
-                        continue;
-
+                    if(s == Constants::LAMBDA) continue;
                     cur_first.insert(s);
                     table[state][s] = pr;
                 }
-
                 has_lambda &= new_first.count(Constants::LAMBDA);
-                if(!new_first.count(Constants::LAMBDA)) break;
             }
-            else {
-                if(!checkTerminals(r, cur_first, state, pr, TYPE::FIRST)) {
-                    has_lambda = false;
-                    break;
-                }
-            }
+            else has_lambda &= checkTerminals(r, cur_first, state, pr, TYPE::FIRST);
+            if(!has_lambda) break;
         }
-        if(has_lambda){
-            cur_first.insert(Constants::LAMBDA);
-            std::unordered_set<std::string> cur_follow = getFollow(state);
-            for(std::string s: cur_follow) {
-                if(table[state].count(s) && table[state][s].getTokens() != pr.getTokens() && s != Constants::LAMBDA) {
-                    std::cerr << "Multiple rules on the same input\n", exit(0);
-                }
-                table[state][s] = pr;
-            }
-        }
+        if(has_lambda) cur_first.insert(Constants::LAMBDA);
     }
+
+    addFollowToTable(state);
     return cur_first;
 }
-
 
 std::unordered_set<std::string> PredictiveTable:: getFollow(std:: string state) {
     if(!ll1_grammar.count(state))
