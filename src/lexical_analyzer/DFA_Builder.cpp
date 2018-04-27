@@ -58,7 +58,7 @@ void DFA_Builder::subset_construction(DFA& ret)
                 search_transtion(state_node, next, trans);
             connect_edge(cur_state, next, ret, trans, data);
         }
-       transition_table->pirnt_data(cur_state->get_id(), cur_state->get_type(),
+        transition_table->pirnt_data(cur_state->get_id(), cur_state->get_type(),
            cur_state->get_priority(), cur_state->get_acceptance(), data);
     }
     transition_table->close_file();

@@ -1,5 +1,7 @@
 #include "parser/PredictiveTable.hpp"
 
+#include "Config.hpp"
+
 #include <algorithm>
 #include <cassert>
 #include <iostream>
@@ -11,7 +13,13 @@ PredictiveTable:: PredictiveTable( std::map<std::string, std::vector<ProductionR
         getFirst(it.first);
         getFollow(it.first);
     }
-
+    setPossibleTransitions();
+    print_predictive_table = new PrintPredictiveTable(Config::getInstance()->get(Config::PREDICTIVE_TABLE_PATH_KEY));
+    std::vector<string> head(1, "Non Terminal");
+    for (auto& itr : possible_transitions)
+        head.push_back(itr);
+    print_predictive_table->printHeader(head);
+    printTable();
 }
 
 std::string PredictiveTable::getStartState() {
@@ -132,4 +140,34 @@ TransitionType PredictiveTable::getTransitionType(std::string state, std::string
     if(getFollow(state).count(input))
         return TransitionType::SYNC;
     return TransitionType::ERROR;
+}
+
+void PredictiveTable::setPossibleTransitions() {
+    for (auto& itr : ll1_grammar) {
+        for (auto& pr : itr.second) {
+            for (auto& tk : pr.getTokens()) {
+                if (tk.getType() == RuleTokenType::TERMINAL)
+                    possible_transitions.insert(tk.getValue());
+            }
+        }
+    }
+}
+
+void PredictiveTable::printTable() {
+    for (auto& itr : ll1_grammar) {
+        std::vector<string> row(1, itr.first);
+        for (auto& input : possible_transitions) {
+            if (getTransitionType(itr.first, input) == TransitionType::ERROR)
+                row.push_back("ERROR");
+            if (getTransitionType(itr.first, input) == TransitionType::SYNC)
+                row.push_back("SYNC");
+            if (getTransitionType(itr.first, input) == TransitionType::LEGAL) {
+                std::string nxt = "";
+                for (auto& trans : getTransition(itr.first, input))
+                    nxt += trans.getValue() + " ";
+                row.push_back(nxt);
+            }
+        }
+        print_predictive_table->printData(row);
+    }
 }

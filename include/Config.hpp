@@ -18,6 +18,7 @@ public:
   const static std::string PREDICTIVE_PARSING_TABLE_PATH_KEY;
   const static std::string PARSE_TREE_PATH_KEY;
   const static std::string PARSE_ERRRORS_PATH_KEY;
+  const static std::string PREDICTIVE_TABLE_PATH_KEY;
 
   ~Config();
   static Config* getInstance();
@@ -47,7 +48,8 @@ private:
   const static std::string DEFAULT_PREDICTIVE_PARSING_TABLE_PATH;
   const static std::string DEFAULT_PARSE_TREE_PATH;
   const static std::string DEFAULT_PARSE_ERRRORS_PATH;
-
+  const static std::string DEFAULT_PREDICTIVE_TABLE_PATH;
+  
   Config();
   void readFileProperties();
   void readCommandLineProperties(int, const char **);
