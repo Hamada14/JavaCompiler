@@ -20,7 +20,7 @@ Tokenizer* getLanguageTokenizer()
         return tokenizer;
 }
 
-ParseTreeCreator getParseTreeCreator(Tokenizer tokenizer) {
+ParseTreeCreator getParseTreeCreator(Tokenizer* tokenizer) {
     std::ifstream parse_rules_file;
     parse_rules_file.open(Config::getInstance()->get(Config::PARSING_RULES_PATH_KEY));
     std::ofstream ll1_grammar_file;
@@ -44,5 +44,8 @@ int main(int argc, const char* argv[])
                             program_config->get(Config::TOKEN_OUTPUT_PATH_KEY)
                           );
 
-        ParseTreeCreator parse_tree_creator = getParseTreeCreator(*tokenizer);
+        ParseTreeCreator parse_tree_creator = getParseTreeCreator(tokenizer);
+        std::ofstream parse_tree_output;
+        parse_tree_output.open(Config::getInstance()->get(Config::PARSE_TREE_PATH_KEY));
+        parse_tree_creator.createTable(&parse_tree_output);
 }

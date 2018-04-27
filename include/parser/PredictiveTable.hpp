@@ -27,7 +27,6 @@ private:
 
     std::unordered_set<std::string> getFirst(std::string state);
     std::unordered_set<std::string> getFollow(std::string state);
-    void calcRHSFollow(std::unordered_set<std::string> &cur, std::string &state);
     bool checkTerminals(RuleToken &r, std::unordered_set<std::string> &cur, std::string &state, ProductionRule &pr, TYPE type);
 
 public:

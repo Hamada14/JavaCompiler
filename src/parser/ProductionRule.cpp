@@ -5,6 +5,7 @@
 #include <limits>
 
 #include "Util.hpp"
+#include "Constants.hpp"
 
 const char ProductionRule::RULE_DEFINITION_START_MARKER = '#';
 const char ProductionRule::RULE_DEFINITION_OPERATOR = '=';
@@ -64,6 +65,9 @@ std::vector<std::string> ProductionRule::tokenize(std::string raw_rule) {
             }
             result.push_back(raw_rule.substr(pos, end_pos - pos));
             pos = end_pos - 1;
+        } else if(pos < raw_rule.size() - 1 && Constants::LAMBDA == raw_rule.substr(pos, pos + 2)) {
+            result.push_back(Constants::LAMBDA);
+            pos++;
         } else {
             this->is_invalid = true;
             break;
