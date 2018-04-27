@@ -11,7 +11,7 @@ public:
   ~PredictiveTableFactory();
   static PredictiveTableFactory* getInstance();
 
-  PredictiveTable getTable(std::ifstream *input_file, std::ofstream *fixed_rules_output);
+  PredictiveTable* getTable(std::ifstream *input_file, std::ofstream *fixed_rules_output);
 
 private:
   static PredictiveTableFactory* instance;

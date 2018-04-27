@@ -5,7 +5,7 @@
 #include <iostream>
 
 
-PredictiveTable:: PredictiveTable( std::map<std::string, std::vector<ProductionRule> > & ll1_grammar, std::string start_state)
+PredictiveTable:: PredictiveTable( std::map<std::string, std::vector<ProductionRule> > ll1_grammar, std::string start_state)
 : ll1_grammar (ll1_grammar), start_state(start_state) {
     for(auto& it: ll1_grammar) {
         getFollow(it.first);
@@ -28,8 +28,6 @@ bool PredictiveTable:: checkTerminals(RuleToken &r, std::unordered_set<std::stri
 
     return true;
 }
-
-
 
 std::unordered_set<std::string> PredictiveTable:: getFirst(std::string state) {
     if(!ll1_grammar.count(state))
@@ -128,9 +126,7 @@ std::vector<RuleToken> PredictiveTable::getTransition(std::string state, std::st
 TransitionType PredictiveTable::getTransitionType(std::string state, std::string input) {
     if(table[state].count(input))
         return TransitionType::LEGAL;
-
     if(getFollow(state).count(input))
         return TransitionType::SYNC;
-
     return TransitionType::ERROR;
 }

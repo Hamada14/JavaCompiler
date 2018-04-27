@@ -1,0 +1,30 @@
+STATEMENT_LIST 
+int id ; State_1 
+int id ; STATEMENT State_1 
+int id ; id = EXPRESSION ; State_1 
+int id ; id = SIMPLE_EXPRESSION Generated_State_0 ; State_1 
+int id ; id = TERM State_0 Generated_State_0 ; State_1 
+int id ; id = id State_2 State_0 Generated_State_0 ; State_1 
+int id ; id = id \L State_0 Generated_State_0 ; State_1 
+int id ; id = id \L State_0 Generated_State_0 ; State_1 
+int id ; id = id \L State_0 Generated_State_0 ; State_1 
+int id ; id = id STATEMENT State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id WHILE State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( EXPRESSION ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( SIMPLE_EXPRESSION Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( TERM State_0 Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( id State_2 State_0 Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( id \L State_0 Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( id \L State_0 Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( id \L State_0 Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( id id = EXPRESSION ; State_0 Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( id id = SIMPLE_EXPRESSION Generated_State_0 ; State_0 Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( id id = TERM State_0 Generated_State_0 ; State_0 Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( id id = id State_2 State_0 Generated_State_0 ; State_0 Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( id id = id \L State_0 Generated_State_0 ; State_0 Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( id id = id addop TERM State_0 State_0 Generated_State_0 ; State_0 Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( id id = id addop num State_2 State_0 State_0 Generated_State_0 ; State_0 Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( id id = id addop num \L State_0 State_0 Generated_State_0 ; State_0 Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( id id = id addop num \L State_0 State_0 Generated_State_0 ; State_0 Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( id id = id addop num \L State_0 State_0 Generated_State_0 ; State_0 Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 
+int id ; id = id while ( id id = id addop num \L State_0 State_0 Generated_State_0 ; State_0 Generated_State_0 ) { STATEMENT } State_1 State_0 Generated_State_0 ; State_1 

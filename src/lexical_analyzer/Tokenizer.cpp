@@ -33,6 +33,9 @@ Tokenizer::Tokenizer(NFA* nfa) {
   printf("Minimization done successfully in %.3f sec\n", time_span.count());
 
   this->dfa = minimized_dfa;
+
+  tokens.clear();
+  indexOfNextToken = 0;
 }
 
 Tokenizer::~Tokenizer() {
@@ -85,7 +88,7 @@ void Tokenizer::tokenize(string inputFile, string outputFile){
             }
         }
     }
-
+    indexOfNextToken = 0;
     in.close();
     out.close();
 }
@@ -93,8 +96,6 @@ void Tokenizer::tokenize(string inputFile, string outputFile){
 void Tokenizer::tokenize(string inputFile){
     ifstream in(inputFile);
 
-    tokens.clear();
-    indexOfNextToken = 0;
 
     string line;
     while(getline(in, line)){
@@ -139,6 +140,7 @@ void Tokenizer::tokenize(string inputFile){
             }
         }
     }
+    indexOfNextToken = 0;
     in.close();
 }
 

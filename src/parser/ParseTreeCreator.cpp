@@ -2,7 +2,7 @@
 
 #include "Util.hpp"
 
-ParseTreeCreator::ParseTreeCreator(std::string& start_state, Tokenizer* tokens, PredictiveTable predictive_table)
+ParseTreeCreator::ParseTreeCreator(std::string start_state, Tokenizer* tokens, PredictiveTable* predictive_table)
 : start_state(start_state), tokens(tokens), predictive_table(predictive_table) {
 	error = false;
 }
@@ -24,8 +24,7 @@ void ParseTreeCreator::createTable(std::ofstream* output_file) {
 			continue;
 		} else if (top_of_stack.getType() == RuleTokenType::NON_TERMINAL) {
             handleNonTerminal(top_of_stack, output_file);
-		}
-        else if (top_of_stack.getType() == RuleTokenType::TERMINAL) {
+		} else if (top_of_stack.getType() == RuleTokenType::TERMINAL) {
 			if (top_of_stack.getValue() != tokens->nextToken())
 				error = true;
 			else
@@ -35,13 +34,15 @@ void ParseTreeCreator::createTable(std::ofstream* output_file) {
 }
 
 void ParseTreeCreator::handleNonTerminal(RuleToken top_of_stack, std::ofstream* output_file) {
-    if (predictive_table.getTransitionType(top_of_stack.getValue(), tokens->nextToken()) == TransitionType::LEGAL) {
-        vector<RuleToken> transitions = predictive_table.getTransition(top_of_stack.getValue(), tokens->nextToken());
+	std::cout << "Fuck " << tokens->nextToken() << std::endl;
+	std::cout << "ere " << (predictive_table->getTransitionType(top_of_stack.getValue(), tokens->nextToken()) == TransitionType::LEGAL) << std::endl;
+    if (predictive_table->getTransitionType(top_of_stack.getValue(), tokens->nextToken()) == TransitionType::LEGAL) {
+        vector<RuleToken> transitions = predictive_table->getTransition(top_of_stack.getValue(), tokens->nextToken());
         for (int i = transitions.size() - 1; i >= 0; --i)
             parse_tree_stack.push(transitions[i]);
         substituteNonTerminal(transitions);
         print(output_file);
-    } else if (predictive_table.getTransitionType(top_of_stack.getValue(), tokens->nextToken()) == TransitionType::SYNC) {
+    } else if (predictive_table->getTransitionType(top_of_stack.getValue(), tokens->nextToken()) == TransitionType::SYNC) {
         error = true;
     } else {
         error = true;
