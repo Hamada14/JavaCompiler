@@ -1,4 +1,4 @@
-# ASSIGNMENT =  'id' '\=' EXPRESSION ';'
+# ASSIGNMENT =  'id' '=' EXPRESSION ';'
 # DECLARATION =  PRIMITIVE_TYPE 'id' ';'
 # EXPRESSION =  SIMPLE_EXPRESSION Generated_State_0
 # FACTOR =  '(' EXPRESSION ')' | 'id' | 'num'
@@ -8,8 +8,8 @@
 # PRIMITIVE_TYPE =  'float' | 'int'
 # SIGN =  '+' | '-'
 # SIMPLE_EXPRESSION =  '+' TERM State_0 | '-' TERM State_0 | TERM State_0
-# STATEMENT =  'float' 'id' ';' | 'id' '\=' EXPRESSION ';' | 'if' '(' EXPRESSION ')' '{' STATEMENT '}' 'else' '{' STATEMENT '}' | 'int' 'id' ';' | WHILE
-# STATEMENT_LIST =  'float' 'id' ';' State_1 | 'id' '\=' EXPRESSION ';' State_1 | 'if' '(' EXPRESSION ')' '{' STATEMENT '}' 'else' '{' STATEMENT '}' State_1 | 'int' 'id' ';' State_1 | WHILE State_1
+# STATEMENT =  'float' 'id' ';' | 'id' '=' EXPRESSION ';' | 'if' '(' EXPRESSION ')' '{' STATEMENT '}' 'else' '{' STATEMENT '}' | 'int' 'id' ';' | WHILE
+# STATEMENT_LIST =  'float' 'id' ';' State_1 | 'id' '=' EXPRESSION ';' State_1 | 'if' '(' EXPRESSION ')' '{' STATEMENT '}' 'else' '{' STATEMENT '}' State_1 | 'int' 'id' ';' State_1 | WHILE State_1
 # State_0 =  'addop' TERM State_0 | \L
 # State_1 =  STATEMENT State_1 | \L
 # State_2 =  'mulop' FACTOR State_2 | \L
