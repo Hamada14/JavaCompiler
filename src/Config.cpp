@@ -23,6 +23,7 @@ const std::string Config::PARSING_RULES_PATH_KEY = "parsingRules";
 const std::string Config::LL1_GRAMMAR_PATH_KEY = "ll1GrammarRules";
 const std::string Config::PREDICTIVE_PARSING_TABLE_PATH_KEY = "predictiveParsingTable";
 const std::string Config::PARSE_TREE_PATH_KEY = "parseTree";
+const std::string Config::PARSE_ERRRORS_PATH_KEY = "parseErrors";
 
 const std::string Config::DEFAULT_INPUT_PROGRAM_PATH = "tokens.txt";
 const std::string Config::DEFAULT_LANGUAGE_SPEC_PATH = "input.txt";
@@ -33,6 +34,7 @@ const std::string Config::DEFAULT_PARSING_RULES_PATH = "parsing_rules.txt";
 const std::string Config::DEFAULT_LL1_GRAMMAR_PATH = "ll1_grammar.txt";
 const std::string Config::DEFAULT_PREDICTIVE_PARSING_TABLE_PATH = "predictive_parsing_table.txt";
 const std::string Config::DEFAULT_PARSE_TREE_PATH = "parse_tree.txt";
+const std::string Config::DEFAULT_PARSE_ERRRORS_PATH = "parse_errors.txt";
 
 Config::Config() {
   this->key_to_value = {
@@ -44,7 +46,8 @@ Config::Config() {
     {PARSING_RULES_PATH_KEY,            DEFAULT_PARSING_RULES_PATH           },
     {LL1_GRAMMAR_PATH_KEY,              DEFAULT_LL1_GRAMMAR_PATH             },
     {PREDICTIVE_PARSING_TABLE_PATH_KEY, DEFAULT_PREDICTIVE_PARSING_TABLE_PATH},
-    {PARSE_TREE_PATH_KEY,               DEFAULT_PARSE_TREE_PATH              }
+    {PARSE_TREE_PATH_KEY,               DEFAULT_PARSE_TREE_PATH              },
+    {PARSE_ERRRORS_PATH_KEY,            DEFAULT_PARSE_ERRRORS_PATH           }
   };
 
   this->valid_keys = {
@@ -52,7 +55,7 @@ Config::Config() {
     TOKEN_OUTPUT_PATH_KEY,         TRANSITION_TABLE_PATH_KEY,
     MIN_TRANSITION_TABLE_PATH_KEY, PARSING_RULES_PATH_KEY,
     LL1_GRAMMAR_PATH_KEY,          PREDICTIVE_PARSING_TABLE_PATH_KEY,
-    PARSE_TREE_PATH_KEY
+    PARSE_TREE_PATH_KEY,           PARSE_ERRRORS_PATH_KEY
   };
 }
 

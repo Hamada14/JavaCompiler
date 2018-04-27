@@ -46,8 +46,11 @@ int main(int argc, const char* argv[])
         tokenizer->tokenize(program_config->get(Config::INPUT_PROGRAM_PATH_KEY));
 
         ParseTreeCreator parse_tree_creator = getParseTreeCreator(tokenizer);
-        std::ofstream parse_tree_output;
+
+        std::ofstream parse_tree_output, parse_errors;
         parse_tree_output.open(Config::getInstance()->get(Config::PARSE_TREE_PATH_KEY));
-        parse_tree_creator.createTable(&parse_tree_output);
+        parse_errors.open(Config::getInstance()->get(Config::PARSE_ERRRORS_PATH_KEY));
+
+        parse_tree_creator.createTable(&parse_tree_output, &parse_errors);
         std::cout << "Program finished successfully" << std::endl;
 }

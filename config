@@ -7,3 +7,4 @@ parsingRules = misc/parsing_rules.txt
 ll1GrammarRules = misc/ll1_grammar.txt
 predictiveParsingTable = misc/predictive_parsing_table.txt
 parseTree = misc/parse_tree.txt
+parseErrors = misc/parse_errors.txt

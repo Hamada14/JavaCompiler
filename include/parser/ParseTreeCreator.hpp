@@ -18,7 +18,7 @@
 class ParseTreeCreator {
 public:
  	ParseTreeCreator(std::string start_state, Tokenizer* tokens, PredictiveTable* predictive_table);
- 	void createTable(std::ofstream* output_file);
+ 	void createTable(std::ofstream* output_file, std::ofstream* parse_errors_file);
 private:
 	stack<RuleToken> parse_tree_stack;
 	vector<RuleToken> print_terminal;
@@ -29,7 +29,7 @@ private:
 	PredictiveTable* predictive_table;
 	void substituteNonTerminal(vector<RuleToken> &new_rules);
 	void print(std::ofstream* output_file);
-	void handleNonTerminal(RuleToken top_of_stack, std::ofstream* output_file);
+	void handleNonTerminal(RuleToken top_of_stack, std::ofstream* output_file, std::ofstream* parse_errors_file);
 };
 
 #endif
