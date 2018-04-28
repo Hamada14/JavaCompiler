@@ -56,7 +56,7 @@ void ParseTreeCreator::handleNonTerminal(RuleToken top_of_stack, std::ofstream* 
 		}
 		*parse_errors_file << std::endl;
         print(output_file);
-    } else if (predictive_table->getTransitionType(top_of_stack.getValue(), tokens->nextToken()) == TransitionType::SYNC) {
+    } else if (predictive_table->getTransitionType(top_of_stack.getValue(), tokens->nextToken()) == TransitionType::SYNC || tokens->nextToken() == Constants::END_OF_INPUT) {
 		print_non_terminal.pop_front();
 		*parse_errors_file << "Synchronizing token, Skipped => {" << top_of_stack.getValue() << "}" << std::endl;
         error = true;

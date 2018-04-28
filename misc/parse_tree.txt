@@ -28,11 +28,4 @@ int id ; id assign num ; if ( id relop num ) { id assign num State_2 State_0 Gen
 int id ; id assign num ; if ( id relop num ) { id assign num State_0 Generated_State_0 ; } else { STATEMENT } State_1 
 int id ; id assign num ; if ( id relop num ) { id assign num Generated_State_0 ; } else { STATEMENT } State_1 
 int id ; id assign num ; if ( id relop num ) { id assign num ; } else { STATEMENT } State_1 
-int id ; id assign num ; if ( id relop num ) { id assign num ; } else { id assign EXPRESSION ; } State_1 
-int id ; id assign num ; if ( id relop num ) { id assign num ; } else { id assign SIMPLE_EXPRESSION Generated_State_0 ; } State_1 
-int id ; id assign num ; if ( id relop num ) { id assign num ; } else { id assign TERM State_0 Generated_State_0 ; } State_1 
-int id ; id assign num ; if ( id relop num ) { id assign num ; } else { id assign num State_2 State_0 Generated_State_0 ; } State_1 
-int id ; id assign num ; if ( id relop num ) { id assign num ; } else { id assign num State_0 Generated_State_0 ; } State_1 
-int id ; id assign num ; if ( id relop num ) { id assign num ; } else { id assign num Generated_State_0 ; } State_1 
-int id ; id assign num ; if ( id relop num ) { id assign num ; } else { id assign num ; } State_1 
-int id ; id assign num ; if ( id relop num ) { id assign num ; } else { id assign num ; } 
+int id ; id assign num ; if ( id relop num ) { id assign num ; } else { State_1 

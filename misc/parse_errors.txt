@@ -143,47 +143,14 @@ Current matching top of stack: {;},	next token {;}
 Matched top of stack successfully
 Current matching top of stack: {}},	next token {}}
 Matched top of stack successfully
-Current matching top of stack: {else},	next token {else}
-Matched top of stack successfully
-Current matching top of stack: {{},	next token {{}
-Matched top of stack successfully
-Current matching top of stack: {STATEMENT},	next token {id}
-Substituting for STATEMENT
-id assign EXPRESSION ; 
-Current matching top of stack: {id},	next token {id}
-Matched top of stack successfully
-Current matching top of stack: {assign},	next token {assign}
-Matched top of stack successfully
-Current matching top of stack: {EXPRESSION},	next token {num}
-Substituting for EXPRESSION
-SIMPLE_EXPRESSION Generated_State_0 
-Current matching top of stack: {SIMPLE_EXPRESSION},	next token {num}
-Substituting for SIMPLE_EXPRESSION
-TERM State_0 
-Current matching top of stack: {TERM},	next token {num}
-Substituting for TERM
-num State_2 
-Current matching top of stack: {num},	next token {num}
-Matched top of stack successfully
-Current matching top of stack: {State_2},	next token {;}
-Substituting for State_2
-\L 
-Current matching top of stack: {\L},	next token {;}
-Skipped Epsilon value
-Current matching top of stack: {State_0},	next token {;}
-Substituting for State_0
-\L 
-Current matching top of stack: {\L},	next token {;}
-Skipped Epsilon value
-Current matching top of stack: {Generated_State_0},	next token {;}
-Substituting for Generated_State_0
-\L 
-Current matching top of stack: {\L},	next token {;}
-Skipped Epsilon value
-Current matching top of stack: {;},	next token {;}
-Matched top of stack successfully
-Current matching top of stack: {}},	next token {}}
-Matched top of stack successfully
+Current matching top of stack: {else},	next token {$}
+Error: missing token {else} inserted
+Current matching top of stack: {{},	next token {$}
+Error: missing token {{} inserted
+Current matching top of stack: {STATEMENT},	next token {$}
+Synchronizing token, Skipped => {STATEMENT}
+Current matching top of stack: {}},	next token {$}
+Error: missing token {}} inserted
 Current matching top of stack: {State_1},	next token {$}
 Substituting for State_1
 \L 
