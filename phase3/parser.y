@@ -1,6 +1,7 @@
 %{
 #include <cstdio>
 #include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
 // stuff from flex that bison needs to know about:
@@ -8,7 +9,49 @@ extern "C" int yylex();
 extern "C" int yyparse();
 extern "C" FILE *yyin;
 
+/* Global Data */
+
+// Output file stream
+ofstream out("output.class");
+
+// Types enum
+enum typeEnum {
+    intType, floatType, errorType 
+};
+
+// Symbol table <name, <variable number, type>>
+map<string, pair<int,typeEnum> > symbolTable;
+
+int labelCnt = 0; // Gives incremental index to labels
+int varCnt = 0;   // Gives incremental address to variables
+int lineCnt = 0;  // Gives the next line number in output file
+
+/*
+// A map to put the correct java byte code instruction
+// for relop and arithmetic operations
+map<string,string> instruction = {
+    {"==", "if_icmpeq"},
+    {"<=", "if_icmple"},
+    {">=", "if_icmpge"},
+    {"!=", "if_icmpne"},
+    {">",  "if_icmpgt"},
+    {"<",  "if_icmplt"},
+
+    {"+", "add"},
+    {"-", "sub"},
+    {"/", "div"},
+    {"*", "mul"},
+    {"%", "rem"}    
+};
+*/
+
+
+/* Function Headers */
+
+void print(string s);
+void defineVariable(char *id_val, int type);
 void yyerror(const char *s);
+
 %}
 
 // Bison fundamentally works by asking flex to get the next token, which it
@@ -22,6 +65,10 @@ void yyerror(const char *s);
 	char *sval;
 
     char *id_val;
+
+    char *next;
+
+    int type;
 
     char addop;
     char mulop;
@@ -45,6 +92,9 @@ void yyerror(const char *s);
 %token <mulop> MULOP
 %token <relop> RELOP
 %token <assign> ASSIGN
+
+
+%type <type> primitive_type
 %%
 
 
@@ -65,10 +115,13 @@ statement:
     ;
 declaration:
     primitive_type ID ';'
+    {
+        defineVariable($2, $1);
+    }
     ;
 primitive_type:
-    INT
-    | FLOAT
+    INT { $$ = intType; }
+    | FLOAT { $$ = floatType; }
     ;
 if:
     IF '(' expression ')' '{' statement '}' ELSE '{' statement '}'
@@ -126,4 +179,15 @@ void yyerror(const char *s) {
 	cout << "EEK, parse error!  Message: " << s << endl;
 	// might as well halt now:
 	exit(-1);
+}
+
+void print(string s){
+    out << s;
+}
+
+void defineVariable(char *id_val, int type){
+    string str = string(id_val);
+    if(symbolTable.count(str))
+        yyerror("Error: Multiple definitions of variable.");
+    symbolTable[str] = make_pair(++varCnt, (typeEnum) type);
 }
