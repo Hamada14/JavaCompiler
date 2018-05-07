@@ -1,6 +1,4 @@
 %{
-#include <cstdio>
-#include <iostream>
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -11,8 +9,13 @@ extern "C" FILE *yyin;
 
 /* Global Data */
 
+const int MAX_LABEL_LENGTH = 10;
+
 // Output file stream
 ofstream out("output.class");
+
+// Output lines
+vector<string> code;
 
 // Types enum
 enum typeEnum {
@@ -26,7 +29,6 @@ int labelCnt = 0; // Gives incremental index to labels
 int varCnt = 0;   // Gives incremental address to variables
 int lineCnt = 0;  // Gives the next line number in output file
 
-/*
 // A map to put the correct java byte code instruction
 // for relop and arithmetic operations
 map<string,string> instruction = {
@@ -43,14 +45,17 @@ map<string,string> instruction = {
     {"*", "mul"},
     {"%", "rem"}    
 };
-*/
 
 
 /* Function Headers */
 
-void print(string s);
+void print();
+void addLine(string s);
+void log(string s);
 void defineVariable(char *id_val, int type);
 void yyerror(const char *s);
+char* newLabel();
+int getType(int t1, int t2);
 
 %}
 
@@ -66,7 +71,18 @@ void yyerror(const char *s);
 
     char *id_val;
 
-    char *next;
+    // These containers contain indexes in 'code' vector.
+    //vector<int> next, trueNext, falseNext;
+    /*
+    if
+    expr
+    goto true
+    goto false
+    true: ...
+    goto next
+    false: ...
+    next: ...
+    */
 
     int type;
 
@@ -94,7 +110,8 @@ void yyerror(const char *s);
 %token <assign> ASSIGN
 
 
-%type <type> primitive_type
+%type <type> primitive_type factor term
+%type <type> expression simple_expression
 %%
 
 
@@ -120,36 +137,94 @@ declaration:
     }
     ;
 primitive_type:
-    INT { $$ = intType; }
-    | FLOAT { $$ = floatType; }
+    INT
+    {
+        $$ = intType;
+    }
+    | FLOAT
+    { 
+        $$ = floatType;
+    }
     ;
 if:
     IF '(' expression ')' '{' statement '}' ELSE '{' statement '}'
+    {
+
+    }
     ;
 while:
     WHILE '(' expression ')' '{' statement '}'
     ;
 assignment:
     ID ASSIGN expression ';'
+    {
+        // Cosider casting instead of the following.
+        if(symbolTable[$1].second != $3)
+            yyerror("Assigned a variable to an expression with different type.");
+        if(symbolTable[$1].second == intType)
+            addLine("istore " + to_string(symbolTable[$1].first));
+        else
+            addLine("fstore " + to_string(symbolTable[$1].first));
+    }
     ;
 expression:
     simple_expression
+    /* to-do or ask about
     | simple_expression RELOP simple_expression
+    {
+        $$ = getType($1, $2);   
+    }
+    */
     ;
 simple_expression:
     term
     | sign term
+    { 
+        $$ = $2;
+    }
     | simple_expression ADDOP term
+    {
+        $$ = getType($1, $3);
+        if($$ == intType)
+            addLine("i" + instruction[string(1, $2)]);
+        else
+            addLine("f" + instruction[string(1, $2)]);
+    }
     ;
 term:
     factor
     | term MULOP factor
+    {
+        $$ = getType($1, $2);
+        if($$ == intType)
+            addLine("imul");
+        else
+            addLine("fmul");
+    }
     ;
 factor:
     ID
+    { 
+        $$ = symbolTable[$1].second;
+        if(symbolTable[$1].second == intType)
+            addLine("iload_" + to_string(symbolTable[$1].first));
+        else
+            addLine("fload_" + to_string(symbolTable[$1].first));
+    }
     | INT_VAL
+    { 
+        $$ = intType;
+        addLine("ldc " + to_string($1));
+    }
     | FLOAT_VAL
+    { 
+        $$ = floatType;
+        addLine("ldc " + to_string($1));
+    }
     | '(' expression ')'
+    { 
+        $$ = $2;
+    }
     ;
 sign:
     '+'
@@ -173,6 +248,7 @@ int main(int, char**) {
 		yyparse();
 	} while (!feof(yyin));
 
+    print();
 }
 
 void yyerror(const char *s) {
@@ -181,13 +257,35 @@ void yyerror(const char *s) {
 	exit(-1);
 }
 
-void print(string s){
-    out << s;
+void print(){
+    int i = 0;
+    for(string s : code) 
+        out <<i++ <<": " <<s << endl;
+}
+
+void log(string s){
+    cout <<s <<endl;
 }
 
 void defineVariable(char *id_val, int type){
     string str = string(id_val);
     if(symbolTable.count(str))
-        yyerror("Error: Multiple definitions of variable.");
+        yyerror("Multiple definitions of variable.");
     symbolTable[str] = make_pair(++varCnt, (typeEnum) type);
+    log("Declared variable " + str + " with type " + (type ? "float" : "int") + " and variable number " + to_string(varCnt));
+}
+
+
+char* newLabel(){
+    char *ret = (char *) malloc(MAX_LABEL_LENGTH);
+    memcpy(ret, ("L_" + to_string(labelCnt++)).c_str(), MAX_LABEL_LENGTH);
+    return ret;
+}
+
+void addLine(string s){
+    code.push_back(s);
+}
+
+int getType(int t1, int t2){
+    return max(t1, t2);
 }

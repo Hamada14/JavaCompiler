@@ -1,1 +1,6 @@
 int x;
+float y;
+int z;
+z = 1;
+y = 6.8;
+x = 2 + z;

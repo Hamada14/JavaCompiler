@@ -1,0 +1,8 @@
+0: ldc 1
+1: istore 3
+2: ldc 6.800000
+3: fstore 2
+4: ldc 2
+5: iload_3
+6: iadd
+7: istore 1
