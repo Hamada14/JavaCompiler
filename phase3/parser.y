@@ -27,7 +27,6 @@ map<string, pair<int,typeEnum> > symbolTable;
 
 int labelCnt = 0; // Gives incremental index to labels
 int varCnt = 0;   // Gives incremental address to variables
-int lineCnt = 0;  // Gives the next line number in output file
 
 // A map to put the correct java byte code instruction
 // for relop and arithmetic operations
@@ -72,7 +71,7 @@ int getType(int t1, int t2);
     char *id_val;
 
     // These containers contain indexes in 'code' vector.
-    //vector<int> next, trueNext, falseNext;
+    struct container { vector<int> *next, *trueList, *falseList; } cntr;
     /*
     if
     expr
@@ -112,6 +111,7 @@ int getType(int t1, int t2);
 
 %type <type> primitive_type factor term
 %type <type> expression simple_expression
+%type <cntr> if
 %%
 
 
@@ -126,7 +126,7 @@ statement_list:
     ;
 statement:
     declaration
-    | if
+    | if {;}
     | while
     | assignment
     ;
@@ -158,13 +158,15 @@ while:
 assignment:
     ID ASSIGN expression ';'
     {
-        // Cosider casting instead of the following.
-        if(symbolTable[$1].second != $3)
+        if(!symbolTable.count(string($1)))
+            yyerror("Undeclared variable.");
+        // Consider casting instead of the following.
+        if(symbolTable[string($1)].second != $3)
             yyerror("Assigned a variable to an expression with different type.");
-        if(symbolTable[$1].second == intType)
-            addLine("istore " + to_string(symbolTable[$1].first));
+        if(symbolTable[string($1)].second == intType)
+            addLine("istore " + to_string(symbolTable[string($1)].first));
         else
-            addLine("fstore " + to_string(symbolTable[$1].first));
+            addLine("fstore " + to_string(symbolTable[string($1)].first));
     }
     ;
 expression:
@@ -205,11 +207,11 @@ term:
 factor:
     ID
     { 
-        $$ = symbolTable[$1].second;
+        $$ = symbolTable[string($1)].second;
         if(symbolTable[$1].second == intType)
-            addLine("iload_" + to_string(symbolTable[$1].first));
+            addLine("iload_" + to_string(symbolTable[string($1)].first));
         else
-            addLine("fload_" + to_string(symbolTable[$1].first));
+            addLine("fload_" + to_string(symbolTable[string($1)].first));
     }
     | INT_VAL
     { 

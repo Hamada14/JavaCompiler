@@ -92,7 +92,6 @@ map<string, pair<int,typeEnum> > symbolTable;
 
 int labelCnt = 0; // Gives incremental index to labels
 int varCnt = 0;   // Gives incremental address to variables
-int lineCnt = 0;  // Gives the next line number in output file
 
 // A map to put the correct java byte code instruction
 // for relop and arithmetic operations
@@ -123,7 +122,7 @@ char* newLabel();
 int getType(int t1, int t2);
 
 
-#line 127 "parser.tab.c" /* yacc.c:339  */
+#line 126 "parser.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -181,7 +180,7 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 67 "parser.y" /* yacc.c:355  */
+#line 66 "parser.y" /* yacc.c:355  */
 
 	int ival;
 	float fval;
@@ -190,7 +189,7 @@ union YYSTYPE
     char *id_val;
 
     // These containers contain indexes in 'code' vector.
-    //vector<int> next, trueNext, falseNext;
+    struct container { vector<int> *next, *trueList, *falseList; } cntr;
     /*
     if
     expr
@@ -210,7 +209,7 @@ union YYSTYPE
 
     char *relop;
 
-#line 214 "parser.tab.c" /* yacc.c:355  */
+#line 213 "parser.tab.c" /* yacc.c:355  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
@@ -225,7 +224,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 229 "parser.tab.c" /* yacc.c:358  */
+#line 228 "parser.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -525,8 +524,8 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint8 yyrline[] =
 {
        0,   121,   121,   124,   125,   128,   129,   130,   131,   134,
-     140,   144,   150,   156,   159,   171,   180,   181,   185,   195,
-     196,   206,   214,   219,   224,   230,   231
+     140,   144,   150,   156,   159,   173,   182,   183,   187,   197,
+     198,   208,   216,   221,   226,   232,   233
 };
 #endif
 
@@ -1326,12 +1325,18 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 9:
+        case 6:
+#line 129 "parser.y" /* yacc.c:1646  */
+    {;}
+#line 1332 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 9:
 #line 135 "parser.y" /* yacc.c:1646  */
     {
         defineVariable((yyvsp[-1].id_val), (yyvsp[-2].type));
     }
-#line 1335 "parser.tab.c" /* yacc.c:1646  */
+#line 1340 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
@@ -1339,7 +1344,7 @@ yyreduce:
     {
         (yyval.type) = intType;
     }
-#line 1343 "parser.tab.c" /* yacc.c:1646  */
+#line 1348 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
@@ -1347,7 +1352,7 @@ yyreduce:
     { 
         (yyval.type) = floatType;
     }
-#line 1351 "parser.tab.c" /* yacc.c:1646  */
+#line 1356 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
@@ -1355,33 +1360,35 @@ yyreduce:
     {
 
     }
-#line 1359 "parser.tab.c" /* yacc.c:1646  */
+#line 1364 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
 #line 160 "parser.y" /* yacc.c:1646  */
     {
-        // Cosider casting instead of the following.
-        if(symbolTable[(yyvsp[-3].id_val)].second != (yyvsp[-1].type))
+        if(!symbolTable.count(string((yyvsp[-3].id_val))))
+            yyerror("Undeclared variable.");
+        // Consider casting instead of the following.
+        if(symbolTable[string((yyvsp[-3].id_val))].second != (yyvsp[-1].type))
             yyerror("Assigned a variable to an expression with different type.");
-        if(symbolTable[(yyvsp[-3].id_val)].second == intType)
-            addLine("istore " + to_string(symbolTable[(yyvsp[-3].id_val)].first));
+        if(symbolTable[string((yyvsp[-3].id_val))].second == intType)
+            addLine("istore " + to_string(symbolTable[string((yyvsp[-3].id_val))].first));
         else
-            addLine("fstore " + to_string(symbolTable[(yyvsp[-3].id_val)].first));
+            addLine("fstore " + to_string(symbolTable[string((yyvsp[-3].id_val))].first));
     }
-#line 1373 "parser.tab.c" /* yacc.c:1646  */
+#line 1380 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 182 "parser.y" /* yacc.c:1646  */
+#line 184 "parser.y" /* yacc.c:1646  */
     { 
         (yyval.type) = (yyvsp[0].type);
     }
-#line 1381 "parser.tab.c" /* yacc.c:1646  */
+#line 1388 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 186 "parser.y" /* yacc.c:1646  */
+#line 188 "parser.y" /* yacc.c:1646  */
     {
         (yyval.type) = getType((yyvsp[-2].type), (yyvsp[0].type));
         if((yyval.type) == intType)
@@ -1389,11 +1396,11 @@ yyreduce:
         else
             addLine("f" + instruction[string(1, (yyvsp[-1].addop))]);
     }
-#line 1393 "parser.tab.c" /* yacc.c:1646  */
+#line 1400 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 197 "parser.y" /* yacc.c:1646  */
+#line 199 "parser.y" /* yacc.c:1646  */
     {
         (yyval.type) = getType((yyvsp[-2].type), (yyvsp[-1].mulop));
         if((yyval.type) == intType)
@@ -1401,49 +1408,49 @@ yyreduce:
         else
             addLine("fmul");
     }
-#line 1405 "parser.tab.c" /* yacc.c:1646  */
+#line 1412 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 207 "parser.y" /* yacc.c:1646  */
+#line 209 "parser.y" /* yacc.c:1646  */
     { 
-        (yyval.type) = symbolTable[(yyvsp[0].id_val)].second;
+        (yyval.type) = symbolTable[string((yyvsp[0].id_val))].second;
         if(symbolTable[(yyvsp[0].id_val)].second == intType)
-            addLine("iload_" + to_string(symbolTable[(yyvsp[0].id_val)].first));
+            addLine("iload_" + to_string(symbolTable[string((yyvsp[0].id_val))].first));
         else
-            addLine("fload_" + to_string(symbolTable[(yyvsp[0].id_val)].first));
+            addLine("fload_" + to_string(symbolTable[string((yyvsp[0].id_val))].first));
     }
-#line 1417 "parser.tab.c" /* yacc.c:1646  */
+#line 1424 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 215 "parser.y" /* yacc.c:1646  */
+#line 217 "parser.y" /* yacc.c:1646  */
     { 
         (yyval.type) = intType;
         addLine("ldc " + to_string((yyvsp[0].ival)));
     }
-#line 1426 "parser.tab.c" /* yacc.c:1646  */
+#line 1433 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 220 "parser.y" /* yacc.c:1646  */
+#line 222 "parser.y" /* yacc.c:1646  */
     { 
         (yyval.type) = floatType;
         addLine("ldc " + to_string((yyvsp[0].fval)));
     }
-#line 1435 "parser.tab.c" /* yacc.c:1646  */
+#line 1442 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 225 "parser.y" /* yacc.c:1646  */
+#line 227 "parser.y" /* yacc.c:1646  */
     { 
         (yyval.type) = (yyvsp[-1].type);
     }
-#line 1443 "parser.tab.c" /* yacc.c:1646  */
+#line 1450 "parser.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1447 "parser.tab.c" /* yacc.c:1646  */
+#line 1454 "parser.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1671,7 +1678,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 233 "parser.y" /* yacc.c:1906  */
+#line 235 "parser.y" /* yacc.c:1906  */
 
 
 int main(int, char**) {

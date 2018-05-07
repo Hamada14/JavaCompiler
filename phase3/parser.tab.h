@@ -68,7 +68,7 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 67 "parser.y" /* yacc.c:1909  */
+#line 66 "parser.y" /* yacc.c:1909  */
 
 	int ival;
 	float fval;
@@ -77,7 +77,7 @@ union YYSTYPE
     char *id_val;
 
     // These containers contain indexes in 'code' vector.
-    //vector<int> next, trueNext, falseNext;
+    struct container { vector<int> *next, *trueList, *falseList; } cntr;
     /*
     if
     expr
