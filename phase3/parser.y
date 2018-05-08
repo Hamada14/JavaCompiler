@@ -122,10 +122,10 @@ statement_list:
     | statement_list statement
     ;
 statement:
-    declaration {;}
+    declaration { $$.next = new vector<int>; }
     | if { addAddress($1.next, code.size()); }
     | while { addAddress($1.next, code.size()); }
-    | assignment {;}
+    | assignment { $$.next = new vector<int>; }
     | for { addAddress($1.next, code.size()); }
     ;
 declaration:
@@ -162,10 +162,14 @@ if:
     statement '}'
     {
         $$ = $7;
+        if($$.next == nullptr) 
+            $$.next = new vector<int>;
         if($13.next){
-            for(int i : *($13.next))
+            while($13.next->size()){
+                int i = $13.next->back();
                 $$.next->push_back(i);
-            $13.next->clear();
+                $13.next->pop_back();
+            }
         }
     }
     ;
@@ -178,6 +182,8 @@ while:
     {
         addLine("goto " + to_string($3));
         $$.next = $4.falseList;
+        if($$.next == nullptr) 
+            $$.next = new vector<int>;
     }
     ;
 mark:
@@ -194,6 +200,8 @@ for:
     {
         addLine("goto " + to_string($4));
         $$.next = $5.falseList;
+        if($$.next == nullptr) 
+            $$.next = new vector<int>;
     }
     ;
 assignment:
