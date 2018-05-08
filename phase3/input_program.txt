@@ -1,18 +1,12 @@
 int x;
-float y;
-int z;
-z = 1;
-y = 6.8;
-x = 2 + z;
 if(x > 2){
-	x = 5; 
+	x = 1;
 }
-else{
-	x = 6;
-}
-while(x != z){
-	z = z + 2;
-}
-for(x = 8; x <= 10; x = x + 2;){
-	z = z + 5 * x;
+else {
+	if(x < 1){
+		x = 6;
+	}
+	else{
+		x = 9;
+	}
 }

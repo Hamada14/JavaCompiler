@@ -79,7 +79,9 @@ void addAddress(vector<int> *v, int a);
   char mulop;
   char assign;
   char *relop;
-  char *booloperator;
+  char *andoperator;
+  char *oroperator;
+  char *notoperator;
 }
 
 // define the constant-string tokens:
@@ -97,7 +99,9 @@ void addAddress(vector<int> *v, int a);
 %token <mulop> MULOP
 %token <relop> RELOP
 %token <assign> ASSIGN
-%token <booloperator> BOOL_OPERATOR
+%token <andoperator> AND_OPERATOR
+%token <oroperator> OR_OPERATOR
+%token <notoperator> NOT_OPERATOR
 
 
 %type <type> primitive_type factor term
@@ -159,7 +163,7 @@ if:
     {
         $$ = $7;
         if($13.next){
-            for(int i : *($13.next)) 
+            for(int i : *($13.next))
                 $$.next->push_back(i);
             $13.next->clear();
         }
@@ -221,15 +225,17 @@ expression:
         $$.falseList->push_back(code.size());
         addLine("goto ");
     }
-    | simple_expression BOOL_OPERATOR simple_expression
+    | simple_expression AND_OPERATOR simple_expression
     {
-        $$.type = getType($1, $3);
-        $$.trueList = new vector<int>;
-        $$.falseList = new vector<int>;
-        $$.trueList->push_back(code.size());
-        addLine(instruction[string($2)] + " ");
-        $$.falseList->push_back(code.size());
-        addLine("goto ");
+
+    }
+    | simple_expression OR_OPERATOR simple_expression
+    {
+
+    }
+    | simple_expression NOT_OPERATOR simple_expression
+    {
+
     }
     ;
 simple_expression:

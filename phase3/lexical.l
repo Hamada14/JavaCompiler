@@ -27,9 +27,9 @@ for                                                               { return FOR; 
 {LETTER}[{LETTER}{DIGIT}]*                                        { yylval.id_val = strdup(yytext); return ID; }
 {DIGITS}                                                          { yylval.ival = atoi(yytext); return INT_VAL;}
 {DIGITS}"."[{DIGITS}]+|{DIGITS}"."[{DIGITS}]+"E"[{DIGITS}]+       { yylval.fval = atof(yytext); return FLOAT_VAL; }
-"&&"                                                              { yylval.booloperator = strdup(yytext); return AND_OPERATOR; }
-"||"                                                              { yylval.booloperator = strdup(yytext); return OR_OPERATOR; }
-"!"                                                               { yylval.booloperator = strdup(yytext); return NOT_OPERATOR; }
+"&&"                                                              { yylval.andoperator = strdup(yytext); return AND_OPERATOR; }
+"||"                                                              { yylval.oroperator = strdup(yytext); return OR_OPERATOR; }
+"!"                                                               { yylval.notoperator = strdup(yytext); return NOT_OPERATOR; }
 "=="|"!="|">"|">="|"<"|"<="                                       { yylval.relop = strdup(yytext); return RELOP; }
 [\=]                                                              { yylval.assign = yytext[0]; return ASSIGN; }
 [\+\-]                                                            { yylval.addop = yytext[0]; return ADDOP; }
