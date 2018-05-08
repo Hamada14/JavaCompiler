@@ -1,8 +1,27 @@
-0: ldc 1
+0: sipush 1
 1: istore 3
 2: ldc 6.800000
 3: fstore 2
-4: ldc 2
+4: sipush 2
 5: iload_3
 6: iadd
 7: istore 1
+8: iload_1
+9: sipush 2
+10: if_icmpgt 12
+11: goto 15
+12: sipush 5
+13: istore 1
+14: goto 17
+15: sipush 6
+16: istore 1
+17: iload_1
+18: iload_3
+19: if_icmpne 21
+20: goto 26
+21: iload_3
+22: sipush 2
+23: iadd
+24: istore 3
+25: goto 17
+26: return

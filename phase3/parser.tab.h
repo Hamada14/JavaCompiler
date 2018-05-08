@@ -68,7 +68,7 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 66 "parser.y" /* yacc.c:1909  */
+#line 67 "parser.y" /* yacc.c:1909  */
 
 	int ival;
 	float fval;
@@ -76,8 +76,11 @@ union YYSTYPE
 
     char *id_val;
 
-    // These containers contain indexes in 'code' vector.
-    struct container { vector<int> *next, *trueList, *falseList; } cntr;
+    struct container {
+        // These containers contain indexes in 'code' vector.
+        vector<int> *next, *trueList, *falseList;
+        int type;
+     } container;
     /*
     if
     expr
@@ -97,7 +100,7 @@ union YYSTYPE
 
     char *relop;
 
-#line 101 "parser.tab.h" /* yacc.c:1909  */
+#line 104 "parser.tab.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1

@@ -55,6 +55,7 @@ void defineVariable(char *id_val, int type);
 void yyerror(const char *s);
 char* newLabel();
 int getType(int t1, int t2);
+void addAddress(vector<int> *v, int a);
 
 %}
 
@@ -70,8 +71,11 @@ int getType(int t1, int t2);
 
     char *id_val;
 
-    // These containers contain indexes in 'code' vector.
-    struct container { vector<int> *next, *trueList, *falseList; } cntr;
+    struct container {
+        // These containers contain indexes in 'code' vector.
+        vector<int> *next, *trueList, *falseList;
+        int type;
+     } container;
     /*
     if
     expr
@@ -110,8 +114,9 @@ int getType(int t1, int t2);
 
 
 %type <type> primitive_type factor term
-%type <type> expression simple_expression
-%type <cntr> if
+%type <type> simple_expression
+%type <container> expression if statement while
+%type <ival> mark
 %%
 
 
@@ -119,16 +124,17 @@ int getType(int t1, int t2);
 // Rule definition
 method_body:
     statement_list
+    { addLine("return"); }
     ;
 statement_list:
     statement
     | statement_list statement
     ;
 statement:
-    declaration
-    | if {;}
-    | while
-    | assignment
+    declaration {;}
+    | if { addAddress($1.next, code.size()); }
+    | while { addAddress($1.next, code.size()); }
+    | assignment {;}
     ;
 declaration:
     primitive_type ID ';'
@@ -147,13 +153,40 @@ primitive_type:
     }
     ;
 if:
-    IF '(' expression ')' '{' statement '}' ELSE '{' statement '}'
+    IF '(' expression ')' '{'
+    { 
+        addAddress($3.trueList, code.size());
+    } 
+    statement
+    { 
+        $7.next = new vector<int>;
+        $7.next->push_back(code.size());
+        addLine("goto "); 
+    }
+    '}' ELSE '{'
+    { 
+       addAddress($3.falseList, code.size()); 
+    }
+    statement '}'
     {
-
+        $$ = $7;
     }
     ;
 while:
-    WHILE '(' expression ')' '{' statement '}'
+    WHILE '(' mark expression ')' '{' 
+    {
+        addAddress($4.trueList, code.size());
+    }
+    statement '}'
+    {
+        addLine("goto " + to_string($3));
+        $$.next = $4.falseList;
+    }
+    ;
+mark:
+    {
+        $$ = code.size();
+    }
     ;
 assignment:
     ID ASSIGN expression ';'
@@ -161,7 +194,7 @@ assignment:
         if(!symbolTable.count(string($1)))
             yyerror("Undeclared variable.");
         // Consider casting instead of the following.
-        if(symbolTable[string($1)].second != $3)
+        if(symbolTable[string($1)].second != $3.type)
             yyerror("Assigned a variable to an expression with different type.");
         if(symbolTable[string($1)].second == intType)
             addLine("istore " + to_string(symbolTable[string($1)].first));
@@ -171,12 +204,19 @@ assignment:
     ;
 expression:
     simple_expression
-    /* to-do or ask about
+    {
+        $$.type = $1;
+    }
     | simple_expression RELOP simple_expression
     {
-        $$ = getType($1, $2);   
+        $$.type = getType($1, $3);
+        $$.trueList = new vector<int>;
+        $$.falseList = new vector<int>;
+        $$.trueList->push_back(code.size());
+        addLine(instruction[string($2)] + " ");
+        $$.falseList->push_back(code.size());
+        addLine("goto ");
     }
-    */
     ;
 simple_expression:
     term
@@ -216,7 +256,7 @@ factor:
     | INT_VAL
     { 
         $$ = intType;
-        addLine("ldc " + to_string($1));
+        addLine("sipush " + to_string($1));
     }
     | FLOAT_VAL
     { 
@@ -225,7 +265,7 @@ factor:
     }
     | '(' expression ')'
     { 
-        $$ = $2;
+        $$ = $2.type;
     }
     ;
 sign:
@@ -290,4 +330,12 @@ void addLine(string s){
 
 int getType(int t1, int t2){
     return max(t1, t2);
+}
+
+void addAddress(vector<int> *v, int a){
+    if(v == nullptr) return;
+    while((*v).size()){
+        code[(*v).back()] += to_string(a);
+        (*v).pop_back();
+    }
 }
