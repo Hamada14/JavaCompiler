@@ -66,8 +66,8 @@ void addAddress(vector<int> *v, int a);
 // use that union instead of "int" for the definition of "yystype":
 %union {
   int ival;
-	float fval;
-	char *sval;
+  float fval;
+  char *sval;
   char *id_val;
   struct container {
     // These containers contain indexes in 'code' vector.
@@ -158,6 +158,11 @@ if:
     statement '}'
     {
         $$ = $7;
+        if($13.next){
+            for(int i : *($13.next)) 
+                $$.next->push_back(i);
+            $13.next->clear();
+        }
     }
     ;
 while:

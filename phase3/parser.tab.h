@@ -59,7 +59,8 @@ extern int yydebug;
     ADDOP = 269,
     MULOP = 270,
     RELOP = 271,
-    ASSIGN = 272
+    ASSIGN = 272,
+    BOOL_OPERATOR = 273
   };
 #endif
 
@@ -70,37 +71,23 @@ union YYSTYPE
 {
 #line 67 "parser.y" /* yacc.c:1909  */
 
-	int ival;
-	float fval;
-	char *sval;
-
-    char *id_val;
-
-    struct container {
-        // These containers contain indexes in 'code' vector.
-        vector<int> *next, *trueList, *falseList;
-        int type;
-     } container;
-    /*
-    if
-    expr
-    goto true
-    goto false
-    true: ...
-    goto next
-    false: ...
-    next: ...
-    */
-
+  int ival;
+  float fval;
+  char *sval;
+  char *id_val;
+  struct container {
+    // These containers contain indexes in 'code' vector.
+    vector<int> *next, *trueList, *falseList;
     int type;
+  } container;
+  int type;
+  char addop;
+  char mulop;
+  char assign;
+  char *relop;
+  char *booloperator;
 
-    char addop;
-    char mulop;
-    char assign;
-
-    char *relop;
-
-#line 104 "parser.tab.h" /* yacc.c:1909  */
+#line 91 "parser.tab.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
