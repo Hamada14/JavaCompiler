@@ -19,7 +19,7 @@ vector<string> code;
 
 // Types enum
 enum typeEnum {
-    intType, floatType, errorType 
+    intType, floatType, errorType
 };
 
 // Symbol table <name, <variable number, type>>
@@ -42,7 +42,7 @@ map<string,string> instruction = {
     {"-", "sub"},
     {"/", "div"},
     {"*", "mul"},
-    {"%", "rem"}    
+    {"%", "rem"}
 };
 
 
@@ -65,35 +65,21 @@ void addAddress(vector<int> *v, int a);
 // holding each of the types of tokens that Flex could return, and have Bison
 // use that union instead of "int" for the definition of "yystype":
 %union {
-	int ival;
+  int ival;
 	float fval;
 	char *sval;
-
-    char *id_val;
-
-    struct container {
-        // These containers contain indexes in 'code' vector.
-        vector<int> *next, *trueList, *falseList;
-        int type;
-     } container;
-    /*
-    if
-    expr
-    goto true
-    goto false
-    true: ...
-    goto next
-    false: ...
-    next: ...
-    */
-
+  char *id_val;
+  struct container {
+    // These containers contain indexes in 'code' vector.
+    vector<int> *next, *trueList, *falseList;
     int type;
-
-    char addop;
-    char mulop;
-    char assign;
-
-    char *relop;
+  } container;
+  int type;
+  char addop;
+  char mulop;
+  char assign;
+  char *relop;
+  char *booloperator;
 }
 
 // define the constant-string tokens:
@@ -111,6 +97,7 @@ void addAddress(vector<int> *v, int a);
 %token <mulop> MULOP
 %token <relop> RELOP
 %token <assign> ASSIGN
+%token <booloperator> BOOL_OPERATOR
 
 
 %type <type> primitive_type factor term
@@ -149,24 +136,24 @@ primitive_type:
         $$ = intType;
     }
     | FLOAT
-    { 
+    {
         $$ = floatType;
     }
     ;
 if:
     IF '(' expression ')' '{'
-    { 
+    {
         addAddress($3.trueList, code.size());
-    } 
+    }
     statement
-    { 
+    {
         $7.next = new vector<int>;
         $7.next->push_back(code.size());
-        addLine("goto "); 
+        addLine("goto ");
     }
     '}' ELSE '{'
-    { 
-       addAddress($3.falseList, code.size()); 
+    {
+       addAddress($3.falseList, code.size());
     }
     statement '}'
     {
@@ -174,7 +161,7 @@ if:
     }
     ;
 while:
-    WHILE '(' mark expression ')' '{' 
+    WHILE '(' mark expression ')' '{'
     {
         addAddress($4.trueList, code.size());
     }
@@ -190,7 +177,7 @@ mark:
     }
     ;
 for:
-    FOR '(' assignment mark expression ';' assignment ')' '{' 
+    FOR '(' assignment mark expression ';' assignment ')' '{'
     {
         addAddress($5.trueList, code.size());
     }
@@ -229,11 +216,21 @@ expression:
         $$.falseList->push_back(code.size());
         addLine("goto ");
     }
+    | simple_expression BOOL_OPERATOR simple_expression
+    {
+        $$.type = getType($1, $3);
+        $$.trueList = new vector<int>;
+        $$.falseList = new vector<int>;
+        $$.trueList->push_back(code.size());
+        addLine(instruction[string($2)] + " ");
+        $$.falseList->push_back(code.size());
+        addLine("goto ");
+    }
     ;
 simple_expression:
     term
     | sign term
-    { 
+    {
         $$ = $2;
     }
     | simple_expression ADDOP term
@@ -258,7 +255,7 @@ term:
     ;
 factor:
     ID
-    { 
+    {
         $$ = symbolTable[string($1)].second;
         if(symbolTable[$1].second == intType)
             addLine("iload_" + to_string(symbolTable[string($1)].first));
@@ -266,17 +263,17 @@ factor:
             addLine("fload_" + to_string(symbolTable[string($1)].first));
     }
     | INT_VAL
-    { 
+    {
         $$ = intType;
         addLine("sipush " + to_string($1));
     }
     | FLOAT_VAL
-    { 
+    {
         $$ = floatType;
         addLine("ldc " + to_string($1));
     }
     | '(' expression ')'
-    { 
+    {
         $$ = $2.type;
     }
     ;
@@ -313,7 +310,7 @@ void yyerror(const char *s) {
 
 void print(){
     int i = 0;
-    for(string s : code) 
+    for(string s : code)
         out <<i++ <<": " <<s << endl;
 }
 
