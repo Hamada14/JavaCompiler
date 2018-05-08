@@ -115,7 +115,7 @@ void addAddress(vector<int> *v, int a);
 
 %type <type> primitive_type factor term
 %type <type> simple_expression
-%type <container> expression if statement while
+%type <container> expression if statement while for
 %type <ival> mark
 %%
 
@@ -135,6 +135,7 @@ statement:
     | if { addAddress($1.next, code.size()); }
     | while { addAddress($1.next, code.size()); }
     | assignment {;}
+    | for { addAddress($1.next, code.size()); }
     ;
 declaration:
     primitive_type ID ';'
@@ -188,6 +189,17 @@ mark:
         $$ = code.size();
     }
     ;
+for:
+    FOR '(' assignment mark expression ';' assignment ')' '{' 
+    {
+        addAddress($5.trueList, code.size());
+    }
+    statement '}'
+    {
+        addLine("goto " + to_string($4));
+        $$.next = $5.falseList;
+    }
+    ;
 assignment:
     ID ASSIGN expression ';'
     {
@@ -237,7 +249,7 @@ term:
     factor
     | term MULOP factor
     {
-        $$ = getType($1, $2);
+        $$ = getType($1, $3);
         if($$ == intType)
             addLine("imul");
         else
