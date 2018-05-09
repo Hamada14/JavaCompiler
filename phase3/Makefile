@@ -6,3 +6,6 @@ parser.tab.c parser.tab.h: parser.y
 
 lex.yy.c: lexical.l parser.tab.h
 	flex lexical.l
+
+clean:
+	rm lex.yy.c parser.tab.c parser.tab.h

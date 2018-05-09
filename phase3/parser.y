@@ -65,8 +65,9 @@ void addAddress(vector<int> *v, int a);
 // holding each of the types of tokens that Flex could return, and have Bison
 // use that union instead of "int" for the definition of "yystype":
 %union {
-  int ival;
-  float fval;
+  int mark_val;
+  char *ival;
+  char *fval;
   char *sval;
   char *id_val;
   struct container {
@@ -108,7 +109,7 @@ void addAddress(vector<int> *v, int a);
 %type <type> primitive_type factor term
 %type <type> simple_expression
 %type <container> if statement while for boolean_expression
-%type <ival> mark
+%type <mark_val> mark
 %type <addop> sign
 %%
 
@@ -319,12 +320,12 @@ factor:
     | INT_VAL
     {
         $$ = intType;
-        addLine("sipush " + to_string($1));
+        addLine("sipush " + string($1));
     }
     | FLOAT_VAL
     {
         $$ = floatType;
-        addLine("ldc " + to_string($1));
+        addLine("ldc " + string($1));
     }
     | '(' simple_expression ')'
     {
