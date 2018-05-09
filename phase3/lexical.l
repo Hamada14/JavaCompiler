@@ -26,7 +26,7 @@ while                                                             { return WHILE
 for                                                               { return FOR; }
 true															                                { return TRUE; }
 false															                                { return FALSE; }
-{LETTER}({LETTER}{DIGIT})*                                        { yylval.id_val = strdup(yytext); return ID; }
+{LETTER}({LETTER}|{DIGIT}|"_")*                                        { yylval.id_val = strdup(yytext); return ID; }
 {DIGITS}                                                          { yylval.ival = atoi(yytext); return INT_VAL;}
 {DIGITS}*"."{DIGITS}+|{DIGITS}"."{DIGITS}+"E"{DIGITS}+            { yylval.fval = atof(yytext); return FLOAT_VAL; }
 "&&"                                                              { yylval.andoperator = strdup(yytext); return AND_OPERATOR; }
