@@ -1,9 +1,8 @@
-int x;
-int y;
-int i;
-for (i = 0; i < 3; i = i + 1;) {
-  x = 0;
-}
-while (x < 5) {
-  y = 10000 / y;
-}
+float xxx;
+xxx = .02;
+float mody;
+mody = 0.02E3;
+float hamada;
+hamada = -6.6;
+int sasa;
+sasa = -7;

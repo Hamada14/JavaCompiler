@@ -24,11 +24,11 @@ if                                                                { return IF; }
 else                                                              { return ELSE; }
 while                                                             { return WHILE; }
 for                                                               { return FOR; }
-true															  { return TRUE; }
-false															  { return FALSE; }
+true															                                { return TRUE; }
+false															                                { return FALSE; }
 {LETTER}[{LETTER}{DIGIT}]*                                        { yylval.id_val = strdup(yytext); return ID; }
 {DIGITS}                                                          { yylval.ival = atoi(yytext); return INT_VAL;}
-{DIGITS}"."[{DIGITS}]+|{DIGITS}"."[{DIGITS}]+"E"[{DIGITS}]+       { yylval.fval = atof(yytext); return FLOAT_VAL; }
+{DIGITS}*"."{DIGITS}+|{DIGITS}"."{DIGITS}+"E"{DIGITS}+            { yylval.fval = atof(yytext); return FLOAT_VAL; }
 "&&"                                                              { yylval.andoperator = strdup(yytext); return AND_OPERATOR; }
 "||"                                                              { yylval.oroperator = strdup(yytext); return OR_OPERATOR; }
 "!"                                                               { yylval.notoperator = strdup(yytext); return NOT_OPERATOR; }
