@@ -275,9 +275,17 @@ boolean_expression:
     ;
 simple_expression:
     term
+
     | sign term
     {
         $$ = $2;
+        if (string(1, $1) == '-') {
+          addLine("iconst_m1");
+          if ($2 == intType)
+            addLine("imul");
+          else
+            addLine("fmul");
+        }
     }
     | simple_expression ADDOP term
     {
