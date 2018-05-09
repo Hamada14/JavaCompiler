@@ -1,0 +1,13 @@
+0: ldc 0.020000
+1: fstore 1
+2: ldc 20.000000
+3: fstore 2
+4: ldc 6.600000
+5: iconst_m1
+6: fmul
+7: fstore 3
+8: sipush 7
+9: iconst_m1
+10: imul
+11: istore 4
+12: return

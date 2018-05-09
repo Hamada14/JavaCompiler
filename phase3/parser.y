@@ -109,6 +109,7 @@ void addAddress(vector<int> *v, int a);
 %type <type> simple_expression
 %type <container> if statement while for boolean_expression
 %type <ival> mark
+%type <addop> sign
 %%
 
 
@@ -275,11 +276,10 @@ boolean_expression:
     ;
 simple_expression:
     term
-
     | sign term
     {
         $$ = $2;
-        if (string(1, $1) == '-') {
+        if ($1 == '-') {
           addLine("iconst_m1");
           if ($2 == intType)
             addLine("imul");
@@ -332,8 +332,7 @@ factor:
     }
     ;
 sign:
-    '+'
-    | '-'
+    ADDOP
     ;
 %%
 
