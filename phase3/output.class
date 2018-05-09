@@ -3,15 +3,22 @@
 2: iload_3
 3: sipush 3
 4: if_icmplt 11
-5: goto 16
+5: goto 14
 6: iload_3
 7: sipush 1
 8: iadd
 9: istore 3
 10: goto 2
-11: sipush 3
-12: iload_2
-13: isub
-14: istore 2
-15: goto 6
-16: return
+11: sipush 0
+12: istore 1
+13: goto 6
+14: iload_1
+15: sipush 5
+16: if_icmplt 18
+17: goto 23
+18: sipush 10000
+19: iload_2
+20: idiv
+21: istore 2
+22: goto 14
+23: return

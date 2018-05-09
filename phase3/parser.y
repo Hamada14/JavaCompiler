@@ -194,7 +194,7 @@ mark:
     ;
 for:
     FOR '(' assignment mark boolean_expression ';' mark assignment ')' '{'
-    {   
+    {
         addLine("goto " + to_string($4));
         addAddress($5.trueList, code.size());
     }
@@ -294,9 +294,9 @@ term:
     {
         $$ = getType($1, $3);
         if($$ == intType)
-            addLine("imul");
+            addLine("i" + instruction[string(1, $2)]);
         else
-            addLine("fmul");
+            addLine("f" + instruction[string(1, $2)]);
     }
     ;
 factor:

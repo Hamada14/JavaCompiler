@@ -2,5 +2,8 @@ int x;
 int y;
 int i;
 for (i = 0; i < 3; i = i + 1;) {
-  y = 3 - y;
+  x = 0;
+}
+while (x < 5) {
+  y = 10000 / y;
 }
