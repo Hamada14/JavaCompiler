@@ -88,6 +88,7 @@ void addAddress(vector<int> *v, int a);
 %token INT FLOAT BOOLEAN
 %token IF ELSE
 %token FOR WHILE
+%token TRUE FALSE
 
 // define the "terminal symbol" token types I'm going to use (in CAPS
 // by convention), and associate each with a field of the union:
@@ -106,7 +107,7 @@ void addAddress(vector<int> *v, int a);
 
 %type <type> primitive_type factor term
 %type <type> simple_expression
-%type <container> expression if statement while for
+%type <container> if statement while for boolean_expression
 %type <ival> mark
 %%
 
@@ -145,7 +146,7 @@ primitive_type:
     }
     ;
 if:
-    IF '(' expression ')' '{'
+    IF '(' boolean_expression ')' '{'
     {
         addAddress($3.trueList, code.size());
     }
@@ -174,7 +175,7 @@ if:
     }
     ;
 while:
-    WHILE '(' mark expression ')' '{'
+    WHILE '(' mark boolean_expression ')' '{'
     {
         addAddress($4.trueList, code.size());
     }
@@ -192,7 +193,7 @@ mark:
     }
     ;
 for:
-    FOR '(' assignment mark expression ';' assignment ')' '{'
+    FOR '(' assignment mark boolean_expression ';' assignment ')' '{'
     {
         addAddress($5.trueList, code.size());
     }
@@ -205,12 +206,12 @@ for:
     }
     ;
 assignment:
-    ID ASSIGN expression ';'
+    ID ASSIGN simple_expression ';'
     {
         if(!symbolTable.count(string($1)))
             yyerror("Undeclared variable.");
         // Consider casting instead of the following.
-        if(symbolTable[string($1)].second != $3.type)
+        if(symbolTable[string($1)].second != $3)
             yyerror("Assigned a variable to an expression with different type.");
         if(symbolTable[string($1)].second == intType)
             addLine("istore " + to_string(symbolTable[string($1)].first));
@@ -218,24 +219,24 @@ assignment:
             addLine("fstore " + to_string(symbolTable[string($1)].first));
     }
     ;
-expression:
-    simple_expression
-    {
-        $$.type = $1;
-    }
-    ;
 boolean_expression:
     TRUE
     {
-
+        $$.trueList = new vector<int>;
+        $$.falseList = new vector<int>;
+        $$.trueList->push_back(code.size());
+        addLine("goto ");
     }
     | FALSE
     {
-
+        $$.trueList = new vector<int>;
+        $$.falseList = new vector<int>;
+        $$.falseList->push_back(code.size());
+        addLine("goto ");
     }
     | simple_expression RELOP simple_expression
     {
-        $$.type = getType($1, $3);
+        if($1 != $3) yyerror("Comparing two expressions of different types.");
         $$.trueList = new vector<int>;
         $$.falseList = new vector<int>;
         $$.trueList->push_back(code.size());
@@ -243,17 +244,32 @@ boolean_expression:
         $$.falseList->push_back(code.size());
         addLine("goto ");
     }
-    | simple_expression AND_OPERATOR simple_expression
+    | boolean_expression AND_OPERATOR mark boolean_expression
     {
-
+        addAddress($1.trueList, $3);
+        $$.falseList = $1.falseList;
+        while($4.falseList->size()){
+            int i = $4.falseList->back();
+            $$.falseList->push_back(i);
+            $4.falseList->pop_back();
+        }
+        $$.trueList = $4.trueList;
     }
-    | simple_expression OR_OPERATOR simple_expression
+    | boolean_expression OR_OPERATOR mark boolean_expression
     {
-
+        addAddress($1.falseList, $3);
+        $$.trueList = $1.trueList;
+        while($4.trueList->size()){
+            int i = $4.trueList->back();
+            $$.trueList->push_back(i);
+            $4.trueList->pop_back();
+        }
+        $$.falseList = $4.falseList;
     }
-    | NOT_OPERATOR simple_expression
+    | NOT_OPERATOR boolean_expression
     {
-
+        $$.trueList = $2.falseList;
+        $$.falseList = $2.trueList;
     }
     ;
 simple_expression:
@@ -301,9 +317,9 @@ factor:
         $$ = floatType;
         addLine("ldc " + to_string($1));
     }
-    | '(' expression ')'
+    | '(' simple_expression ')'
     {
-        $$ = $2.type;
+        $$ = $2;
     }
     ;
 sign:

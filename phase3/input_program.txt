@@ -1,12 +1,14 @@
 int x;
-if(x > 2){
-	x = 1;
+int y;
+int z;
+if (x > 3 || y <= 2) {
+  if(z < 50 && y > 6){
+  	y = 0;
+  }
+  else{
+  	x = 7;
+  }
 }
 else {
-	if(x < 1){
-		x = 6;
-	}
-	else{
-		x = 9;
-	}
+  z = 70;
 }

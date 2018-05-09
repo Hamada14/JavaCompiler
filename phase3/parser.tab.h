@@ -52,17 +52,19 @@ extern int yydebug;
     ELSE = 262,
     FOR = 263,
     WHILE = 264,
-    INT_VAL = 265,
-    FLOAT_VAL = 266,
-    STRING = 267,
-    ID = 268,
-    ADDOP = 269,
-    MULOP = 270,
-    RELOP = 271,
-    ASSIGN = 272,
-    AND_OPERATOR = 273,
-    OR_OPERATOR = 274,
-    NOT_OPERATOR = 275
+    TRUE = 265,
+    FALSE = 266,
+    INT_VAL = 267,
+    FLOAT_VAL = 268,
+    STRING = 269,
+    ID = 270,
+    ADDOP = 271,
+    MULOP = 272,
+    RELOP = 273,
+    ASSIGN = 274,
+    AND_OPERATOR = 275,
+    OR_OPERATOR = 276,
+    NOT_OPERATOR = 277
   };
 #endif
 
@@ -91,7 +93,7 @@ union YYSTYPE
   char *oroperator;
   char *notoperator;
 
-#line 95 "parser.tab.h" /* yacc.c:1909  */
+#line 97 "parser.tab.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
