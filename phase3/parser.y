@@ -162,7 +162,7 @@ if:
     statement '}'
     {
         $$ = $7;
-        if($$.next == nullptr) 
+        if($$.next == nullptr)
             $$.next = new vector<int>;
         if($13.next){
             while($13.next->size()){
@@ -182,7 +182,7 @@ while:
     {
         addLine("goto " + to_string($3));
         $$.next = $4.falseList;
-        if($$.next == nullptr) 
+        if($$.next == nullptr)
             $$.next = new vector<int>;
     }
     ;
@@ -200,7 +200,7 @@ for:
     {
         addLine("goto " + to_string($4));
         $$.next = $5.falseList;
-        if($$.next == nullptr) 
+        if($$.next == nullptr)
             $$.next = new vector<int>;
     }
     ;
@@ -223,6 +223,16 @@ expression:
     {
         $$.type = $1;
     }
+    ;
+boolean_expression:
+    TRUE
+    {
+
+    }
+    | FALSE
+    {
+
+    }
     | simple_expression RELOP simple_expression
     {
         $$.type = getType($1, $3);
@@ -241,7 +251,7 @@ expression:
     {
 
     }
-    | simple_expression NOT_OPERATOR simple_expression
+    | NOT_OPERATOR simple_expression
     {
 
     }
