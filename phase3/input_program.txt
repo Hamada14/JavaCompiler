@@ -1,14 +1,6 @@
 int x;
 int y;
-int z;
-if (x > 3 || y <= 2) {
-  if(z < 50 && y > 6){
-  	y = 0;
-  }
-  else{
-  	x = 7;
-  }
-}
-else {
-  z = 70;
+int i;
+for (i = 0; i < 3; i = i + 1;) {
+  y = 3 - y;
 }

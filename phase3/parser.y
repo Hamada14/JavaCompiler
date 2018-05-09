@@ -193,13 +193,14 @@ mark:
     }
     ;
 for:
-    FOR '(' assignment mark boolean_expression ';' assignment ')' '{'
-    {
+    FOR '(' assignment mark boolean_expression ';' mark assignment ')' '{'
+    {   
+        addLine("goto " + to_string($4));
         addAddress($5.trueList, code.size());
     }
     statement '}'
     {
-        addLine("goto " + to_string($4));
+        addLine("goto " + to_string($7));
         $$.next = $5.falseList;
         if($$.next == nullptr)
             $$.next = new vector<int>;

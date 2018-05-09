@@ -1,25 +1,17 @@
-0: iload_1
-1: sipush 3
-2: if_icmpgt 8
-3: goto 4
-4: iload_2
-5: sipush 2
-6: if_icmple 8
-7: goto 22
-8: iload_3
-9: sipush 50
-10: if_icmplt 12
-11: goto 19
+0: sipush 0
+1: istore 3
+2: iload_3
+3: sipush 3
+4: if_icmplt 11
+5: goto 16
+6: iload_3
+7: sipush 1
+8: iadd
+9: istore 3
+10: goto 2
+11: sipush 3
 12: iload_2
-13: sipush 6
-14: if_icmpgt 16
-15: goto 19
-16: sipush 0
-17: istore 2
-18: goto 21
-19: sipush 7
-20: istore 1
-21: goto 24
-22: sipush 70
-23: istore 3
-24: return
+13: isub
+14: istore 2
+15: goto 6
+16: return
