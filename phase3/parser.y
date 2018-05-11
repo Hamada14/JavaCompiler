@@ -222,9 +222,9 @@ assignment:
         if(!symbolTable.count(string($1)))
             yyerror("Undeclared variable.");
         // Consider casting instead of the following.
-        if(symbolTable[string($1)].second != $3)
+        else if(symbolTable[string($1)].second != $3)
             yyerror("Assigned a variable to an expression with different type.");
-        if(symbolTable[string($1)].second == intType)
+        else if(symbolTable[string($1)].second == intType)
             addLine("istore " + to_string(symbolTable[string($1)].first));
         else
             addLine("fstore " + to_string(symbolTable[string($1)].first));
@@ -247,21 +247,24 @@ boolean_expression:
     }
     | simple_expression RELOP simple_expression
     {
-        if($1 != $3) yyerror("Comparing two expressions of different types.");
-        $$.trueList = new vector<int>;
-        $$.falseList = new vector<int>;
-        if($1 == intType){
-            $$.trueList->push_back(code.size());
-            addLine(intInstruction[string($2)] + " ");
-            $$.falseList->push_back(code.size());
-            addLine("goto ");
-        }
-        else{
-            addLine("fcmpl");
-            $$.trueList->push_back(code.size());
-            addLine(floatInstruction[string($2)] + " ");
-            $$.falseList->push_back(code.size());
-            addLine("goto ");
+        if($1 != $3) {
+            yyerror("Comparing two expressions of different types.");
+        } else {
+            $$.trueList = new vector<int>;
+            $$.falseList = new vector<int>;
+            if($1 == intType){
+                $$.trueList->push_back(code.size());
+                addLine(intInstruction[string($2)] + " ");
+                $$.falseList->push_back(code.size());
+                addLine("goto ");
+            }
+            else{
+                addLine("fcmpl");
+                $$.trueList->push_back(code.size());
+                addLine(floatInstruction[string($2)] + " ");
+                $$.falseList->push_back(code.size());
+                addLine("goto ");
+            }
         }
     }
     | boolean_expression AND_OPERATOR mark boolean_expression
@@ -328,13 +331,15 @@ term:
 factor:
     ID
     {
-        if(!symbolTable.count(string($1)))
-          yyerror("Undeclared variable.");
-        $$ = symbolTable[string($1)].second;
-        if(symbolTable[$1].second == intType)
-            addLine("iload_" + to_string(symbolTable[string($1)].first));
-        else
-            addLine("fload_" + to_string(symbolTable[string($1)].first));
+        if(!symbolTable.count(string($1))){
+            yyerror("Undeclared variable.");
+        } else {
+            $$ = symbolTable[string($1)].second;
+            if(symbolTable[$1].second == intType)
+                addLine("iload_" + to_string(symbolTable[string($1)].first));
+            else
+                addLine("fload_" + to_string(symbolTable[string($1)].first));
+        }
     }
     | INT_VAL
     {
@@ -377,8 +382,6 @@ int main(int, char**) {
 
 void yyerror(const char *s) {
 	cout << "EEK, parse error!  Message: " << s << endl;
-	// might as well halt now:
-	exit(-1);
 }
 
 void print(){
