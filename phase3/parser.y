@@ -311,6 +311,8 @@ term:
 factor:
     ID
     {
+        if(!symbolTable.count(string($1)))
+          yyerror("Undeclared variable.");
         $$ = symbolTable[string($1)].second;
         if(symbolTable[$1].second == intType)
             addLine("iload_" + to_string(symbolTable[string($1)].first));
