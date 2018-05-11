@@ -42,7 +42,6 @@ map<string,string> instruction = {
     {"-", "sub"},
     {"/", "div"},
     {"*", "mul"},
-    {"%", "rem"}
 };
 
 
