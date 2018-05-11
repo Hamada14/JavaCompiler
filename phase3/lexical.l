@@ -7,9 +7,11 @@
 
 using namespace std;
 #define YY_DECL extern "C" int yylex()
-
 #include "parser.tab.h"
+bool lexical_error;
+int cur_line = 1;
 
+void log_error(string error);
 char* fix_float(char* init_str);
 string removeLeadingZeros(string str);
 string normalize(string int_val, string decimal_val, string exp_val);
@@ -20,7 +22,8 @@ LETTER   ([a-z]|[A-Z])
 DIGITS   [0-9]+
 
 %%
-[ \t\n]          ;
+[ \t] ;
+[\n]                                                           { cur_line++; }
 
 [\(\)\{\},;]                                                      { return yytext[0]; }
 int                                                               { return INT; }
@@ -42,11 +45,16 @@ false															                                { return FALSE; }
 [\=]                                                              { yylval.assign = yytext[0]; return ASSIGN; }
 [\+\-]                                                            { yylval.addop = yytext[0]; return ADDOP; }
 [\*/]                                                             { yylval.mulop = yytext[0]; return MULOP; }
-.                                                                 { ;}
+.                                                                 { log_error("Couldn't match text{" + string(yytext) + "} at line:" + to_string(cur_line));
+                                                                    log_error("Skipping match{" + string(yytext) + "}, Program might be malformed.");}
 %%
 
 
 //Util functions
+
+void log_error(string error) {
+  cout << "Error: " << error << endl;
+}
 
 char* fix_float(char* init_ptr) {
     string init_str(init_ptr);
