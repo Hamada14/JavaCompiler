@@ -73,10 +73,11 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 67 "parser.y" /* yacc.c:1909  */
+#line 75 "parser.y" /* yacc.c:1909  */
 
-  int ival;
-  float fval;
+  int mark_val;
+  char *ival;
+  char *fval;
   char *sval;
   char *id_val;
   struct container {
@@ -93,7 +94,7 @@ union YYSTYPE
   char *oroperator;
   char *notoperator;
 
-#line 97 "parser.tab.h" /* yacc.c:1909  */
+#line 98 "parser.tab.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1

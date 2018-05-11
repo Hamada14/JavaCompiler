@@ -28,20 +28,29 @@ map<string, pair<int,typeEnum> > symbolTable;
 int labelCnt = 0; // Gives incremental index to labels
 int varCnt = 0;   // Gives incremental address to variables
 
-// A map to put the correct java byte code instruction
+// Maps to put the correct java byte code instruction
 // for relop and arithmetic operations
-map<string,string> instruction = {
+map<string,string> intInstruction = {
     {"==", "if_icmpeq"},
     {"<=", "if_icmple"},
     {">=", "if_icmpge"},
     {"!=", "if_icmpne"},
     {">",  "if_icmpgt"},
-    {"<",  "if_icmplt"},
-
+    {"<",  "if_icmplt"}
+};
+map<string,string> floatInstruction = {
+    {"==", "ifeq"},
+    {"<=", "ifle"},
+    {">=", "ifge"},
+    {"!=", "ifne"},
+    {">",  "ifgt"},
+    {"<",  "iflt"}
+};
+map<string,string> arithmeticInstruction = {
     {"+", "add"},
     {"-", "sub"},
     {"/", "div"},
-    {"*", "mul"},
+    {"*", "mul"}
 };
 
 
@@ -241,10 +250,19 @@ boolean_expression:
         if($1 != $3) yyerror("Comparing two expressions of different types.");
         $$.trueList = new vector<int>;
         $$.falseList = new vector<int>;
-        $$.trueList->push_back(code.size());
-        addLine(instruction[string($2)] + " ");
-        $$.falseList->push_back(code.size());
-        addLine("goto ");
+        if($1 == intType){
+            $$.trueList->push_back(code.size());
+            addLine(intInstruction[string($2)] + " ");
+            $$.falseList->push_back(code.size());
+            addLine("goto ");
+        }
+        else{
+            addLine("fcmpl");
+            $$.trueList->push_back(code.size());
+            addLine(floatInstruction[string($2)] + " ");
+            $$.falseList->push_back(code.size());
+            addLine("goto ");
+        }
     }
     | boolean_expression AND_OPERATOR mark boolean_expression
     {
@@ -291,9 +309,9 @@ simple_expression:
     {
         $$ = getType($1, $3);
         if($$ == intType)
-            addLine("i" + instruction[string(1, $2)]);
+            addLine("i" + arithmeticInstruction[string(1, $2)]);
         else
-            addLine("f" + instruction[string(1, $2)]);
+            addLine("f" + arithmeticInstruction[string(1, $2)]);
     }
     ;
 term:
@@ -302,9 +320,9 @@ term:
     {
         $$ = getType($1, $3);
         if($$ == intType)
-            addLine("i" + instruction[string(1, $2)]);
+            addLine("i" + arithmeticInstruction[string(1, $2)]);
         else
-            addLine("f" + instruction[string(1, $2)]);
+            addLine("f" + arithmeticInstruction[string(1, $2)]);
     }
     ;
 factor:
